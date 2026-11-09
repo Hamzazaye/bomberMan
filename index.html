@@ -347,7 +347,18 @@
 
     .skill-btn:hover {
       border-color: var(--cyan);
-      transform: translateX(-2px);
+      transform: translateX(2px);
+    }
+
+    .skill-btn.skill-unlocked {
+      border-color: rgba(0, 240, 255, 0.55);
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.2), rgba(14, 34, 64, 0.96));
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.22);
+    }
+
+    .skill-btn.skill-cd {
+      opacity: 0.55;
+      border-color: rgba(255, 255, 255, 0.08);
     }
 
     .skill-btn kbd {
@@ -839,6 +850,7 @@
         <button class="hud-btn" id="codexBtn" title="Armory">🛡️</button>
         <button class="hud-btn" id="musicBtn" title="Music">🎵</button>
         <button class="hud-btn" id="soundBtn" title="Sound Effects">🔊</button>
+        <button class="hud-btn" id="fsBtn" title="Fullscreen">⛶</button>
         <button class="hud-btn" id="pauseBtn" title="Pause">⏸</button>
       </div>
     </header>
@@ -880,7 +892,7 @@
         </div>
 
         <div class="action-stack">
-          <button class="skill-btn" id="btn-dash"><span>⚡ DASH</span><kbd>Shift</kbd></button>
+          <button class="skill-btn" id="btn-dash"><span id="dash-label">⚡ DASH</span><kbd>Shift</kbd></button>
           <button class="skill-btn" id="btn-glove"><span>🥊 THROW / HOP</span><kbd>E</kbd></button>
           <button class="skill-btn" id="btn-remote"><span>📡 DETONATE</span><kbd>R</kbd></button>
           <button class="skill-btn" id="btn-line"><span>🚀 LINE BOMB</span><kbd>F</kbd></button>
@@ -1258,10 +1270,10 @@ const POWERUP_CATALOG = [
 ];
 
 const BIOMES = [
-  { bgTop: '#0b2239', bgBot: '#040b14', grid: 'rgba(0, 240, 255, 0.08)', wallTop: '#1d3f5e', wallFront: '#0f2338', wallEdge: '#00f0ff', crateTop: '#8f473f', crateFront: '#592824', crateAccent: '#ff9e66', moteColor: '#00f0ff' },
-  { bgTop: '#0d2b45', bgBot: '#061322', grid: 'rgba(112, 226, 255, 0.11)', wallTop: '#2b587a', wallFront: '#17344d', wallEdge: '#70e2ff', crateTop: '#3d6cb9', crateFront: '#224075', crateAccent: '#a6ecff', moteColor: '#a6ecff' },
-  { bgTop: '#2a1215', bgBot: '#0f0608', grid: 'rgba(255, 123, 28, 0.09)', wallTop: '#3d2327', wallFront: '#211114', wallEdge: '#ff7b1c', crateTop: '#78290f', crateFront: '#471606', crateAccent: '#ffcc33', moteColor: '#ff7b1c' },
-  { bgTop: '#092622', bgBot: '#030d0c', grid: 'rgba(5, 255, 161, 0.09)', wallTop: '#184e46', wallFront: '#0c2b27', wallEdge: '#05ffa1', crateTop: '#4c3b75', crateFront: '#2b2046', crateAccent: '#05ffa1', moteColor: '#05ffa1' }
+  { name: 'NEON CITADEL', bgTop: '#0b2239', bgBot: '#040b14', grid: 'rgba(0, 240, 255, 0.08)', wallTop: '#1d3f5e', wallFront: '#0f2338', wallEdge: '#00f0ff', crateTop: '#8f473f', crateFront: '#592824', crateAccent: '#ff9e66', moteColor: '#00f0ff' },
+  { name: 'CRYO FOUNDRY', bgTop: '#0d2b45', bgBot: '#061322', grid: 'rgba(112, 226, 255, 0.11)', wallTop: '#2b587a', wallFront: '#17344d', wallEdge: '#70e2ff', crateTop: '#3d6cb9', crateFront: '#224075', crateAccent: '#a6ecff', moteColor: '#a6ecff' },
+  { name: 'MAGMA CORE', bgTop: '#2a1215', bgBot: '#0f0608', grid: 'rgba(255, 123, 28, 0.09)', wallTop: '#3d2327', wallFront: '#211114', wallEdge: '#ff7b1c', crateTop: '#78290f', crateFront: '#471606', crateAccent: '#ffcc33', moteColor: '#ff7b1c' },
+  { name: 'QUANTUM GRID', bgTop: '#092622', bgBot: '#030d0c', grid: 'rgba(5, 255, 161, 0.09)', wallTop: '#184e46', wallFront: '#0c2b27', wallEdge: '#05ffa1', crateTop: '#4c3b75', crateFront: '#2b2046', crateAccent: '#05ffa1', moteColor: '#05ffa1' }
 ];
 
 /* ============================================================================
@@ -1338,6 +1350,7 @@ let scarfNodes = [];
 let shake = 0;
 let hitStop = 0;
 let chronoTime = 0;
+let sectorBannerTimer = 0;
 let comboCount = 1;
 let comboTimer = 0;
 let last = 0;
@@ -1674,6 +1687,7 @@ function startLevel() {
   hurryUpActive = false;
   suddenDeathTimer = 0;
   suddenDeathIndex = 0;
+  sectorBannerTimer = 2.6;
   spiralCoords = buildSpiralCoords();
   initAmbientMotes();
   initMap();
@@ -1796,6 +1810,28 @@ function syncUI() {
     odBtn.classList.remove('od-ready');
   }
 
+  const dashBtn = document.getElementById('btn-dash');
+  const dashLbl = document.getElementById('dash-label');
+  if (dashBtn && dashLbl) {
+    if (player.dashCd > 0) {
+      dashBtn.classList.add('skill-cd');
+      dashBtn.classList.remove('skill-unlocked');
+      dashLbl.textContent = `⚡ ${player.dashCd.toFixed(1)}s`;
+    } else {
+      dashBtn.classList.remove('skill-cd');
+      dashBtn.classList.add('skill-unlocked');
+      dashLbl.textContent = '⚡ DASH';
+    }
+  }
+
+  const setBtnState = (id, unlocked) => {
+    const el = document.getElementById(id);
+    if (el) el.classList.toggle('skill-unlocked', !!unlocked);
+  };
+  setBtnState('btn-glove', player.glove || !!player.mount);
+  setBtnState('btn-remote', player.remote);
+  setBtnState('btn-line', player.lineBomb || player.overdriveTime > 0);
+
   ui.statBombs.textContent = player.overdriveTime > 0 ? '∞' : player.maxBombs;
   ui.statRange.textContent = player.overdriveTime > 0 ? '8' : player.range;
   ui.statSpeed.textContent = player.speedTier;
@@ -1806,7 +1842,7 @@ function syncUI() {
     if (el) el.classList.toggle('active', !!cond);
   };
   toggleChip('chip-kick', player.kick);
-  toggleChip('chip-glove', player.glove || player.mount === 'hopper');
+  toggleChip('chip-glove', player.glove || !!player.mount);
   toggleChip('chip-remote', player.remote);
   toggleChip('chip-line', player.lineBomb);
   toggleChip('chip-pierce', player.pierce || player.overdriveTime > 0);
@@ -1818,12 +1854,24 @@ function syncUI() {
 /* ============================================================================
    5. COLLISION, CORNER-SLIDE ASSIST & PLAYER MOVEMENT
    ============================================================================ */
-function getBlockingBombAt(c, r) {
-  return bombs.find(b => b.c === c && b.r === r && b.solid);
+function rectOverlapsTile(rx, ry, rw, rh, c, r) {
+  const inset = 3;
+  const tx = c * TILE;
+  const ty = r * TILE;
+  return (rx + inset < tx + TILE) && (rx + rw - inset > tx) && (ry + inset < ty + TILE) && (ry + rh - inset > ty);
+}
+
+function getBlockingBombAt(c, r, curX = null, curY = null, curW = 30, curH = 30) {
+  const b = bombs.find(item => item.c === c && item.r === r);
+  if (!b) return null;
+  if (curX !== null && curY !== null && rectOverlapsTile(curX, curY, curW, curH, c, r)) {
+    return null;
+  }
+  return b.solid ? b : null;
 }
 
 function rectHitsWall(x, y, w, h, opts = {}) {
-  const { includeBombs = true, canWallPass = false, canBombPass = false } = opts;
+  const { includeBombs = true, canWallPass = false, canBombPass = false, curX = null, curY = null } = opts;
   const inset = 3;
   const pts = [
     [x + inset, y + inset],
@@ -1839,7 +1887,7 @@ function rectHitsWall(x, y, w, h, opts = {}) {
       return { hit: true, type: 'crate', r, c };
     }
     if (includeBombs && !canBombPass) {
-      const b = getBlockingBombAt(c, r);
+      const b = getBlockingBombAt(c, r, curX, curY, w, h);
       if (b) return { hit: true, type: 'bomb', bomb: b, r, c };
     }
   }
@@ -1868,6 +1916,7 @@ function triggerDash() {
   } else {
     sfx.playDash(false);
   }
+  syncUI();
 }
 
 function useGloveOrMountAction() {
@@ -1877,6 +1926,7 @@ function useGloveOrMountAction() {
   const pc = Math.floor(cx / TILE);
   const pr = Math.floor(cy / TILE);
 
+  // 1. Power Glove Bomb Throw (if standing on or facing a bomb)
   if (player.glove) {
     let bIdx = bombs.findIndex(b => b.c === pc && b.r === pr);
     if (bIdx < 0) {
@@ -1904,6 +1954,62 @@ function useGloveOrMountAction() {
     }
   }
 
+  // 2. Titan Louie Mount: Seismic Ground Slam (shatters adjacent crates & stuns foes)
+  if (player.mount === 'titan') {
+    const biome = BIOMES[(level - 1) % BIOMES.length];
+    let shattered = 0;
+    for (let dr = -1; dr <= 1; dr++) {
+      for (let dc = -1; dc <= 1; dc++) {
+        const tr = pr + dr;
+        const tc = pc + dc;
+        if (map[tr] && (map[tr][tc] === 2 || map[tr][tc] === 3)) {
+          map[tr][tc] = 0;
+          spawnCrateDebris(tc, tr, biome.crateTop);
+          score += 25;
+          shattered++;
+        }
+      }
+    }
+    for (const e of enemies) {
+      if (Math.hypot(e.x - cx, e.y - cy) < TILE * 2.5) {
+        e.stunned = 2.5;
+        addFloatText(e.x, e.y - 12, '💫 SLAMMED!', '#ff2a6d');
+      }
+    }
+    shake = 0.35;
+    sfx.playKick();
+    addShockwave(cx, cy, 115, '#ff2a6d', 4);
+    addFloatText(cx, cy - 12, shattered ? `🤖 TITAN SLAM! +${shattered * 25}` : '🤖 TITAN SLAM!', '#ff2a6d', 1.15);
+    syncUI();
+    return;
+  }
+
+  // 3. Striker Louie Mount: Sonic Wave Kick (kicks all bombs in a 4-tile line & stuns enemies)
+  if (player.mount === 'striker') {
+    const dx = player.dirX || 1;
+    const dy = player.dirY || 0;
+    for (let step = 1; step <= 4; step++) {
+      const tc = pc + dx * step;
+      const tr = pr + dy * step;
+      for (const b of bombs) {
+        if (b.c === tc && b.r === tr) {
+          b.vx = dx * 11;
+          b.vy = dy * 11;
+        }
+      }
+      for (const e of enemies) {
+        if (e.c === tc && e.r === tr) {
+          e.stunned = 2.2;
+        }
+      }
+    }
+    sfx.playKick();
+    addShockwave(cx + dx * 28, cy + dy * 28, 95, '#ffcc33', 3);
+    addFloatText(cx, cy - 10, '⚡ SONIC PULSE!', '#ffcc33', 1.1);
+    return;
+  }
+
+  // 4. Hopper Louie Mount or Power Glove: Rocket Leap 2 tiles over walls/bombs
   if (player.mount === 'hopper' || player.glove) {
     const destC = pc + player.dirX * 2;
     const destR = pr + player.dirY * 2;
@@ -1998,7 +2104,9 @@ function updatePlayer(dt) {
   const moveOpts = {
     includeBombs: true,
     canWallPass: player.wallPass || player.overdriveTime > 0,
-    canBombPass: player.bombPass || player.dashing > 0
+    canBombPass: player.bombPass || player.dashing > 0,
+    curX: player.x,
+    curY: player.y
   };
 
   const nx = player.x + ax * spd * dt * 60;
@@ -2023,6 +2131,8 @@ function updatePlayer(dt) {
     }
   }
 
+  moveOpts.curX = player.x;
+  moveOpts.curY = player.y;
   const ny = player.y + ay * spd * dt * 60;
   const hitY = rectHitsWall(player.x, ny, player.w, player.h, moveOpts);
   if (!hitY.hit) {
@@ -2113,6 +2223,12 @@ function applyPowerup(p) {
     case 'shield': player.shield = true; break;
     case 'wallpass': player.wallPass = true; player.bombPass = true; break;
     case 'heart': lives = Math.min(9, lives + 1); break;
+    case 'chrono':
+      chronoTime = Math.max(chronoTime, 3.2);
+      player.dashCd = 0;
+      addOverdriveCharge(30);
+      addShockwave(cx, cy, 240, '#00f0ff', 4);
+      break;
     case 'louie': {
       const mounts = ['hopper', 'striker', 'titan'];
       player.mount = mounts[Math.floor(Math.random() * mounts.length)];
@@ -2264,6 +2380,12 @@ function updateBombs(dt) {
         }
       }
 
+      if (boss && Math.hypot(boss.x - nx, boss.y - ny) < 42) {
+        b.vx = 0;
+        b.vy = 0;
+        b.t = 0;
+      }
+
       if (!map[nextR] || map[nextR][nextC] !== 0 || bombs.some(other => other !== b && other.c === nextC && other.r === nextR)) {
         b.vx = 0;
         b.vy = 0;
@@ -2292,10 +2414,12 @@ function updateBombs(dt) {
       b.y = b.r * TILE + TILE / 2;
     }
 
-    const bx = b.c * TILE;
-    const by = b.r * TILE;
-    if (!b.solid && !(player.x < bx + TILE && player.x + player.w > bx && player.y < by + TILE && player.y + player.h > by)) {
-      b.solid = true;
+    if (!b.solid) {
+      const playerOn = rectOverlapsTile(player.x, player.y, player.w, player.h, b.c, b.r);
+      const enemyOn = enemies.some(e => rectOverlapsTile(e.x - e.rad, e.y - e.rad, e.rad * 2, e.rad * 2, b.c, b.r));
+      if (!playerOn && !enemyOn) {
+        b.solid = true;
+      }
     }
   }
 
@@ -2317,7 +2441,7 @@ function rollPowerupType() {
     'kick', 'kick',
     'glove', 'glove',
     'pierce', 'ice', 'remote', 'line',
-    'shield', 'wallpass', 'louie', 'fullfire', 'heart', 'skull'
+    'shield', 'wallpass', 'louie', 'fullfire', 'heart', 'chrono', 'skull'
   ];
   return weighted[Math.floor(Math.random() * weighted.length)];
 }
@@ -2366,7 +2490,7 @@ function detonateBombObject(b) {
         if (exitSp) {
           exitSp.revealed = true;
           addFloatText(c * TILE + 24, r * TILE + 12, '🌀 PORTAL!', '#05ffa1', 1.2);
-        } else if (wasReinforced || Math.random() < 0.42) {
+        } else if ((wasReinforced || Math.random() < 0.42) && !powerups.some(p => p.c === c && p.r === r)) {
           powerups.push({ c, r, type: rollPowerupType() });
         }
 
@@ -2620,7 +2744,12 @@ function chooseDir(e) {
   const valid = dirs.filter(d => {
     const x = e.x + d.x * 20 - e.rad;
     const y = e.y + d.y * 20 - e.rad;
-    return !rectHitsWall(x, y, e.rad * 2, e.rad * 2, { includeBombs: true, canWallPass: canPhase }).hit;
+    return !rectHitsWall(x, y, e.rad * 2, e.rad * 2, {
+      includeBombs: true,
+      canWallPass: canPhase,
+      curX: e.x - e.rad,
+      curY: e.y - e.rad
+    }).hit;
   });
 
   if (valid.length === 0) {
@@ -2708,7 +2837,12 @@ function updateEnemiesAndBoss(dt) {
     const canPhase = e.kind === 'phantom';
     const nx = e.x + e.dx * e.speed * effDt * 60;
     const ny = e.y + e.dy * e.speed * effDt * 60;
-    if (!rectHitsWall(nx - e.rad, ny - e.rad, e.rad * 2, e.rad * 2, { includeBombs: false, canWallPass: canPhase }).hit) {
+    if (!rectHitsWall(nx - e.rad, ny - e.rad, e.rad * 2, e.rad * 2, {
+      includeBombs: true,
+      canWallPass: canPhase,
+      curX: e.x - e.rad,
+      curY: e.y - e.rad
+    }).hit) {
       e.x = nx;
       e.y = ny;
       e.c = Math.floor(e.x / TILE);
@@ -2740,21 +2874,49 @@ function updateEnemiesAndBoss(dt) {
 
   if (boss) {
     if (boss.invuln > 0) boss.invuln -= dt;
-    boss.x += boss.vx * effDt * 60;
-    boss.y += boss.vy * effDt * 60;
+
+    // 3 Dynamic Boss Phases based on HP ratio
+    const hpRatio = boss.hp / boss.maxHp;
+    const newPhase = hpRatio <= 0.34 ? 3 : hpRatio <= 0.67 ? 2 : 1;
+    if (newPhase !== boss.phase) {
+      boss.phase = newPhase;
+      addShockwave(boss.x, boss.y, 200, '#ff2a6d', 5);
+      addFloatText(boss.x, boss.y - 34, newPhase === 3 ? '⚠️ OVERCLOCK PHASE! ⚠️' : '⚡ PHASE II ENGAGED!', '#ff2a6d', 1.35);
+      syncBossUI();
+    }
+
+    const speedMult = boss.phase === 3 ? 1.5 : boss.phase === 2 ? 1.25 : 1.0;
+    boss.x += boss.vx * speedMult * effDt * 60;
+    boss.y += boss.vy * speedMult * effDt * 60;
 
     if (boss.x < TILE * 2.5 || boss.x > canvas.width - TILE * 2.5) boss.vx *= -1;
     if (boss.y < TILE * 2.5 || boss.y > canvas.height - TILE * 2.5) boss.vy *= -1;
 
+    // Boss crushes destructible crates under its treads
+    const bc = Math.floor(boss.x / TILE);
+    const br = Math.floor(boss.y / TILE);
+    const biome = BIOMES[(level - 1) % BIOMES.length];
+    if (map[br] && (map[br][bc] === 2 || map[br][bc] === 3)) {
+      map[br][bc] = 0;
+      spawnCrateDebris(bc, br, biome.crateTop);
+    }
+
     boss.attackTimer -= effDt;
     if (boss.attackTimer <= 0) {
-      boss.attackTimer = 3.0;
-      for (let k = 0; k < 3; k++) {
+      boss.attackTimer = boss.phase === 3 ? 2.1 : boss.phase === 2 ? 2.5 : 3.0;
+      const count = boss.phase === 3 ? 5 : boss.phase === 2 ? 4 : 3;
+      for (let k = 0; k < count; k++) {
         const tc = 2 + Math.floor(Math.random() * (COLS - 4));
         const tr = 2 + Math.floor(Math.random() * (ROWS - 4));
         if (map[tr][tc] !== 1) {
-          boss.reticles.push({ c: tc, r: tr, t: 1.35, maxT: 1.35 });
+          boss.reticles.push({ c: tc, r: tr, t: 1.25, maxT: 1.25 });
         }
+      }
+      // Phase 2 & 3 also lock onto the player's current sector tile
+      const pc = Math.floor((player.x + 15) / TILE);
+      const pr = Math.floor((player.y + 15) / TILE);
+      if (boss.phase >= 2 && map[pr] && map[pr][pc] !== 1) {
+        boss.reticles.push({ c: pc, r: pr, t: 1.35, maxT: 1.35 });
       }
     }
 
@@ -2776,6 +2938,7 @@ function updateEnemiesAndBoss(dt) {
 
 function updateStageTimerAndSuddenDeath(dt) {
   if (chronoTime > 0) chronoTime = Math.max(0, chronoTime - dt);
+  if (sectorBannerTimer > 0) sectorBannerTimer = Math.max(0, sectorBannerTimer - dt);
 
   stageTime = Math.max(0, stageTime - dt);
   if (stageTime <= 40 && !hurryUpActive) {
@@ -2786,15 +2949,35 @@ function updateStageTimerAndSuddenDeath(dt) {
 
   if (hurryUpActive) {
     suddenDeathTimer -= dt;
+    const dropInterval = stageTime <= 0 ? 0.28 : 0.55;
     if (suddenDeathTimer <= 0 && suddenDeathIndex < spiralCoords.length - 18) {
-      suddenDeathTimer = 0.55;
+      suddenDeathTimer = dropInterval;
       const cell = spiralCoords[suddenDeathIndex++];
-      const pc = Math.floor((player.x + player.w / 2) / TILE);
-      const pr = Math.floor((player.y + player.h / 2) / TILE);
       const isExit = specials.some(s => s.type === 'exit' && s.r === cell.r && s.c === cell.c);
-      if (!isExit && !(cell.r === pr && cell.c === pc)) {
+      if (!isExit) {
+        // Detonate any bomb on this cell
+        for (const b of bombs) {
+          if (b.c === cell.c && b.r === cell.r) b.t = 0;
+        }
+        // Clear any powerup on this cell
+        powerups = powerups.filter(p => !(p.c === cell.c && p.r === cell.r));
+        // Crush any enemy on this cell
+        for (let i = enemies.length - 1; i >= 0; i--) {
+          if (enemies[i].c === cell.c && enemies[i].r === cell.r) {
+            burst(enemies[i].x, enemies[i].y, '#ff2a6d', 24);
+            addFloatText(enemies[i].x, enemies[i].y - 10, '💥 CRUSHED!', '#ff2a6d');
+            enemies.splice(i, 1);
+          }
+        }
         map[cell.r][cell.c] = 1;
-        burst(cell.c * TILE + 24, cell.r * TILE + 24, '#ff2a6d', 10);
+        burst(cell.c * TILE + 24, cell.r * TILE + 24, '#ff2a6d', 12);
+
+        // If player overlaps the newly dropped Sudden Death wall, damage and nudge to safety
+        if (rectOverlapsTile(player.x, player.y, player.w, player.h, cell.c, cell.r)) {
+          hurt();
+          player.x = (COLS >> 1) * TILE + (TILE - player.w) / 2;
+          player.y = (ROWS >> 1) * TILE + (TILE - player.h) / 2;
+        }
       }
     }
   }
@@ -2911,6 +3094,29 @@ function draw() {
     ctx.restore();
   }
 
+  if (state === 'PLAYING' && sectorBannerTimer > 0) {
+    const biome = BIOMES[(level - 1) % BIOMES.length];
+    const alpha = Math.min(1, sectorBannerTimer * 1.4);
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = 'rgba(4, 11, 24, 0.82)';
+    ctx.strokeStyle = biome.wallEdge;
+    ctx.lineWidth = 2;
+    roundRectPath(canvas.width / 2 - 190, 56, 380, 54, 12);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.font = "900 18px 'Orbitron', monospace";
+    ctx.fillStyle = '#ffffff';
+    ctx.textAlign = 'center';
+    ctx.fillText(`SECTOR 0${level} — ${biome.name}`, canvas.width / 2, 82);
+
+    ctx.font = "700 11px 'Orbitron', monospace";
+    ctx.fillStyle = biome.wallEdge;
+    ctx.fillText(gameMode.replace('_', ' '), canvas.width / 2, 100);
+    ctx.restore();
+  }
+
   ctx.restore();
 }
 
@@ -2991,6 +3197,21 @@ function drawArenaAndWalls() {
 }
 
 function drawSpecialTiles() {
+  // Telegraph next 3 Sudden Death falling blocks during Hurry Up!
+  if (hurryUpActive && spiralCoords.length > 0) {
+    for (let k = 0; k < 3; k++) {
+      const idx = suddenDeathIndex + k;
+      if (idx < spiralCoords.length - 18) {
+        const cell = spiralCoords[idx];
+        ctx.save();
+        ctx.strokeStyle = `rgba(255, 42, 109, ${0.45 + Math.sin(elapsed * 18) * 0.35})`;
+        ctx.lineWidth = 2.5;
+        ctx.strokeRect(cell.c * TILE + 6, cell.r * TILE + 6, TILE - 12, TILE - 12);
+        ctx.restore();
+      }
+    }
+  }
+
   for (const sp of specials) {
     if (map[sp.r][sp.c] !== 0) {
       if (sp.type === 'exit') {
@@ -3645,6 +3866,23 @@ window.addEventListener('keyup', e => {
   if (bindings[e.code]) setKey(bindings[e.code], false);
 });
 
+window.addEventListener('blur', () => {
+  keys.up = false;
+  keys.down = false;
+  keys.left = false;
+  keys.right = false;
+});
+
+function toggleFullscreen() {
+  try {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen();
+    } else if (document.exitFullscreen) {
+      document.exitFullscreen();
+    }
+  } catch (_) {}
+}
+
 function bindTouch(id, handlerDown, handlerUp = null) {
   const el = document.getElementById(id);
   if (!el) return;
@@ -3727,6 +3965,7 @@ document.getElementById('resume-btn').onclick = togglePause;
 document.getElementById('pauseBtn').onclick = togglePause;
 document.getElementById('soundBtn').onclick = () => sfx.toggleMute();
 document.getElementById('musicBtn').onclick = () => sfx.toggleMusic();
+document.getElementById('fsBtn').onclick = toggleFullscreen;
 document.getElementById('codexBtn').onclick = openCodex;
 document.getElementById('open-codex-start').onclick = openCodex;
 document.getElementById('close-codex-btn').onclick = closeCodex;
