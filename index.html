@@ -2649,13 +2649,47 @@ const PILOT_CATALOG = [
 ];
 
 const HANGAR_TECHS = [
-  { id: 'capacitor', name: 'OVERDRIVE COILS',  max: 3, costs: [60, 130, 220], desc: '+15% STARTING OD PER TIER' },
-  { id: 'plating',   name: 'AEGIS BULKHEAD',   max: 3, costs: [80, 160, 260], desc: 'START RUNS WITH SHIELD AT TIER 2+' },
-  { id: 'thrusters', name: 'CHRONO JETS',      max: 3, costs: [70, 145, 240], desc: '-10% DASH COOLDOWN PER TIER' },
-  { id: 'scanner',   name: 'LOOT TELEMETRY',   max: 3, costs: [65, 140, 230], desc: '+6% POWERUP DROP RATE PER TIER' },
-  { id: 'alchemy',   name: 'BLAST ALCHEMY',    max: 3, costs: [75, 150, 250], desc: '+0.8s CHAIN COMBO WINDOW PER TIER' },
-  { id: 'bounty',    name: 'SALVAGE MAGNET',   max: 3, costs: [55, 120, 210], desc: '+20% SALVAGE GEAR EARNED PER TIER' }
+  { id: 'capacitor', name: 'OVERDRIVE COILS',  max: 3, costs: [45, 110, 195], desc: '+15% STARTING OD PER TIER' },
+  { id: 'plating',   name: 'AEGIS BULKHEAD',   max: 3, costs: [60, 130, 220], desc: 'START RUNS WITH SHIELD AT TIER 2+' },
+  { id: 'thrusters', name: 'CHRONO JETS',      max: 3, costs: [55, 120, 200], desc: '-10% DASH COOLDOWN PER TIER' },
+  { id: 'scanner',   name: 'LOOT TELEMETRY',   max: 3, costs: [50, 110, 190], desc: '+6% POWERUP DROP RATE PER TIER' },
+  { id: 'alchemy',   name: 'BLAST ALCHEMY',    max: 3, costs: [55, 120, 200], desc: '+0.8s CHAIN COMBO WINDOW PER TIER' },
+  { id: 'bounty',    name: 'SALVAGE MAGNET',   max: 3, costs: [45, 100, 180], desc: '+20% SALVAGE GEAR EARNED PER TIER' }
 ];
+
+function getPowerupActivationInfo(pwid) {
+  const b = (typeof settings !== 'undefined' && settings.bindings) ? settings.bindings : DEFAULT_BINDINGS;
+  const kStop = formatKeyLabel(b.stop);
+  const kRemote = formatKeyLabel(b.remote);
+  const kLine = formatKeyLabel(b.line);
+  const kSkill = formatKeyLabel(b.skill);
+  const kDash = formatKeyLabel(b.dash);
+  switch (pwid) {
+    case 'bomb':     return { key: 'PASSIVE', how: '+1 simultaneous bomb limit' };
+    case 'flame':    return { key: 'PASSIVE', how: '+1 tile blast flame range' };
+    case 'speed':    return { key: 'PASSIVE', how: '+1 movement speed tier' };
+    case 'heart':    return { key: 'INSTANT', how: 'Restores +1 extra life right away' };
+    case 'kick':     return { key: `WALK + [${kStop}]`, how: 'Bump bomb to slide; key halts it' };
+    case 'remote':   return { key: `PRESS [${kRemote}]`, how: 'Detonates placed bombs on demand' };
+    case 'line':     return { key: `PRESS [${kLine}]`, how: 'Deploys a full bomb row ahead' };
+    case 'ice':      return { key: 'PASSIVE', how: 'Blasts freeze enemies for 4s' };
+    case 'shield':   return { key: 'AUTO GUARD', how: 'Blocks 1 hit & grants brief grace' };
+    case 'glove':    return { key: `PRESS [${kSkill}]`, how: 'Pick up & throw bombs over walls' };
+    case 'pierce':   return { key: 'PASSIVE', how: 'Blasts pierce straight through crates' };
+    case 'fullfire': return { key: 'PASSIVE', how: 'Instantly maxes flame range to 8' };
+    case 'louie':    return { key: `RIDE / [${kSkill}]`, how: 'Armored mount; key leaps hazards' };
+    case 'cluster':  return { key: 'PASSIVE', how: 'Adds 4 diagonal blasts (3x3 clear)' };
+    case 'magnet':   return { key: 'PASSIVE', how: 'Pulls nearby pickups toward you' };
+    case 'skull':    return { key: 'TOUCH FOE', how: 'Risk curse: bump foe to stun +400' };
+    case 'plasma':   return { key: 'PASSIVE', how: 'Blasts arc lightning onto foes' };
+    case 'bouncy':   return { key: 'THROW / KICK', how: 'Slid or thrown bombs bounce walls' };
+    case 'bombpass': return { key: 'PASSIVE', how: 'Walk smoothly over active bombs' };
+    case 'wallpass': return { key: 'PASSIVE', how: 'Walk freely through soft crates' };
+    case 'chrono':   return { key: `PICK / [${kDash}]`, how: 'Slows time 75% for 6s on field' };
+    case 'gravity':  return { key: 'PASSIVE', how: 'Vortex pulls foes & bombs inward' };
+    default:         return { key: 'PASSIVE', how: 'Tactical suit module upgrade' };
+  }
+}
 
 const RELIC_CATALOG = [
   { id: 'overclock_fuses', name: 'OVERCLOCK FUSES',  color: '#00f0ff', tag: 'BOMBS DETONATE 25% FASTER' },
@@ -2753,6 +2787,7 @@ const BIOMES = [
     name: 'NEON CITADEL',
     shortName: 'CITADEL',
     subtitle: 'KINETIC & LASER GRID',
+    arenaTip: 'ARENA: CONVEYOR BELTS & TIMED LASER GATES',
     themeStyle: 'citadel',
     bgTop: '#0b2038', bgBot: '#040b16', plateA: '#0d223a', plateB: '#09192c',
     conduit: 'rgba(0, 240, 255, 0.14)', wallTop: '#244b70', wallFront: '#10253b', wallEdge: '#00f0ff',
@@ -2763,13 +2798,14 @@ const BIOMES = [
     bossVariant: 0,
     bossTitle: 'OMEGA TANK-CORE',
     bossMinion: 'sapper',
-    hardCrateChance: 0.15
+    hardCrateChance: 0.14
   },
   {
     id: 'cryo',
     name: 'CRYO FOUNDRY',
     shortName: 'CRYO',
     subtitle: 'SUB-ZERO & AEGIS ARMOR',
+    arenaTip: 'ARENA: SLICK GLACIAL ICE TILES (USE DASH)',
     themeStyle: 'cryo',
     bgTop: '#0d2b45', bgBot: '#051220', plateA: '#102d47', plateB: '#0a2034',
     conduit: 'rgba(112, 226, 255, 0.17)', wallTop: '#2f6187', wallFront: '#16354f', wallEdge: '#70e2ff',
@@ -2780,13 +2816,14 @@ const BIOMES = [
     bossVariant: 1,
     bossTitle: 'CRYO OVERLORD',
     bossMinion: 'cryogolem',
-    hardCrateChance: 0.17
+    hardCrateChance: 0.16
   },
   {
     id: 'magma',
     name: 'MAGMA CORE',
     shortName: 'MAGMA',
     subtitle: 'THERMAL PIERCE & MECHS',
+    arenaTip: 'ARENA: VENTING MAGMA GEYSERS (WARN THEN ERUPT)',
     themeStyle: 'magma',
     bgTop: '#2b1114', bgBot: '#0e0507', plateA: '#261114', plateB: '#1a0b0d',
     conduit: 'rgba(255, 123, 28, 0.17)', wallTop: '#4a282d', wallFront: '#261316', wallEdge: '#ff7b1c',
@@ -2797,13 +2834,14 @@ const BIOMES = [
     bossVariant: 2,
     bossTitle: 'SOLAR EMPEROR',
     bossMinion: 'pyromancer',
-    hardCrateChance: 0.24
+    hardCrateChance: 0.22
   },
   {
     id: 'biodome',
     name: 'VERDANT BIO-DOME',
     shortName: 'BIO-DOME',
     subtitle: 'MUTAGEN SPORES & XENO SWARM',
+    arenaTip: 'ARENA: HEALING SPORE PODS TRIGGER ON BLAST',
     themeStyle: 'biodome',
     bgTop: '#0d2818', bgBot: '#041009', plateA: '#0f2b1a', plateB: '#091d11',
     conduit: 'rgba(132, 204, 22, 0.17)', wallTop: '#255c36', wallFront: '#112e1b', wallEdge: '#84cc16',
@@ -2814,13 +2852,14 @@ const BIOMES = [
     bossVariant: 3,
     bossTitle: 'VENOM BROOD-QUEEN',
     bossMinion: 'slime',
-    hardCrateChance: 0.16
+    hardCrateChance: 0.15
   },
   {
     id: 'skyfort',
     name: 'STORM SKY-FORTRESS',
     shortName: 'SKY-FORT',
     subtitle: 'TESLA ARCS & TURBO RUNWAYS',
+    arenaTip: 'ARENA: TURBO RUNWAYS & TELEPORT WARP RINGS',
     themeStyle: 'skyfort',
     bgTop: '#162447', bgBot: '#070e22', plateA: '#18294f', plateB: '#101c38',
     conduit: 'rgba(250, 204, 21, 0.17)', wallTop: '#3b5284', wallFront: '#1b2847', wallEdge: '#facc15',
@@ -2831,13 +2870,14 @@ const BIOMES = [
     bossVariant: 4,
     bossTitle: 'TEMPEST SKY-TITAN',
     bossMinion: 'valkyrie',
-    hardCrateChance: 0.18
+    hardCrateChance: 0.17
   },
   {
     id: 'quantum',
     name: 'QUANTUM ABYSS',
     shortName: 'QUANTUM',
     subtitle: 'PHASE RIFT & GRAVITY SINGULARITY',
+    arenaTip: 'ARENA: PHASE RIFTS BLINK + BOOST SPEED',
     themeStyle: 'quantum',
     bgTop: '#082622', bgBot: '#030d0c', plateA: '#0b2924', plateB: '#071c19',
     conduit: 'rgba(5, 255, 161, 0.16)', wallTop: '#1d5c52', wallFront: '#0d302b', wallEdge: '#05ffa1',
@@ -2848,7 +2888,7 @@ const BIOMES = [
     bossVariant: 5,
     bossTitle: 'QUANTUM NEXUS',
     bossMinion: 'phantom',
-    hardCrateChance: 0.17
+    hardCrateChance: 0.16
   }
 ];
 
@@ -3558,10 +3598,23 @@ function getActiveBiome() {
 }
 
 function getDiffConfig() {
-  const ngScale = (gameMode === 'CAMPAIGN' && level > 12) ? 1.18 : 1.0;
-  if (difficultyTier === 'APEX') return { speedMult: 1.26 * ngScale, scoreMult: 2.0, extraEnemies: 3, bossHpBonus: 6, aggroChance: 0.9 };
-  if (difficultyTier === 'HARD') return { speedMult: 1.13 * ngScale, scoreMult: 1.5, extraEnemies: 2, bossHpBonus: 3, aggroChance: 0.8 };
-  return { speedMult: 1.0 * ngScale, scoreMult: 1.0, extraEnemies: 0, bossHpBonus: 0, aggroChance: 0.72 };
+  const ngScale = (gameMode === 'CAMPAIGN' && level > 12) ? 1.15 : 1.0;
+  if (difficultyTier === 'APEX') {
+    return {
+      speedMult: 1.15 * ngScale, scoreMult: 2.0, extraEnemies: 2, bossHpBonus: 5,
+      aggroChance: 0.76, boltSpeedMult: 1.05, escapeChance: 0.88, bombNoticeTime: 1.85, maxEscapeDist: 6
+    };
+  }
+  if (difficultyTier === 'HARD') {
+    return {
+      speedMult: 1.02 * ngScale, scoreMult: 1.5, extraEnemies: 1, bossHpBonus: 2,
+      aggroChance: 0.58, boltSpeedMult: 0.94, escapeChance: 0.74, bombNoticeTime: 1.45, maxEscapeDist: 5
+    };
+  }
+  return {
+    speedMult: 0.88 * ngScale, scoreMult: 1.0, extraEnemies: 0, bossHpBonus: 0,
+    aggroChance: 0.38, boltSpeedMult: 0.82, escapeChance: 0.52, bombNoticeTime: 1.15, maxEscapeDist: 3
+  };
 }
 
 const dirs = [
@@ -3592,7 +3645,7 @@ function makeFighterState(isP2 = false) {
     dirX: 0,
     dirY: 1,
     speedTier: 1,
-    baseSpeed: 3.38,
+    baseSpeed: 3.46,
     maxBombs: 1,
     range: 2,
     invuln: 0,
@@ -4235,7 +4288,7 @@ function initEnemies() {
         maxBombs: 2,
         canKick: true,
         warpLock: 0,
-        speed: (1.92 + Math.min(0.85, level * 0.1)) * diff.speedMult,
+        speed: (1.76 + Math.min(0.65, (level - 1) * 0.08)) * diff.speedMult,
         range: 2 + Math.floor(level / 2),
         dx: idx % 2 === 0 ? -1 : 1,
         dy: 0,
@@ -4244,7 +4297,8 @@ function initEnemies() {
         frozen: 0,
         stunned: 0,
         invuln: 0,
-        bombCd: 1.1 + idx * 0.35,
+        reactCd: 0,
+        bombCd: 1.4 + idx * 0.35,
         walkPhase: gameRand() * 6
       });
     });
@@ -4256,7 +4310,7 @@ function initEnemies() {
 
   if (isBossStage) {
     const bossVariant = biome.bossVariant;
-    const maxHp = 8 + level * 2 + diff.bossHpBonus + (coopMode === '2P' ? 4 : 0);
+    const maxHp = 6 + Math.floor(level * 1.5) + diff.bossHpBonus + (coopMode === '2P' ? 3 : 0);
     boss = {
       x: (COLS / 2) * TILE,
       y: (ROWS / 2) * TILE,
@@ -4266,13 +4320,13 @@ function initEnemies() {
       title: biome.bossTitle,
       hp: maxHp,
       maxHp,
-      vx: 1.58 * diff.speedMult,
-      vy: 1.18 * diff.speedMult,
+      vx: 1.45 * diff.speedMult,
+      vy: 1.08 * diff.speedMult,
       invuln: 0,
       stunned: 0,
-      attackTimer: 2.6,
-      boltTimer: 3.1,
-      summonTimer: 8.8,
+      attackTimer: 2.9,
+      boltTimer: 3.4,
+      summonTimer: 9.2,
       spiralAngle: 0,
       shieldAngle: 0,
       rushState: 'patrol',
@@ -4291,8 +4345,8 @@ function initEnemies() {
     };
     if (bossVariant === 2) {
       bossSatellites = [
-        { angle: 0, hp: 2, maxHp: 2, fireCd: 2.4 },
-        { angle: Math.PI, hp: 2, maxHp: 2, fireCd: 3.6 }
+        { angle: 0, hp: 2, maxHp: 2, fireCd: 2.6 },
+        { angle: Math.PI, hp: 2, maxHp: 2, fireCd: 3.8 }
       ];
     }
     if (hasRelic('apex_battery') && player.overdriveMeter < 50) {
@@ -4306,8 +4360,8 @@ function initEnemies() {
     ui.bossHud.classList.add('hidden');
   }
 
-  const baseWanted = isBossStage ? Math.min(3 + Math.floor(level / 2), 6) : Math.min(4 + level, 12);
-  const wanted = Math.min(14, baseWanted + diff.extraEnemies + (coopMode === '2P' ? 2 : 0));
+  const baseWanted = isBossStage ? Math.min(2 + Math.floor(level / 4), 4) : Math.min(3 + level, 10);
+  const wanted = Math.min(12, baseWanted + diff.extraEnemies + (coopMode === '2P' ? 2 : 0));
   let guard = 0;
 
   const useGentleStart = (gameMode === 'CAMPAIGN' && level === 1 && difficultyTier === 'NORMAL' && !isBossStage);
@@ -4316,27 +4370,28 @@ function initEnemies() {
   while (enemies.length < wanted && guard++ < 700) {
     const r = 1 + Math.floor(gameRand() * (ROWS - 2));
     const c = 1 + Math.floor(gameRand() * (COLS - 2));
-    const safeP2 = coopMode === '2P' && r >= ROWS - 4 && c <= 3;
-    if (cellOpen(r, c) && (r > 3 || c > 3) && !safeP2 && !enemies.some(e => e.r === r && e.c === c)) {
+    const safeP1 = Math.hypot(r - 1, c - 1) >= 4.2;
+    const safeP2 = coopMode !== '2P' || Math.hypot(r - (ROWS - 2), c - 1) >= 4.2;
+    if (cellOpen(r, c) && safeP1 && safeP2 && !enemies.some(e => e.r === r && e.c === c)) {
       let kind = archetypes[enemies.length % archetypes.length];
       if (enemies.length >= archetypes.length) {
         kind = archetypes[Math.floor(gameRand() * archetypes.length)];
       }
 
       const baseSpd =
-        kind === 'rival'      ? 1.75 :
-        kind === 'zephyr'     ? 1.56 :
-        kind === 'hunter'     ? 1.5 :
-        kind === 'mantis'     ? 1.48 :
-        kind === 'valkyrie'   ? 1.42 :
-        kind === 'sapper'     ? 1.4 :
-        kind === 'pyromancer' ? 1.35 :
-        kind === 'gravitor'   ? 1.32 :
-        kind === 'phantom'    ? 1.3 :
-        kind === 'knight'     ? 1.28 :
-        kind === 'slime'      ? 1.25 :
-        kind === 'sniper'     ? 1.24 :
-        kind === 'cryogolem'  ? 1.12 : 1.22;
+        kind === 'rival'      ? 1.66 :
+        kind === 'zephyr'     ? 1.48 :
+        kind === 'hunter'     ? 1.42 :
+        kind === 'mantis'     ? 1.40 :
+        kind === 'valkyrie'   ? 1.36 :
+        kind === 'sapper'     ? 1.34 :
+        kind === 'pyromancer' ? 1.30 :
+        kind === 'gravitor'   ? 1.28 :
+        kind === 'phantom'    ? 1.26 :
+        kind === 'knight'     ? 1.22 :
+        kind === 'slime'      ? 1.20 :
+        kind === 'sniper'     ? 1.20 :
+        kind === 'cryogolem'  ? 1.10 : 1.18;
 
       const rivalColors = ['#ef4444', '#ffcc33', '#a855f7', '#05ffa1'];
       const rCol = kind === 'rival' ? rivalColors[enemies.length % rivalColors.length] : biome.wallEdge;
@@ -4361,7 +4416,7 @@ function initEnemies() {
         enraged: false,
         aggro: false,
         range: 2 + (kind === 'rival' ? Math.floor(level / 3) : 0),
-        speed: (baseSpd + Math.min(0.85, level * 0.07)) * diff.speedMult,
+        speed: (baseSpd + Math.min(0.58, (level - 1) * 0.055)) * diff.speedMult,
         dx: 0,
         dy: 1,
         turn: 0,
@@ -4369,13 +4424,14 @@ function initEnemies() {
         frozen: 0,
         stunned: 0,
         invuln: 0,
-        bombCd: 1.6 + gameRand() * 1.6,
-        frostCd: 2.2 + gameRand() * 1.6,
+        reactCd: 0,
+        bombCd: 1.9 + gameRand() * 1.8,
+        frostCd: 2.5 + gameRand() * 1.8,
         aimTimer: 0,
         aimDx: 1,
         aimDy: 0,
-        shotCd: 1.5 + gameRand() * 1.4,
-        blinkCd: 3.5 + gameRand() * 2.0,
+        shotCd: 2.0 + gameRand() * 1.6,
+        blinkCd: 3.8 + gameRand() * 2.0,
         walkPhase: gameRand() * 6
       });
     }
@@ -4621,7 +4677,7 @@ function startLevel() {
   inputBuffer.timer = 0;
   p2InputBuffer.type = null;
   p2InputBuffer.timer = 0;
-  sectorBannerTimer = 3.0;
+  sectorBannerTimer = 5.5;
   if (hasRelic('phase_heart')) {
     player.shield = true;
     if (coopMode === '2P') player2.shield = true;
@@ -5953,10 +6009,11 @@ function rollPowerupType() {
     for (let i = 0; i < count; i++) weighted.push(id);
   };
 
-  pushMany('bomb', player.maxBombs < 9 ? 4 : 1);
-  pushMany('flame', player.range < 8 ? 4 : 1);
+  const earlyCoreBoost = level <= 3 ? 5 : 4;
+  pushMany('bomb', player.maxBombs < 9 ? earlyCoreBoost : 1);
+  pushMany('flame', player.range < 8 ? earlyCoreBoost : 1);
   pushMany('speed', player.speedTier < 6 ? 3 : 1);
-  pushMany('heart', 1);
+  pushMany('heart', lives < 3 ? 2 : 1);
 
   for (const sigId of biome.signaturePowerups) {
     if (sigId === 'skull') {
@@ -5965,7 +6022,7 @@ function rollPowerupType() {
       pushMany('chrono', 2);
     } else {
       const owned = isSignatureModuleOwned(sigId);
-      pushMany(sigId, owned ? 1 : 3);
+      pushMany(sigId, owned ? 1 : 4);
     }
   }
 
@@ -6000,7 +6057,7 @@ function spawnHydraMiniSlimes(parent) {
       enraged: false,
       aggro: false,
       range: 2,
-      speed: parent.speed * 1.36,
+      speed: parent.speed * 1.24,
       dx: odx,
       dy: ody,
       turn: 0.25,
@@ -6008,6 +6065,7 @@ function spawnHydraMiniSlimes(parent) {
       frozen: 0,
       stunned: 0,
       invuln: 0.65,
+      reactCd: 0,
       bombCd: 9,
       walkPhase: Math.random() * 6
     };
@@ -6022,7 +6080,7 @@ function damageBoss(dmg = 1, label = 'CORE HIT! -1 HP', bypassInvuln = false) {
   const diff = getDiffConfig();
   const actualDmg = boss.stunned > 0 ? Math.max(dmg, 2) : dmg;
   boss.hp -= actualDmg;
-  boss.invuln = 0.72;
+  boss.invuln = 0.58;
   addScore(Math.round(250 * comboCount * diff.scoreMult));
   addOverdriveCharge(22);
   if (state === 'PLAYING') {
@@ -6084,7 +6142,7 @@ function handleEnemyKilledVisuals(deadEnemy, killerOwner = 'player') {
         lives = Math.min(9, lives + 1);
         addFloatText(player.x + 15, player.y - 18, 'NANO-SIPHON +1 LIFE!', '#05ffa1', 1.2);
       }
-      if (stageKills % 3 === 0 && gameMode !== 'TRAINING') {
+      if (stageKills % 2 === 0 && gameMode !== 'TRAINING') {
         awardScrap(5);
       }
 
@@ -6129,7 +6187,7 @@ function detonateBombObject(b) {
 
   const biome = getActiveBiome();
   const blastPoints = [{ x: b.x, y: b.y }];
-  const dropBaseChance = 0.42 + getTechTier('scanner') * 0.06;
+  const dropBaseChance = 0.48 + getTechTier('scanner') * 0.06;
 
   for (const d of dirs) {
     let endC = b.c;
@@ -6724,14 +6782,14 @@ function bombThreatensCell(b, targetC, targetR) {
   return false;
 }
 
-function isTileThreatenedByBomb(c, r) {
+function isTileThreatenedByBomb(c, r, maxFuseTime = 999) {
   if (explosions.some(ex => ex.c === c && ex.r === r)) return true;
   if (fallingBlocks.some(fb => fb.c === c && fb.r === r)) return true;
   if (boss && boss.reticles.some(ret => ret.c === c && ret.r === r)) return true;
-  return bombs.some(b => bombThreatensCell(b, c, r));
+  return bombs.some(b => (b.t <= maxFuseTime || (b.c === c && b.r === r)) && bombThreatensCell(b, c, r));
 }
 
-function findBestEscapeDir(c0, r0, canPhase = false) {
+function findBestEscapeDir(c0, r0, canPhase = false, maxDist = 4, noticeTime = 999) {
   const visited = new Set([`${c0},${r0}`]);
   const queue = [];
   for (const d of dirs) {
@@ -6746,10 +6804,10 @@ function findBestEscapeDir(c0, r0, canPhase = false) {
   }
   while (queue.length > 0) {
     const cur = queue.shift();
-    if (!isTileThreatenedByBomb(cur.c, cur.r)) {
+    if (!isTileThreatenedByBomb(cur.c, cur.r, noticeTime)) {
       return cur.firstDir;
     }
-    if (cur.dist >= 6) continue;
+    if (cur.dist >= maxDist) continue;
     for (const d of dirs) {
       const nc = cur.c + d.x;
       const nr = cur.r + d.y;
@@ -6831,20 +6889,27 @@ function computeLaserEnd(startX, startY, dx, dy, maxTiles = 6) {
 
 function chooseDir(e) {
   const canPhase = e.kind === 'phantom';
+  const diff = getDiffConfig();
+  const isTactical = e.kind === 'rival' || e.kind === 'sapper' || e.kind === 'pyromancer';
+  const noticeWindow = diff.bombNoticeTime + (isTactical ? 0.55 : 0);
+  const escapeDepth = Math.min(diff.maxEscapeDist, isTactical ? 6 : Math.max(3, diff.maxEscapeDist - 1));
 
-  // Priority #1: If currently standing on a threatened tile, follow guaranteed BFS safe escape path!
-  if (isTileThreatenedByBomb(e.c, e.r)) {
-    const esc = findBestEscapeDir(e.c, e.r, canPhase);
-    if (esc) {
-      e.dx = esc.x;
-      e.dy = esc.y;
-      e.escaping = true;
-      e.turn = 0.24;
-      return;
+  // Threat-aware escape with human-like reaction odds so skilled bomb traps work
+  if (isTileThreatenedByBomb(e.c, e.r, noticeWindow)) {
+    const noticeRoll = e.escaping || isTactical || Math.random() < diff.escapeChance;
+    if (noticeRoll) {
+      const esc = findBestEscapeDir(e.c, e.r, canPhase, escapeDepth, noticeWindow);
+      if (esc) {
+        e.dx = esc.x;
+        e.dy = esc.y;
+        e.escaping = true;
+        e.turn = 0.28;
+        return;
+      }
     }
   }
   e.escaping = false;
-  e.turn = 0.35 + Math.random() * 0.75;
+  e.turn = 0.4 + Math.random() * 0.85;
 
   const valid = dirs.filter(d => {
     const nc = e.c + d.x;
@@ -6858,27 +6923,27 @@ function chooseDir(e) {
   if (valid.length === 0) {
     e.dx = 0;
     e.dy = 0;
-    e.turn = 0.2;
+    e.turn = 0.22;
     return;
   }
 
-  const safeDirs = valid.filter(d => !isTileThreatenedByBomb(e.c + d.x, e.r + d.y));
-  if (safeDirs.length === 0) {
-    // Wait safely on current unthreatened tile rather than stepping into an active bomb lane!
-    if (!isTileThreatenedByBomb(e.c, e.r)) {
-      e.dx = 0;
-      e.dy = 0;
-      e.turn = 0.22;
-      return;
-    }
+  const safeDirs = valid.filter(d => !isTileThreatenedByBomb(e.c + d.x, e.r + d.y, noticeWindow));
+  if (safeDirs.length === 0 && !isTileThreatenedByBomb(e.c, e.r, noticeWindow) && (isTactical || Math.random() < diff.escapeChance)) {
+    e.dx = 0;
+    e.dy = 0;
+    e.turn = 0.24;
+    return;
   }
 
   const pool = safeDirs.length > 0 ? safeDirs : valid;
-  const diff = getDiffConfig();
+  const liveTargets = [player, player2].filter(t => t.alive);
+  const nearTarget = liveTargets.length > 1
+    ? liveTargets.reduce((bT, t) => Math.hypot(t.x + 15 - e.x, t.y + 15 - e.y) < Math.hypot(bT.x + 15 - e.x, bT.y + 15 - e.y) ? t : bT)
+    : (liveTargets[0] || player);
 
   if (e.kind === 'rival' || e.kind === 'sapper' || e.kind === 'pyromancer') {
-    let targetX = player.x + 15;
-    let targetY = player.y + 15;
+    let targetX = nearTarget.x + 15;
+    let targetY = nearTarget.y + 15;
 
     // True Free-For-All Battle Royale targeting: hunt nearest living Bomber (Player or Rival)!
     if (gameMode === 'BATTLE_ROYALE' && e.kind === 'rival') {
@@ -6924,8 +6989,8 @@ function chooseDir(e) {
     Math.random() < diff.aggroChance
   ) {
     pool.sort((a, b) => {
-      const da = Math.hypot((e.x + a.x * TILE) - (player.x + 15), (e.y + a.y * TILE) - (player.y + 15));
-      const db = Math.hypot((e.x + b.x * TILE) - (player.x + 15), (e.y + b.y * TILE) - (player.y + 15));
+      const da = Math.hypot((e.x + a.x * TILE) - (nearTarget.x + 15), (e.y + a.y * TILE) - (nearTarget.y + 15));
+      const db = Math.hypot((e.x + b.x * TILE) - (nearTarget.x + 15), (e.y + b.y * TILE) - (nearTarget.y + 15));
       return da - db;
     });
     e.dx = pool[0].x;
@@ -6939,6 +7004,8 @@ function chooseDir(e) {
 }
 
 function updateEnemiesAndBoss(dt) {
+  const diff = getDiffConfig();
+  const bossPace = difficultyTier === 'APEX' ? 1.08 : difficultyTier === 'HARD' ? 0.96 : 0.82;
   const timeScale = chronoTime > 0 ? 0.25 : 1.0;
   const effDt = dt * timeScale;
   const activeTargets = [player, player2].filter(t => t.alive);
@@ -6949,8 +7016,6 @@ function updateEnemiesAndBoss(dt) {
       Math.hypot(t.x + 15 - x, t.y + 15 - y) < Math.hypot(bestT.x + 15 - x, bestT.y + 15 - y) ? t : bestT
     );
   };
-  const pc = Math.floor((leadTarget.x + 15) / TILE);
-  const pr = Math.floor((leadTarget.y + 15) / TILE);
 
   // Update Enemy Plasma Rail, Frost, Magma, Tesla & Void Bolts
   for (let bi = enemyBolts.length - 1; bi >= 0; bi--) {
@@ -6989,6 +7054,7 @@ function updateEnemiesAndBoss(dt) {
   for (const e of enemies) {
     if (e.invuln > 0) e.invuln -= dt;
     if (e.warpLock > 0) e.warpLock = Math.max(0, e.warpLock - effDt);
+    if ((e.reactCd || 0) > 0) e.reactCd = Math.max(0, e.reactCd - effDt);
     if (e.frozen > 0) {
       e.frozen -= dt;
       continue;
@@ -7002,36 +7068,39 @@ function updateEnemiesAndBoss(dt) {
     const foeTgt = getNearestTarget(e.x, e.y);
     const tc = Math.floor((foeTgt.x + 15) / TILE);
     const tr = Math.floor((foeTgt.y + 15) / TILE);
+    const isTacticalFoe = e.kind === 'rival' || e.kind === 'sapper' || e.kind === 'pyromancer';
+    const enemyNotice = diff.bombNoticeTime + (isTacticalFoe ? 0.55 : 0);
 
     // 1. Rail-Spider Sniper Aiming & Laser Shot (Neon Citadel)
     if (e.kind === 'sniper') {
       e.shotCd = Math.max(0, (e.shotCd || 0) - effDt);
       if (e.aimTimer > 0) {
-        if (isTileThreatenedByBomb(e.c, e.r)) {
+        if (isTileThreatenedByBomb(e.c, e.r, enemyNotice)) {
           e.aimTimer = 0;
         } else {
           e.aimTimer -= effDt;
           if (e.aimTimer <= 0) {
             if (state === 'PLAYING') sfx.playRailShot(e.x);
+            const boltSpd = 5.2 * diff.boltSpeedMult;
             enemyBolts.push({
               x: e.x + e.aimDx * 14,
               y: e.y + e.aimDy * 14,
-              vx: e.aimDx * 5.4,
-              vy: e.aimDy * 5.4,
+              vx: e.aimDx * boltSpd,
+              vy: e.aimDy * boltSpd,
               color: '#f72585',
               life: 1.6
             });
             burst(e.x + e.aimDx * 16, e.y + e.aimDy * 16, '#f72585', 10);
-            e.shotCd = 2.8;
+            e.shotCd = difficultyTier === 'NORMAL' ? 3.5 : 3.0;
           }
           continue;
         }
       } else if (e.shotCd <= 0 && (e.c === tc || e.r === tr)) {
         const distTiles = Math.abs(e.c - tc) + Math.abs(e.r - tr);
-        if (distTiles >= 2 && distTiles <= 6 && checkClearCorridor(e.c, e.r, tc, tr) && !isTileThreatenedByBomb(e.c, e.r)) {
+        if (distTiles >= 2 && distTiles <= 6 && checkClearCorridor(e.c, e.r, tc, tr) && !isTileThreatenedByBomb(e.c, e.r, enemyNotice)) {
           e.aimDx = Math.sign(tc - e.c);
           e.aimDy = Math.sign(tr - e.r);
-          e.aimTimer = 0.78;
+          e.aimTimer = difficultyTier === 'NORMAL' ? 1.05 : difficultyTier === 'HARD' ? 0.88 : 0.72;
           if (state === 'PLAYING') sfx.playLaserAim();
           addFloatText(e.x, e.y - 16, 'LASER LOCK!', '#f72585', 0.95);
           continue;
@@ -7041,20 +7110,21 @@ function updateEnemiesAndBoss(dt) {
 
     // 2. Cryo-Golem 4-Way Frost Shard Slam (Cryo Foundry)
     if (e.kind === 'cryogolem') {
-      e.frostCd = (e.frostCd ?? 3.2) - effDt;
-      if (e.frostCd <= 0 && Math.hypot(e.x - (foeTgt.x + 15), e.y - (foeTgt.y + 15)) < TILE * 4.6 && !isTileThreatenedByBomb(e.c, e.r)) {
-        e.frostCd = 3.8 + Math.random() * 0.8;
+      e.frostCd = (e.frostCd ?? 3.4) - effDt;
+      if (e.frostCd <= 0 && Math.hypot(e.x - (foeTgt.x + 15), e.y - (foeTgt.y + 15)) < TILE * 4.4 && !isTileThreatenedByBomb(e.c, e.r, enemyNotice)) {
+        e.frostCd = 4.2 + Math.random() * 1.0;
         addShockwave(e.x, e.y, 76, '#70e2ff', 3);
         burst(e.x, e.y, '#70e2ff', 14);
         addFloatText(e.x, e.y - 18, 'CRYO SLAM!', '#70e2ff', 0.98);
+        const fSpd = 4.0 * diff.boltSpeedMult;
         for (const d of dirs) {
           enemyBolts.push({
             x: e.x + d.x * 14,
             y: e.y + d.y * 14,
-            vx: d.x * 4.2,
-            vy: d.y * 4.2,
+            vx: d.x * fSpd,
+            vy: d.y * fSpd,
             color: '#70e2ff',
-            life: 0.95
+            life: 0.92
           });
         }
       }
@@ -7062,10 +7132,11 @@ function updateEnemiesAndBoss(dt) {
 
     // 3. Seeker Hound, Bio-Mantis & Zephyr Interceptor Line-of-Sight Aggro Lunges
     if (e.kind === 'hunter' || e.kind === 'mantis' || e.kind === 'zephyr') {
+      const losMax = difficultyTier === 'NORMAL' ? 5 : 6;
       const los = (e.c === tc || e.r === tr) &&
-                  (Math.abs(e.c - tc) + Math.abs(e.r - tr) <= 6) &&
+                  (Math.abs(e.c - tc) + Math.abs(e.r - tr) <= losMax) &&
                   checkClearCorridor(e.c, e.r, tc, tr);
-      if (los && !isTileThreatenedByBomb(e.c, e.r) && !isTileThreatenedByBomb(e.c + Math.sign(tc - e.c), e.r + Math.sign(tr - e.r))) {
+      if (los && !isTileThreatenedByBomb(e.c, e.r, enemyNotice) && !isTileThreatenedByBomb(e.c + Math.sign(tc - e.c), e.r + Math.sign(tr - e.r), enemyNotice)) {
         if (!e.aggro) {
           e.aggro = true;
           const callout = e.kind === 'mantis' ? 'SCYTHE LUNGE!' : e.kind === 'zephyr' ? 'SONIC SWOOP!' : 'TURBO AGGRO!';
@@ -7077,14 +7148,15 @@ function updateEnemiesAndBoss(dt) {
         e.turn = 0.35;
 
         if (e.kind === 'zephyr') {
-          e.shotCd = Math.max(0, (e.shotCd ?? 1.8) - effDt);
+          e.shotCd = Math.max(0, (e.shotCd ?? 2.2) - effDt);
           if (e.shotCd <= 0 && (Math.abs(e.c - tc) + Math.abs(e.r - tr) >= 2)) {
-            e.shotCd = 3.2;
+            e.shotCd = 3.5;
+            const zSpd = 4.8 * diff.boltSpeedMult;
             enemyBolts.push({
               x: e.x + e.dx * 14,
               y: e.y + e.dy * 14,
-              vx: e.dx * 5.2,
-              vy: e.dy * 5.2,
+              vx: e.dx * zSpd,
+              vy: e.dy * zSpd,
               color: '#38bdf8',
               life: 1.35
             });
@@ -7097,8 +7169,8 @@ function updateEnemiesAndBoss(dt) {
 
     // 4. Pyromancer, Storm Valkyrie & Void Gravitor Corridor Projectiles
     if (e.kind === 'pyromancer' || e.kind === 'valkyrie' || e.kind === 'gravitor') {
-      e.shotCd = Math.max(0, (e.shotCd ?? 2.2) - effDt);
-      if (e.shotCd <= 0 && (e.c === tc || e.r === tr) && !isTileThreatenedByBomb(e.c, e.r)) {
+      e.shotCd = Math.max(0, (e.shotCd ?? 2.4) - effDt);
+      if (e.shotCd <= 0 && (e.c === tc || e.r === tr) && !isTileThreatenedByBomb(e.c, e.r, enemyNotice)) {
         const distTiles = Math.abs(e.c - tc) + Math.abs(e.r - tr);
         const maxDist = e.kind === 'valkyrie' ? 7 : 6;
         if (distTiles >= 2 && distTiles <= maxDist && checkClearCorridor(e.c, e.r, tc, tr)) {
@@ -7106,7 +7178,7 @@ function updateEnemiesAndBoss(dt) {
           const sdy = Math.sign(tr - e.r);
           e.dx = sdx || e.dx;
           e.dy = sdy || e.dy;
-          const bSpeed = e.kind === 'valkyrie' ? 5.7 : e.kind === 'pyromancer' ? 4.8 : 4.4;
+          const bSpeed = (e.kind === 'valkyrie' ? 5.3 : e.kind === 'pyromancer' ? 4.5 : 4.2) * diff.boltSpeedMult;
           const bCol = e.kind === 'valkyrie' ? '#facc15' : e.kind === 'pyromancer' ? '#ff5e00' : '#c084fc';
           const bText = e.kind === 'valkyrie' ? 'TESLA LANCE!' : e.kind === 'pyromancer' ? 'MAGMA FLARE!' : 'VOID ORB!';
           enemyBolts.push({
@@ -7115,7 +7187,7 @@ function updateEnemiesAndBoss(dt) {
             vx: sdx * bSpeed,
             vy: sdy * bSpeed,
             color: bCol,
-            life: 1.55
+            life: 1.5
           });
           burst(e.x + sdx * 16, e.y + sdy * 16, bCol, 10);
           if (state === 'PLAYING') {
@@ -7123,16 +7195,16 @@ function updateEnemiesAndBoss(dt) {
             else sfx.playRailShot(e.x);
           }
           addFloatText(e.x, e.y - 16, bText, bCol, 0.94);
-          e.shotCd = e.kind === 'valkyrie' ? 2.6 : e.kind === 'pyromancer' ? 2.9 : 2.75;
+          e.shotCd = e.kind === 'valkyrie' ? 3.2 : e.kind === 'pyromancer' ? 3.4 : 3.2;
         }
       }
     }
 
     // 5. Phase Wraith & Void Gravitor Dimensional Shadow Blink (Quantum Abyss)
     if (e.kind === 'phantom' || e.kind === 'gravitor') {
-      e.blinkCd = (e.blinkCd || 3.8) - effDt;
+      e.blinkCd = (e.blinkCd || 4.0) - effDt;
       if (e.blinkCd <= 0 && (e.dx !== 0 || e.dy !== 0)) {
-        e.blinkCd = (e.kind === 'gravitor' ? 4.6 : 4.0) + Math.random() * 2.0;
+        e.blinkCd = (e.kind === 'gravitor' ? 5.0 : 4.4) + Math.random() * 2.0;
         const bc = e.c + e.dx * 2;
         const br = e.r + e.dy * 2;
         if (bc >= 1 && bc <= COLS - 2 && br >= 1 && br <= ROWS - 2 && cellOpen(br, bc) && !isTileThreatenedByBomb(bc, br)) {
@@ -7147,8 +7219,9 @@ function updateEnemiesAndBoss(dt) {
       }
     }
 
-    // Trigger immediate BFS escape ONLY if newly threatened and not already executing escape
-    if (isTileThreatenedByBomb(e.c, e.r) && !e.escaping) {
+    // Trigger BFS escape with slight human reaction delay when newly threatened
+    if (isTileThreatenedByBomb(e.c, e.r, enemyNotice) && !e.escaping && e.reactCd <= 0) {
+      e.reactCd = difficultyTier === 'NORMAL' ? 0.34 : difficultyTier === 'HARD' ? 0.22 : 0.12;
       chooseDir(e);
     }
 
@@ -7157,7 +7230,7 @@ function updateEnemiesAndBoss(dt) {
 
     // Rival Bombers, Demo-Sappers & Pyromancers: plant BFS-verified tactical bombs
     if (e.kind === 'rival' || e.kind === 'sapper' || e.kind === 'pyromancer') {
-      if (e.kind !== 'pyromancer') {
+      if (e.kind !== 'pyromancer' && (gameMode === 'BATTLE_ROYALE' || level >= 3)) {
         for (let pi = powerups.length - 1; pi >= 0; pi--) {
           const pw = powerups[pi];
           if (pw.c === e.c && pw.r === e.r && pw.type !== 'skull') {
@@ -7167,7 +7240,7 @@ function updateEnemiesAndBoss(dt) {
             else if (pw.type === 'pierce') e.pierce = true;
             else if (pw.type === 'ice') e.ice = true;
             else if (pw.type === 'shield') e.hp = Math.min((e.maxHp || 2) + 1, (e.hp || 1) + 1);
-            else e.speed = Math.min(3.0, e.speed + 0.14);
+            else e.speed = Math.min(2.8, e.speed + 0.12);
             powerups.splice(pi, 1);
             burst(e.x, e.y, e.rivalColor || '#ffcc33', 10);
           }
@@ -7180,10 +7253,10 @@ function updateEnemiesAndBoss(dt) {
       const nearPlayer = activeTargets.some(t => Math.hypot(e.x - (t.x + 15), e.y - (t.y + 15)) < TILE * 3.0);
       const nearOtherRival = gameMode === 'BATTLE_ROYALE' && enemies.some(o => o !== e && Math.hypot(o.x - e.x, o.y - e.y) < TILE * 3.0);
       const bRange = e.range || 2;
-      const fuseT = e.kind === 'pyromancer' ? 1.85 : 2.15;
+      const fuseT = e.kind === 'pyromancer' ? 1.95 : 2.15;
 
       if (e.bombCd <= 0 && myActiveBombs < (e.maxBombs || 1) && (nearCrate || nearPlayer || nearOtherRival) && !isTileThreatenedByBomb(e.c, e.r)) {
-        e.bombCd = (e.kind === 'rival' ? 2.2 : e.kind === 'pyromancer' ? 3.5 : 3.2) + Math.random() * 1.4;
+        e.bombCd = (e.kind === 'rival' ? 2.5 : e.kind === 'pyromancer' ? 3.8 : 3.5) + Math.random() * 1.4;
         if (!bombs.some(b => b.c === e.c && b.r === e.r) && hasSafeEscapeAfterBomb(e.c, e.r, bRange, !!e.pierce)) {
           bombs.push({
             c: e.c, r: e.r,
@@ -7212,8 +7285,9 @@ function updateEnemiesAndBoss(dt) {
     }
 
     const canPhase = e.kind === 'phantom';
-    const aggroMult = e.kind === 'mantis' ? 1.68 : e.kind === 'zephyr' ? 1.55 : 1.38;
-    const spdBoost = e.aggro ? aggroMult : e.escaping ? 1.18 : 1.0;
+    const aggroMult = e.kind === 'mantis' ? 1.36 : e.kind === 'zephyr' ? 1.32 : 1.24;
+    const escapeBoost = difficultyTier === 'NORMAL' ? 1.04 : 1.12;
+    const spdBoost = e.aggro ? aggroMult : e.escaping ? escapeBoost : 1.0;
     const nx = e.x + e.dx * e.speed * spdBoost * effDt * 60;
     const ny = e.y + e.dy * e.speed * spdBoost * effDt * 60;
     const colCheck = rectHitsWall(nx - e.rad, ny - e.rad, e.rad * 2, e.rad * 2, {
@@ -7284,7 +7358,7 @@ function updateEnemiesAndBoss(dt) {
     egg.t -= effDt;
     if (egg.t <= 0) {
       bossEggs.splice(i, 1);
-      if (enemies.length < 7) {
+      if (enemies.length < 5) {
         const hatchKind = Math.random() < 0.5 ? 'mantis' : 'slime';
         enemies.push({
           uid: `e_egg_${nextEnemyId++}`,
@@ -7292,8 +7366,8 @@ function updateEnemiesAndBoss(dt) {
           kind: hatchKind, isMini: false, rivalColor: '#84cc16',
           hp: 1, maxHp: 1, maxBombs: 0, canKick: false, warpLock: 0,
           shielded: false, enraged: false, aggro: false, range: 2,
-          speed: 1.5, dx: 1, dy: 0, turn: 0.2, hue: 0,
-          frozen: 0, stunned: 0, invuln: 0.6, bombCd: 9, frostCd: 9,
+          speed: 1.38 * diff.speedMult, dx: 1, dy: 0, turn: 0.2, hue: 0,
+          frozen: 0, stunned: 0, invuln: 0.6, reactCd: 0, bombCd: 9, frostCd: 9,
           aimTimer: 0, aimDx: 1, aimDy: 0, shotCd: 2.5, blinkCd: 9, walkPhase: 0
         });
         burst(egg.x, egg.y, '#84cc16', 18);
@@ -7312,16 +7386,17 @@ function updateEnemiesAndBoss(dt) {
     if (cl.x > (COLS - 4.25) * TILE) { cl.x = (COLS - 4.25) * TILE; cl.vx = -Math.abs(cl.vx); }
     if (cl.y < 3.25 * TILE) { cl.y = 3.25 * TILE; cl.vy = Math.abs(cl.vy); }
     if (cl.y > (ROWS - 3.25) * TILE) { cl.y = (ROWS - 3.25) * TILE; cl.vy = -Math.abs(cl.vy); }
-    cl.boltTimer = (cl.boltTimer || 2.2) - effDt;
+    cl.boltTimer = (cl.boltTimer || 2.5) - effDt;
     if (cl.boltTimer <= 0) {
-      cl.boltTimer = 2.4;
+      cl.boltTimer = 2.6 / bossPace;
       const bTgt = getNearestTarget(cl.x, cl.y);
       const ang = Math.atan2((bTgt.y + 15) - cl.y, (bTgt.x + 15) - cl.x);
+      const clSpd = 3.9 * diff.boltSpeedMult;
       enemyBolts.push({
         x: cl.x + Math.cos(ang) * 20,
         y: cl.y + Math.sin(ang) * 20,
-        vx: Math.cos(ang) * 4.0,
-        vy: Math.sin(ang) * 4.0,
+        vx: Math.cos(ang) * clSpd,
+        vy: Math.sin(ang) * clSpd,
         color: '#c084fc',
         life: 1.45
       });
@@ -7348,6 +7423,22 @@ function updateEnemiesAndBoss(dt) {
       if (state === 'PLAYING') sfx.playBossRoar();
       addShockwave(boss.x, boss.y, 230, '#ff2a6d', 5);
       addFloatText(boss.x, boss.y - 34, newPhase === 3 ? 'OVERCLOCK PHASE!' : 'PHASE II ENGAGED!', '#ff2a6d', 1.35);
+      // Drop a tactical supply pod on Boss phase transition if arena isn't cluttered
+      if (powerups.length < 3) {
+        const bBiome = getActiveBiome();
+        const dropPool = bBiome.signaturePowerups.filter(p => p !== 'skull');
+        const dropType = (newPhase === 3 && lives < 3) ? 'heart' : (dropPool[Math.floor(gameRand() * dropPool.length)] || 'flame');
+        for (let tries = 0; tries < 25; tries++) {
+          const sc = 1 + Math.floor(gameRand() * (COLS - 2));
+          const sr = 1 + Math.floor(gameRand() * (ROWS - 2));
+          if (cellOpen(sr, sc) && !powerups.some(p => p.c === sc && p.r === sr) && Math.hypot(sc * TILE + 24 - boss.x, sr * TILE + 24 - boss.y) > TILE * 2.5) {
+            powerups.push({ c: sc, r: sr, type: dropType });
+            burst(sc * TILE + 24, sr * TILE + 24, '#05ffa1', 14);
+            addFloatText(sc * TILE + 24, sr * TILE + 10, 'SUPPLY DROP!', '#05ffa1', 1.05);
+            break;
+          }
+        }
+      }
       syncBossUI();
     }
 
@@ -7364,7 +7455,7 @@ function updateEnemiesAndBoss(dt) {
         const wantAng = Math.atan2((bTgt.y + 15) - boss.y, (bTgt.x + 15) - boss.x);
         const curAng = boss.shieldAngle || 0;
         const delta = Math.atan2(Math.sin(wantAng - curAng), Math.cos(wantAng - curAng));
-        boss.shieldAngle = curAng + Math.sign(delta) * Math.min(Math.abs(delta), effDt * (boss.phase === 3 ? 2.1 : 1.55));
+        boss.shieldAngle = curAng + Math.sign(delta) * Math.min(Math.abs(delta), effDt * (boss.phase === 3 ? 1.85 : 1.35));
       }
 
       // Variant 1: Cryo Overlord Glacier Bull-Rush + Self-Stun Crash!
@@ -7382,7 +7473,7 @@ function updateEnemiesAndBoss(dt) {
         } else if (boss.rushState === 'rush') {
           bossMovedCustom = true;
           boss.rushTimer -= effDt;
-          const rSpd = boss.phase === 3 ? 6.2 : 5.2;
+          const rSpd = (boss.phase === 3 ? 5.6 : 4.8) * Math.min(1.08, bossPace + 0.08);
           boss.x += (boss.rushDx || 0) * rSpd * effDt * 60;
           boss.y += (boss.rushDy || 0) * rSpd * effDt * 60;
           const rBc = Math.floor(boss.x / TILE);
@@ -7394,7 +7485,7 @@ function updateEnemiesAndBoss(dt) {
             boss.y = Math.max(minY, Math.min(maxY, boss.y));
             if (hitBombInRush) hitBombInRush.t = 0;
             boss.rushState = 'patrol';
-            boss.rushTimer = 5.2;
+            boss.rushTimer = 5.4 / bossPace;
             boss.stunned = 2.6;
             shake = Math.max(shake, 0.38);
             addShockwave(boss.x, boss.y, 130, '#70e2ff', 4.5);
@@ -7402,7 +7493,7 @@ function updateEnemiesAndBoss(dt) {
             addFloatText(boss.x, boss.y - 38, 'GLACIER CRASH! STUNNED!', '#ffcc33', 1.25);
           } else if (boss.rushTimer <= 0) {
             boss.rushState = 'patrol';
-            boss.rushTimer = 4.6;
+            boss.rushTimer = 4.8 / bossPace;
           }
         } else {
           boss.rushTimer = (boss.rushTimer ?? 4.8) - effDt;
@@ -7412,7 +7503,7 @@ function updateEnemiesAndBoss(dt) {
             if (Math.abs(dx) >= Math.abs(dy)) { boss.rushDx = Math.sign(dx) || 1; boss.rushDy = 0; }
             else { boss.rushDx = 0; boss.rushDy = Math.sign(dy) || 1; }
             boss.rushState = 'telegraph';
-            boss.rushTimer = 0.88;
+            boss.rushTimer = 0.96;
             addFloatText(boss.x, boss.y - 36, 'RUSH INCOMING!', '#70e2ff', 1.15);
           }
         }
@@ -7428,18 +7519,19 @@ function updateEnemiesAndBoss(dt) {
             boss.x = boss.dashTx;
             boss.y = boss.dashTy;
             boss.dashState = 'patrol';
-            boss.dashTimer = boss.phase === 3 ? 3.8 : 4.8;
+            boss.dashTimer = (boss.phase === 3 ? 4.2 : 5.2) / bossPace;
             if (state === 'PLAYING') sfx.playZap(boss.x);
             addShockwave(boss.x, boss.y, 135, '#facc15', 4.2);
             burst(boss.x, boss.y, '#facc15', 24);
             addFloatText(boss.x, boss.y - 38, 'SONIC BLINK SLAM!', '#facc15', 1.2);
+            const tSpd = 4.5 * diff.boltSpeedMult;
             for (let k = 0; k < 4; k++) {
               const ang = (k * Math.PI) / 2 + 0.4;
               enemyBolts.push({
                 x: boss.x + Math.cos(ang) * 26,
                 y: boss.y + Math.sin(ang) * 26,
-                vx: Math.cos(ang) * 4.8,
-                vy: Math.sin(ang) * 4.8,
+                vx: Math.cos(ang) * tSpd,
+                vy: Math.sin(ang) * tSpd,
                 color: '#facc15',
                 life: 1.4
               });
@@ -7449,7 +7541,7 @@ function updateEnemiesAndBoss(dt) {
           boss.dashTimer = (boss.dashTimer ?? 5.0) - effDt;
           if (boss.dashTimer <= 0) {
             boss.dashState = 'charge';
-            boss.dashTimer = 0.9;
+            boss.dashTimer = 1.0;
             boss.dashTx = Math.max(minX + 18, Math.min(maxX - 18, bTgt.x + 15 + (Math.random() - 0.5) * 90));
             boss.dashTy = Math.max(minY + 18, Math.min(maxY - 18, bTgt.y + 15 + (Math.random() - 0.5) * 90));
             addFloatText(boss.dashTx, boss.dashTy - 18, 'BLINK TARGET!', '#facc15', 1.05);
@@ -7458,7 +7550,7 @@ function updateEnemiesAndBoss(dt) {
       }
 
       if (!bossMovedCustom) {
-        const speedMult = boss.phase === 3 ? 1.55 : boss.phase === 2 ? 1.28 : 1.0;
+        const speedMult = boss.phase === 3 ? 1.45 : boss.phase === 2 ? 1.22 : 1.0;
         boss.x += boss.vx * speedMult * effDt * 60;
         boss.y += boss.vy * speedMult * effDt * 60;
 
@@ -7478,20 +7570,21 @@ function updateEnemiesAndBoss(dt) {
 
       // Variant 2: Solar Emperor Orbiting Defense Satellites
       if (boss.variant === 2 && bossSatellites.length) {
-        const orbitSpd = boss.phase === 3 ? 1.9 : 1.3;
+        const orbitSpd = boss.phase === 3 ? 1.75 : 1.25;
         for (const sat of bossSatellites) {
           if ((sat.invuln || 0) > 0) sat.invuln = Math.max(0, sat.invuln - dt);
           sat.angle = (sat.angle || 0) + effDt * orbitSpd;
-          sat.fireCd = (sat.fireCd ?? 2.5) - effDt;
+          sat.fireCd = (sat.fireCd ?? 2.8) - effDt;
           if (sat.fireCd <= 0) {
-            sat.fireCd = boss.phase === 3 ? 2.1 : 2.9;
+            sat.fireCd = (boss.phase === 3 ? 2.4 : 3.2) / bossPace;
             const sx = boss.x + Math.cos(sat.angle) * 62;
             const sy = boss.y + Math.sin(sat.angle) * 62;
             const ang = Math.atan2((bTgt.y + 15) - sy, (bTgt.x + 15) - sx);
+            const sSpd = 4.2 * diff.boltSpeedMult;
             enemyBolts.push({
               x: sx, y: sy,
-              vx: Math.cos(ang) * 4.5,
-              vy: Math.sin(ang) * 4.5,
+              vx: Math.cos(ang) * sSpd,
+              vy: Math.sin(ang) * sSpd,
               color: '#ffcc33',
               life: 1.5
             });
@@ -7504,7 +7597,7 @@ function updateEnemiesAndBoss(dt) {
       if (boss.variant === 3) {
         boss.eggTimer = (boss.eggTimer ?? 5.5) - effDt;
         if (boss.eggTimer <= 0) {
-          boss.eggTimer = boss.phase === 3 ? 4.4 : 6.2;
+          boss.eggTimer = (boss.phase === 3 ? 4.8 : 6.4) / bossPace;
           if (bossEggs.length < 3 && cellOpen(br, bc) && !bossEggs.some(g => g.c === bc && g.r === br)) {
             bossEggs.push({ c: bc, r: br, x: bc * TILE + TILE / 2, y: br * TILE + TILE / 2, t: 6.5, maxT: 6.5 });
             burst(bc * TILE + 24, br * TILE + 24, '#84cc16', 12);
@@ -7515,9 +7608,9 @@ function updateEnemiesAndBoss(dt) {
 
       // Variant 5: Quantum Nexus Phase-2+ Safe Dimensional Blink + Mirage Decoy Clones!
       if (boss.variant === 5 && boss.phase >= 2) {
-        boss.blinkTimer = (boss.blinkTimer ?? 4.8) - effDt;
+        boss.blinkTimer = (boss.blinkTimer ?? 5.0) - effDt;
         if (boss.blinkTimer <= 0) {
-          boss.blinkTimer = boss.phase === 3 ? 3.8 : 5.2;
+          boss.blinkTimer = (boss.phase === 3 ? 4.2 : 5.5) / bossPace;
           const spots = [
             { x: 5.5 * TILE, y: 4.5 * TILE },
             { x: (COLS - 5.5) * TILE, y: 4.5 * TILE },
@@ -7525,12 +7618,12 @@ function updateEnemiesAndBoss(dt) {
             { x: (COLS - 5.5) * TILE, y: (ROWS - 4.5) * TILE }
           ].filter(sp => Math.hypot(sp.x - (bTgt.x + 15), sp.y - (bTgt.y + 15)) > 110 && Math.hypot(sp.x - boss.x, sp.y - boss.y) > 85);
           if (spots.length > 0) {
-            if (bossClones.length < 2) {
+            if (bossClones.length < (boss.phase >= 3 ? 2 : 1)) {
               bossClones.push({
                 x: boss.x, y: boss.y,
                 vx: -boss.vx, vy: boss.vy,
-                boltTimer: 2.0,
-                life: 11.0
+                boltTimer: 2.2,
+                life: 10.0
               });
             }
             addShockwave(boss.x, boss.y, 90, '#c77dff', 3);
@@ -7547,7 +7640,7 @@ function updateEnemiesAndBoss(dt) {
 
       // Signature Boss Projectile Patterns across all 6 Worlds (0..5)!
       if (boss.variant >= 1 || boss.phase >= 2) {
-        boss.boltTimer = (boss.boltTimer || 3.0) - effDt;
+        boss.boltTimer = (boss.boltTimer || 3.2) - effDt;
         if (boss.boltTimer <= 0) {
           boss.recoil = 1.0;
           if (state === 'PLAYING') {
@@ -7562,63 +7655,68 @@ function updateEnemiesAndBoss(dt) {
             boss.variant === 5 ? '#05ffa1' : '#ff2a6d';
 
           if (boss.variant === 5) {
-            boss.boltTimer = boss.phase === 3 ? 1.45 : boss.phase === 2 ? 1.95 : 2.5;
+            boss.boltTimer = (boss.phase === 3 ? 1.65 : boss.phase === 2 ? 2.15 : 2.75) / bossPace;
             boss.spiralAngle = (boss.spiralAngle || 0) + 0.52;
+            const pSpd = 4.2 * diff.boltSpeedMult;
             for (let k = 0; k < 6; k++) {
               const ang = boss.spiralAngle + (k * Math.PI) / 3;
               const dx = Math.cos(ang), dy = Math.sin(ang);
               enemyBolts.push({
                 x: boss.x + dx * 28, y: boss.y + dy * 28,
-                vx: dx * 4.5, vy: dy * 4.5,
-                color: k % 2 === 0 ? '#05ffa1' : '#c77dff', life: 1.7
+                vx: dx * pSpd, vy: dy * pSpd,
+                color: k % 2 === 0 ? '#05ffa1' : '#c77dff', life: 1.65
               });
             }
           } else if (boss.variant === 4) {
-            boss.boltTimer = boss.phase === 3 ? 1.65 : boss.phase === 2 ? 2.15 : 2.75;
+            boss.boltTimer = (boss.phase === 3 ? 1.85 : boss.phase === 2 ? 2.35 : 2.95) / bossPace;
             boss.spiralAngle = (boss.spiralAngle || 0) + 0.39;
+            const pSpd = 4.6 * diff.boltSpeedMult;
             for (let k = 0; k < 8; k++) {
               const ang = boss.spiralAngle + (k * Math.PI) / 4;
               const dx = Math.cos(ang), dy = Math.sin(ang);
               enemyBolts.push({
                 x: boss.x + dx * 30, y: boss.y + dy * 30,
-                vx: dx * 5.0, vy: dy * 5.0,
-                color: k % 2 === 0 ? '#facc15' : '#38bdf8', life: 1.65
+                vx: dx * pSpd, vy: dy * pSpd,
+                color: k % 2 === 0 ? '#facc15' : '#38bdf8', life: 1.6
               });
             }
           } else if (boss.variant === 3) {
-            boss.boltTimer = boss.phase === 3 ? 1.55 : boss.phase === 2 ? 2.05 : 2.65;
+            boss.boltTimer = (boss.phase === 3 ? 1.75 : boss.phase === 2 ? 2.25 : 2.85) / bossPace;
             boss.spiralAngle = (boss.spiralAngle || 0) - 0.48;
+            const pSpd = 4.0 * diff.boltSpeedMult;
             for (let k = 0; k < 6; k++) {
               const ang = boss.spiralAngle + (k * Math.PI) / 3;
               const dx = Math.cos(ang), dy = Math.sin(ang);
               enemyBolts.push({
                 x: boss.x + dx * 28, y: boss.y + dy * 28,
-                vx: dx * 4.3, vy: dy * 4.3,
-                color: k % 2 === 0 ? '#84cc16' : '#d946ef', life: 1.7
+                vx: dx * pSpd, vy: dy * pSpd,
+                color: k % 2 === 0 ? '#84cc16' : '#d946ef', life: 1.65
               });
             }
           } else if (boss.variant === 2) {
-            boss.boltTimer = boss.phase === 3 ? 1.15 : boss.phase === 2 ? 1.55 : 2.1;
+            boss.boltTimer = (boss.phase === 3 ? 1.35 : boss.phase === 2 ? 1.75 : 2.3) / bossPace;
             boss.spiralAngle = (boss.spiralAngle || 0) + 0.44;
+            const pSpd = 4.3 * diff.boltSpeedMult;
             for (let k = 0; k < 4; k++) {
               const ang = boss.spiralAngle + (k * Math.PI) / 2;
               const dx = Math.cos(ang), dy = Math.sin(ang);
               enemyBolts.push({
                 x: boss.x + dx * 28, y: boss.y + dy * 28,
-                vx: dx * 4.6, vy: dy * 4.6,
-                color: boltCol, life: 1.75
+                vx: dx * pSpd, vy: dy * pSpd,
+                color: boltCol, life: 1.7
               });
             }
           } else {
-            boss.boltTimer = boss.phase === 3 ? 2.2 : 3.2;
+            boss.boltTimer = (boss.phase === 3 ? 2.4 : 3.4) / bossPace;
+            const pSpd = 4.1 * diff.boltSpeedMult;
             const salvoDirs = (boss.phase === 3 || boss.variant === 1)
               ? [...dirs, { x: 0.707, y: 0.707 }, { x: -0.707, y: 0.707 }, { x: 0.707, y: -0.707 }, { x: -0.707, y: -0.707 }]
               : dirs;
             for (const d of salvoDirs) {
               enemyBolts.push({
                 x: boss.x + d.x * 28, y: boss.y + d.y * 28,
-                vx: d.x * 4.4, vy: d.y * 4.4,
-                color: boltCol, life: 1.6
+                vx: d.x * pSpd, vy: d.y * pSpd,
+                color: boltCol, life: 1.55
               });
             }
           }
@@ -7628,11 +7726,11 @@ function updateEnemiesAndBoss(dt) {
 
       // Theme-Matched Minion Deployment
       const canSummon = (boss.phase === 3 || (boss.variant === 3 && boss.phase >= 2)) &&
-                        enemies.length < (boss.variant === 3 ? 5 : 4);
+                        enemies.length < (boss.variant === 3 ? 4 : 3);
       if (canSummon) {
-        boss.summonTimer = (boss.summonTimer || 7.5) - effDt;
+        boss.summonTimer = (boss.summonTimer || 8.0) - effDt;
         if (boss.summonTimer <= 0) {
-          boss.summonTimer = boss.variant === 3 ? 7.8 : 9.5;
+          boss.summonTimer = (boss.variant === 3 ? 8.2 : 10.0) / bossPace;
           if (cellOpen(br, bc)) {
             const mKind = biome.bossMinion || 'hunter';
             const isGolem = mKind === 'cryogolem';
@@ -7644,9 +7742,9 @@ function updateEnemiesAndBoss(dt) {
               canKick: mKind === 'sapper' || mKind === 'rival',
               shielded: mKind === 'knight',
               warpLock: 0, enraged: false, aggro: false,
-              range: 2, speed: 1.55, dx: 1, dy: 0, turn: 0.2,
-              hue: 15, frozen: 0, stunned: 0, invuln: 0.8, bombCd: 2.0, frostCd: 2.8,
-              aimTimer: 0, aimDx: 1, aimDy: 0, shotCd: 2.0, blinkCd: 3.5, walkPhase: 0
+              range: 2, speed: 1.4 * diff.speedMult, dx: 1, dy: 0, turn: 0.2,
+              hue: 15, frozen: 0, stunned: 0, invuln: 0.8, reactCd: 0, bombCd: 2.2, frostCd: 3.0,
+              aimTimer: 0, aimDx: 1, aimDy: 0, shotCd: 2.4, blinkCd: 4.0, walkPhase: 0
             });
             addFloatText(boss.x, boss.y - 38, boss.variant === 3 ? 'BROOD SPAWNED!' : 'FACTION UNIT DEPLOYED!', biome.wallEdge, 1.1);
             if (state === 'PLAYING') syncUI();
@@ -7656,9 +7754,10 @@ function updateEnemiesAndBoss(dt) {
 
       boss.attackTimer -= effDt;
       if (boss.attackTimer <= 0) {
-        boss.attackTimer = boss.phase === 3 ? 2.0 : boss.phase === 2 ? 2.4 : 2.9;
+        boss.attackTimer = (boss.phase === 3 ? 2.25 : boss.phase === 2 ? 2.65 : 3.2) / bossPace;
         boss.recoil = 0.8;
-        const pushRet = (tc0, tr0, delay = 1.25) => {
+        const retDelay = difficultyTier === 'NORMAL' ? 1.48 : difficultyTier === 'HARD' ? 1.32 : 1.18;
+        const pushRet = (tc0, tr0, delay = retDelay) => {
           if (tc0 >= 1 && tc0 <= COLS - 2 && tr0 >= 1 && tr0 <= ROWS - 2 && map[tr0][tc0] !== 1 &&
               !boss.reticles.some(r0 => r0.c === tc0 && r0.r === tr0)) {
             boss.reticles.push({
@@ -7674,38 +7773,38 @@ function updateEnemiesAndBoss(dt) {
         if (boss.variant === 0) {
           const cc = Math.max(2, Math.min(COLS - 3, btC));
           const cr = Math.max(2, Math.min(ROWS - 3, btR));
-          pushRet(cc, cr, 1.35);
+          pushRet(cc, cr, retDelay + 0.08);
           if (boss.phase >= 2) {
-            pushRet(cc + 1, cr, 1.35); pushRet(cc - 1, cr, 1.35);
-            pushRet(cc, cr + 1, 1.35); pushRet(cc, cr - 1, 1.35);
+            pushRet(cc + 1, cr, retDelay + 0.08); pushRet(cc - 1, cr, retDelay + 0.08);
+            pushRet(cc, cr + 1, retDelay + 0.08); pushRet(cc, cr - 1, retDelay + 0.08);
           }
         } else if (boss.variant === 2 && boss.phase >= 2) {
-          pushRet(btC, btR, 1.3);
-          pushRet(btC + 1, btR + 1, 1.3); pushRet(btC - 1, btR + 1, 1.3);
-          pushRet(btC + 1, btR - 1, 1.3); pushRet(btC - 1, btR - 1, 1.3);
+          pushRet(btC, btR, retDelay + 0.05);
+          pushRet(btC + 1, btR + 1, retDelay + 0.05); pushRet(btC - 1, btR + 1, retDelay + 0.05);
+          pushRet(btC + 1, btR - 1, retDelay + 0.05); pushRet(btC - 1, btR - 1, retDelay + 0.05);
         } else if (boss.variant === 3) {
-          pushRet(btC + 1, btR + 1, 1.3); pushRet(btC - 1, btR + 1, 1.3);
-          pushRet(btC + 1, btR - 1, 1.3); pushRet(btC - 1, btR - 1, 1.3);
-          if (boss.phase >= 2) pushRet(btC, btR, 1.35);
+          pushRet(btC + 1, btR + 1, retDelay + 0.05); pushRet(btC - 1, btR + 1, retDelay + 0.05);
+          pushRet(btC + 1, btR - 1, retDelay + 0.05); pushRet(btC - 1, btR - 1, retDelay + 0.05);
+          if (boss.phase >= 2) pushRet(btC, btR, retDelay + 0.1);
         } else if (boss.variant === 4) {
           const span = boss.phase >= 2 ? 2 : 1;
           for (let k = -span; k <= span; k++) {
-            pushRet(btC + k, btR, 1.28);
-            pushRet(btC, btR + k, 1.28);
+            pushRet(btC + k, btR, retDelay + 0.04);
+            pushRet(btC, btR + k, retDelay + 0.04);
           }
         } else if (boss.variant === 5) {
-          pushRet(btC + 2, btR, 1.3); pushRet(btC - 2, btR, 1.3);
-          pushRet(btC, btR + 2, 1.3); pushRet(btC, btR - 2, 1.3);
-          if (boss.phase >= 2) pushRet(btC, btR, 1.35);
+          pushRet(btC + 2, btR, retDelay + 0.05); pushRet(btC - 2, btR, retDelay + 0.05);
+          pushRet(btC, btR + 2, retDelay + 0.05); pushRet(btC, btR - 2, retDelay + 0.05);
+          if (boss.phase >= 2) pushRet(btC, btR, retDelay + 0.1);
         }
 
         const count = boss.phase === 3 ? 4 : 3;
         for (let k = 0; k < count; k++) {
           const rtc = 2 + Math.floor(Math.random() * (COLS - 4));
           const rtr = 2 + Math.floor(Math.random() * (ROWS - 4));
-          pushRet(rtc, rtr, 1.25);
+          pushRet(rtc, rtr, retDelay);
         }
-        if (boss.variant === 1 && boss.phase >= 2) pushRet(btC, btR, 1.35);
+        if (boss.variant === 1 && boss.phase >= 2) pushRet(btC, btR, retDelay + 0.1);
       }
     }
 
@@ -7738,12 +7837,12 @@ function updateStageTimerAndSuddenDeath(dt) {
   // Cycle World-Specific Floor Mechanics (Tripwires, Magma Geysers, Cooldowns)
   for (const sp of specials) {
     if (sp.type === 'tripwire') {
-      sp.timer = ((sp.timer || 0) + dt) % 3.2;
-      sp.active = sp.timer >= 2.0;
+      sp.timer = ((sp.timer || 0) + dt) % 3.6;
+      sp.active = sp.timer >= 2.6;
     } else if (sp.type === 'geyser') {
-      sp.timer = ((sp.timer || 0) + dt) % 4.0;
+      sp.timer = ((sp.timer || 0) + dt) % 4.2;
       const prevPhase = sp.phase;
-      sp.phase = sp.timer < 1.6 ? 'idle' : sp.timer < 3.0 ? 'warn' : 'erupt';
+      sp.phase = sp.timer < 1.7 ? 'idle' : sp.timer < 3.25 ? 'warn' : 'erupt';
       if (sp.phase === 'erupt' && prevPhase !== 'erupt' && state === 'PLAYING') {
         burst(sp.c * TILE + 24, sp.r * TILE + 24, '#ff5e00', 14);
         sfx.playExplode(1, false, false, sp.c * TILE + 24);
@@ -8036,7 +8135,7 @@ function drawSpecialTiles() {
       }
       ctx.restore();
     } else if (sp.type === 'tripwire') {
-      const armed = !sp.active && (sp.timer || 0) >= 1.3;
+      const armed = !sp.active && (sp.timer || 0) >= 1.6;
       if (sp.active) drawGlow(x, y, 28, '#ff2a6d', 0.34);
       ctx.save();
       ctx.translate(x, y);
@@ -10724,51 +10823,125 @@ function draw() {
     ctx.restore();
   }
 
-  // Sector Banner & Theme Signature Loadout Preview
+  // Sector Briefing Banner: World Rule + Unique Signature Powers & Activation Guide
   if (state === 'PLAYING' && sectorBannerTimer > 0) {
     const alpha = Math.min(1, sectorBannerTimer * 1.4);
+    const panelW = 600;
+    const panelH = 152;
+    const panelX = LOGICAL_W / 2 - panelW / 2;
+    const panelY = 14;
+    const accent = boss ? '#ff2a6d' : biome.wallEdge;
     ctx.save();
     ctx.globalAlpha = alpha;
-    ctx.fillStyle = 'rgba(4, 11, 24, 0.9)';
-    ctx.strokeStyle = boss ? '#ff2a6d' : biome.wallEdge;
-    ctx.lineWidth = 2;
-    roundRectPath(LOGICAL_W / 2 - 215, 48, 430, 82, 13);
+    ctx.fillStyle = 'rgba(4, 11, 24, 0.94)';
+    ctx.strokeStyle = accent;
+    ctx.lineWidth = 2.2;
+    roundRectPath(panelX, panelY, panelW, panelH, 14);
     ctx.fill();
     ctx.stroke();
 
-    ctx.font = "900 16.5px 'Orbitron', sans-serif";
+    ctx.font = "900 15.5px 'Orbitron', sans-serif";
     ctx.fillStyle = '#ffffff';
     ctx.textAlign = 'center';
     ctx.fillText(
       boss ? `WARNING: ${boss.title}` : `SECTOR ${String(level).padStart(2, '0')} — ${biome.name}`,
       LOGICAL_W / 2,
-      72
+      panelY + 23
     );
 
-    ctx.font = "700 10.5px 'Orbitron', monospace";
+    ctx.font = "700 9.5px 'Orbitron', monospace";
     ctx.fillStyle = boss ? '#ffcc33' : biome.wallEdge;
-    ctx.fillText(`${biome.subtitle} • ${gameMode.replace('_', ' ')}${dailySeedMode ? ' • DAILY SEED' : ''}`, LOGICAL_W / 2, 90);
+    ctx.fillText(
+      `${biome.arenaTip || biome.subtitle} • ${gameMode.replace('_', ' ')}${dailySeedMode ? ' • DAILY SEED' : ''}`,
+      LOGICAL_W / 2,
+      panelY + 40
+    );
 
-    // Render mini vector emblems for the active Theme's 3 Signature Power-Ups
+    ctx.font = "700 8.5px 'Orbitron', monospace";
+    ctx.fillStyle = '#94a3b8';
+    ctx.fillText('WORLD UNIQUE POWERS & HOW TO ACTIVATE', LOGICAL_W / 2, panelY + 55);
+
     const sigs = biome.signaturePowerups || [];
-    const spanX = 32;
-    const startX = LOGICAL_W / 2 - ((sigs.length - 1) * spanX) / 2;
+    const cardW = 184;
+    const cardH = 68;
+    const gap = 12;
+    const totalCardsW = sigs.length * cardW + Math.max(0, sigs.length - 1) * gap;
+    const startCardX = LOGICAL_W / 2 - totalCardsW / 2;
+    const cardY = panelY + 62;
+
     sigs.forEach((pwid, idx) => {
-      const meta = POWERUP_CATALOG.find(item => item.id === pwid) || { color: biome.wallEdge };
-      const ix = startX + idx * spanX;
-      const iy = 112;
+      const meta = POWERUP_CATALOG.find(item => item.id === pwid) || { name: pwid.toUpperCase(), color: biome.wallEdge };
+      const info = getPowerupActivationInfo(pwid);
+      const cx = startCardX + idx * (cardW + gap);
+
       ctx.save();
-      ctx.translate(ix, iy);
-      ctx.fillStyle = 'rgba(10, 20, 38, 0.96)';
+      ctx.fillStyle = 'rgba(10, 22, 42, 0.94)';
       ctx.strokeStyle = meta.color;
-      ctx.lineWidth = 1.6;
-      ctx.beginPath();
-      ctx.roundRect(-11, -11, 22, 22, 6);
+      ctx.lineWidth = 1.5;
+      roundRectPath(cx, cardY, cardW, cardH, 9);
       ctx.fill();
       ctx.stroke();
-      drawPowerupEmblem(ctx, pwid, 7.5);
+
+      // Icon Box
+      ctx.save();
+      ctx.translate(cx + 20, cardY + 21);
+      ctx.fillStyle = 'rgba(5, 12, 26, 0.96)';
+      ctx.strokeStyle = meta.color;
+      ctx.lineWidth = 1.4;
+      ctx.beginPath();
+      ctx.roundRect(-12, -12, 24, 24, 6);
+      ctx.fill();
+      ctx.stroke();
+      drawPowerupEmblem(ctx, pwid, 8);
+      ctx.restore();
+
+      // Power Name
+      ctx.textAlign = 'left';
+      ctx.font = "900 9.5px 'Orbitron', sans-serif";
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText(meta.name, cx + 38, cardY + 16);
+
+      // Activation Badge
+      ctx.font = "800 8px 'Orbitron', monospace";
+      const pillW = Math.min(cardW - 44, Math.max(66, ctx.measureText(info.key).width + 12));
+      ctx.fillStyle = meta.color;
+      roundRectPath(cx + 38, cardY + 21, pillW, 14, 4);
+      ctx.fill();
+      ctx.fillStyle = '#040b16';
+      ctx.fillText(info.key, cx + 44, cardY + 31);
+
+      // Effect / Usage line (wrap neatly across up to 2 lines)
+      ctx.font = "600 9.5px sans-serif";
+      ctx.fillStyle = '#e2e8f0';
+      const maxTextW = cardW - 16;
+      const words = info.how.split(' ');
+      const lines = [];
+      let curLine = '';
+      for (const w of words) {
+        const test = curLine ? curLine + ' ' + w : w;
+        if (ctx.measureText(test).width > maxTextW && curLine) {
+          lines.push(curLine);
+          curLine = w;
+        } else {
+          curLine = test;
+        }
+      }
+      if (curLine) lines.push(curLine);
+      ctx.fillText(lines[0] || '', cx + 8, cardY + 49);
+      if (lines[1]) ctx.fillText(lines[1], cx + 8, cardY + 61);
       ctx.restore();
     });
+
+    const curPilot = PILOT_CATALOG.find(p => p.id === profileSave.selectedPilot) || PILOT_CATALOG[0];
+    const bnd = settings.bindings || DEFAULT_BINDINGS;
+    ctx.textAlign = 'center';
+    ctx.font = "700 8.5px 'Orbitron', monospace";
+    ctx.fillStyle = '#a5f3fc';
+    ctx.fillText(
+      `PILOT: ${curPilot.name} • [${formatKeyLabel(bnd.dash)}] DASH • [${formatKeyLabel(bnd.overdrive)}] OVERDRIVE AT 100%`,
+      LOGICAL_W / 2,
+      panelY + 143
+    );
 
     ctx.restore();
   }
