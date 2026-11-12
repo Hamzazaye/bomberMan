@@ -224,7 +224,11 @@
       position: relative;
       width: 100%;
       height: 100%;
-      background: #030812;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(0, 240, 255, 0.06) 0%, rgba(3, 8, 18, 0.98) 78%),
+        repeating-linear-gradient(0deg, rgba(0, 240, 255, 0.025) 0 1px, transparent 1px 24px),
+        repeating-linear-gradient(90deg, rgba(0, 240, 255, 0.025) 0 1px, transparent 1px 24px),
+        #030812;
       border-radius: 18px;
       border: 1px solid rgba(255, 255, 255, 0.16);
       box-shadow: 0 22px 56px rgba(0, 0, 0, 0.85), inset 0 0 32px rgba(0, 240, 255, 0.06);
@@ -232,6 +236,62 @@
       display: flex;
       align-items: center;
       justify-content: center;
+    }
+
+    /* LIVE ACHIEVEMENT / MEDAL UNLOCK TOASTS */
+    #toast-stack {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 60;
+      pointer-events: none;
+    }
+
+    .medal-toast {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      background: linear-gradient(135deg, rgba(9, 22, 44, 0.96), rgba(4, 10, 22, 0.98));
+      border: 1.5px solid var(--gold);
+      border-radius: 12px;
+      padding: 7px 12px;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 204, 51, 0.35);
+      animation: toastSlideIn 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes toastSlideIn {
+      from { opacity: 0; transform: translateX(24px) scale(0.94); }
+      to { opacity: 1; transform: translateX(0) scale(1); }
+    }
+
+    .medal-toast canvas {
+      width: 30px;
+      height: 30px;
+      flex-shrink: 0;
+    }
+
+    .medal-toast-txt {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+      line-height: 1.15;
+    }
+
+    .medal-toast-txt span {
+      font-family: 'Orbitron', monospace;
+      font-size: 8.5px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      color: var(--gold);
+    }
+
+    .medal-toast-txt strong {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 11.5px;
+      color: #fff;
     }
 
     #gameCanvas {
@@ -870,6 +930,23 @@
       gap: 11px;
       box-shadow: 0 28px 75px rgba(0, 0, 0, 0.94);
       overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(0, 240, 255, 0.42) rgba(5, 12, 24, 0.65);
+    }
+
+    .armory-card::-webkit-scrollbar, .menu-card::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .armory-card::-webkit-scrollbar-track, .menu-card::-webkit-scrollbar-track {
+      background: rgba(5, 12, 24, 0.55);
+      border-radius: 99px;
+      margin: 14px 0;
+    }
+
+    .armory-card::-webkit-scrollbar-thumb, .menu-card::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, rgba(0, 240, 255, 0.55), rgba(56, 189, 248, 0.35));
+      border-radius: 99px;
     }
 
     .armory-grid {
@@ -914,6 +991,17 @@
       font-size: 10.5px;
       font-weight: 700;
       color: var(--text-muted);
+    }
+
+    .armory-tile.medal-locked {
+      opacity: 0.42;
+      filter: grayscale(0.85);
+    }
+
+    .armory-tile.medal-unlocked {
+      border-color: rgba(255, 204, 51, 0.58);
+      background: linear-gradient(165deg, rgba(28, 22, 8, 0.82), rgba(6, 12, 24, 0.94));
+      box-shadow: inset 0 0 18px rgba(255, 204, 51, 0.12);
     }
 
     /* RESULT & PAUSE CARDS */
@@ -1041,13 +1129,15 @@
     .dpad-center-nub {
       grid-column: 2;
       grid-row: 2;
-      width: 28px;
-      height: 28px;
+      width: 30px;
+      height: 30px;
       margin: auto;
       border-radius: 50%;
-      background: rgba(0, 240, 255, 0.25);
-      border: 1px solid rgba(0, 240, 255, 0.6);
+      background: radial-gradient(circle at 35% 35%, rgba(0, 240, 255, 0.75), rgba(0, 120, 220, 0.35));
+      border: 1.5px solid rgba(0, 240, 255, 0.85);
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.45);
       pointer-events: none;
+      transition: transform 0.04s linear;
     }
 
     #up { grid-column: 2; grid-row: 1; }
@@ -1091,6 +1181,12 @@
     .touch-btn:active {
       background: rgba(0, 240, 255, 0.4);
       transform: scale(0.95);
+    }
+
+    @media (pointer: coarse) {
+      #mobile-controls {
+        display: flex;
+      }
     }
 
     @media (max-width: 880px) {
@@ -1203,7 +1299,7 @@
       </div>
 
       <div class="hud-controls">
-        <button class="hud-btn" id="codexBtn" title="Armory & Bestiary">
+        <button class="hud-btn" id="codexBtn" title="Armory, Bestiary & Medals">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 4v5c0 5-3.5 8.5-8 9.8C7.5 20.5 4 17 4 12V7l8-4Z"/><path d="M12 8v8M8 12h8"/></svg>
         </button>
         <button class="hud-btn" id="musicBtn" title="Toggle Synthwave BGM">
@@ -1264,7 +1360,7 @@
         <div>
           <div class="dock-section-title">ACTIVE SUIT MODULES</div>
           <div class="icon-matrix">
-            <div class="suit-node" id="chip-kick" data-pwid="kick" title="Bomb Kick"></div>
+            <div class="suit-node" id="chip-kick" data-pwid="kick" title="Bomb Kick [X to Stop]"></div>
             <div class="suit-node" id="chip-glove" data-pwid="glove" title="Power Glove & Punch"></div>
             <div class="suit-node" id="chip-remote" data-pwid="remote" title="Remote Detonator"></div>
             <div class="suit-node" id="chip-line" data-pwid="line" title="Line Bomb"></div>
@@ -1291,7 +1387,7 @@
       <div class="dpad-pad" id="dpad-pad">
         <div class="dpad-dir" id="up">▲</div>
         <div class="dpad-dir" id="left">◀</div>
-        <div class="dpad-center-nub"></div>
+        <div class="dpad-center-nub" id="dpad-nub"></div>
         <div class="dpad-dir" id="right">▶</div>
         <div class="dpad-dir" id="down">▼</div>
       </div>
@@ -1368,28 +1464,31 @@
 
       <div class="launch-bar">
         <button class="aaa-play-btn" id="start-btn">▶ DEPLOY NOW</button>
-        <button class="aaa-armory-btn" id="open-codex-start">ARMORY &amp; BESTIARY (24)</button>
+        <button class="aaa-armory-btn" id="open-codex-start">ARMORY, BESTIARY &amp; MEDALS</button>
       </div>
 
       <div class="key-strip">
         <div class="key-badge"><kbd>WASD</kbd><span>MOVE</span></div>
         <div class="key-badge"><kbd>SPACE</kbd><span>BOMB</span></div>
-        <div class="key-badge"><kbd>SHIFT</kbd><span>CHRONO DASH</span></div>
-        <div class="key-badge"><kbd>E</kbd><span>GRAB / THROW / MECH</span></div>
+        <div class="key-badge"><kbd>SHIFT</kbd><span>DASH</span></div>
+        <div class="key-badge"><kbd>E</kbd><span>GLOVE / MECH</span></div>
+        <div class="key-badge"><kbd>X</kbd><span>STOP KICK</span></div>
         <div class="key-badge"><kbd>R</kbd><span>DETONATE</span></div>
-        <div class="key-badge"><kbd>F</kbd><span>LINE BOMB</span></div>
+        <div class="key-badge"><kbd>F</kbd><span>LINE VOLLEY</span></div>
         <div class="key-badge"><kbd>Q</kbd><span>OVERDRIVE</span></div>
       </div>
     </div>
   </section>
 
-  <!-- ARMORY & HOSTILE BESTIARY WITH CUSTOM RENDERED 2.5D CANVASES -->
+  <!-- ARMORY, BESTIARY & CAREER MEDALS WITH CUSTOM RENDERED 2.5D CANVASES -->
   <section id="codex-screen" class="overlay hidden">
     <div class="armory-card">
       <div class="logo-sub" style="letter-spacing:0.16em;">COMBAT SUITS &amp; POWER-UP ARMORY (16)</div>
       <div class="armory-grid" id="codex-list"></div>
       <div class="logo-sub" style="letter-spacing:0.16em;color:var(--crimson);margin-top:6px;">HOSTILE CYBER-UNITS &amp; BOSS BESTIARY (8)</div>
       <div class="armory-grid" id="enemy-codex-list"></div>
+      <div class="logo-sub" style="letter-spacing:0.16em;color:var(--emerald);margin-top:6px;" id="medal-header">CAREER HONORS &amp; MEDALS (0/8)</div>
+      <div class="armory-grid" id="medal-codex-list"></div>
       <button class="aaa-play-btn" id="close-codex-btn" style="font-size:15px;padding:10px 32px;">CLOSE CODEX</button>
     </div>
   </section>
@@ -1398,7 +1497,7 @@
   <section id="level-complete-screen" class="overlay hidden">
     <div class="banner-card">
       <div class="rank-emblem" id="stage-rank">S</div>
-      <div class="logo-sub" style="font-size:21px;letter-spacing:0.1em;">SECTOR CLEARED</div>
+      <div class="logo-sub" id="victory-title" style="font-size:21px;letter-spacing:0.1em;">SECTOR CLEARED</div>
       <div class="banner-score" id="level-bonus-score">+500</div>
       <div class="summary-grid">
         <div class="summary-box"><span>TIME BONUS</span><strong id="sum-time">+0</strong></div>
@@ -1428,16 +1527,26 @@
     </div>
   </section>
 
-  <!-- PAUSE BANNER -->
+  <!-- UPGRADED TACTICAL PAUSE BANNER -->
   <section id="pause-screen" class="overlay hidden">
     <div class="banner-card">
       <div class="logo-sub" style="font-size:22px;letter-spacing:0.12em;">SYSTEM PAUSED</div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">
-        <button class="aaa-play-btn" id="resume-btn" style="font-size:15px;padding:10px 28px;">▶ RESUME</button>
+      <div class="summary-grid">
+        <div class="summary-box"><span>MODE</span><strong id="pause-mode">CAMPAIGN</strong></div>
+        <div class="summary-box"><span>SECTOR</span><strong id="pause-sector">01</strong></div>
+        <div class="summary-box"><span>MEDALS</span><strong id="pause-medals">0/8</strong></div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;">
+        <button class="aaa-play-btn" id="resume-btn" style="font-size:15px;padding:10px 26px;">▶ RESUME</button>
+        <button class="aaa-armory-btn" id="retry-pause-btn">RETRY RUN</button>
+        <button class="aaa-armory-btn" id="codex-pause-btn">CODEX</button>
         <button class="aaa-armory-btn" id="restart-pause-btn">MAIN MENU</button>
       </div>
     </div>
   </section>
+
+  <!-- LIVE ACHIEVEMENT UNLOCK TOASTS (ABOVE ALL MODAL OVERLAYS) -->
+  <div id="toast-stack"></div>
 
 <script>
 'use strict';
@@ -1448,6 +1557,7 @@
 class SoundEngine {
   constructor() {
     this.ctx = null;
+    this.master = null;
     this.muted = false;
     this.musicEnabled = true;
     this.bgmStep = 0;
@@ -1458,12 +1568,28 @@ class SoundEngine {
     try {
       if (!this.ctx) {
         const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        if (AudioCtx) this.ctx = new AudioCtx();
+        if (AudioCtx) {
+          this.ctx = new AudioCtx();
+          const comp = this.ctx.createDynamicsCompressor();
+          comp.threshold.setValueAtTime(-14, this.ctx.currentTime);
+          comp.knee.setValueAtTime(18, this.ctx.currentTime);
+          comp.ratio.setValueAtTime(6, this.ctx.currentTime);
+          comp.attack.setValueAtTime(0.003, this.ctx.currentTime);
+          comp.release.setValueAtTime(0.18, this.ctx.currentTime);
+          this.master = this.ctx.createGain();
+          this.master.gain.setValueAtTime(0.88, this.ctx.currentTime);
+          this.master.connect(comp);
+          comp.connect(this.ctx.destination);
+        }
       }
       if (this.ctx && this.ctx.state === 'suspended') {
         this.ctx.resume();
       }
     } catch (_) {}
+  }
+
+  outNode() {
+    return this.master || (this.ctx && this.ctx.destination);
   }
 
   toggleMute() {
@@ -1477,9 +1603,9 @@ class SoundEngine {
     document.getElementById('musicBtn').classList.toggle('muted', !this.musicEnabled);
   }
 
-  updateBgm(dt, isPlaying, isIntense) {
+  updateBgm(dt, isPlaying, isIntense, biomeIdx = 0) {
     if (!isPlaying || !this.musicEnabled || this.muted || !this.ctx) return;
-    const stepDur = isIntense ? 0.118 : 0.142;
+    const stepDur = isIntense ? 0.116 : 0.14;
     this.bgmAccum += dt;
     if (this.bgmAccum >= stepDur) {
       this.bgmAccum -= stepDur;
@@ -1487,36 +1613,41 @@ class SoundEngine {
       const bar = Math.floor(s / 16);
       const sub = s % 16;
 
-      // Kick on beats 0, 4, 8, 12 (+ syncopation in intense mode)
-      if (sub % 4 === 0 || (isIntense && sub === 14)) {
-        this.tone(125, 'sine', 0.09, 0.055, 36);
+      if (sub % 4 === 0 || (isIntense && (sub === 10 || sub === 14))) {
+        this.tone(128, 'sine', 0.09, 0.058, 35);
       }
-      // Crisp hi-hat / snare groove
       if (sub === 4 || sub === 12) {
-        this.noise(0.065, 0.026, 2600);
+        this.noise(0.065, 0.028, 2700);
       } else if (sub % 2 === 0) {
-        this.noise(0.025, 0.011, 5200);
+        this.noise(0.024, 0.011, 5400);
       }
 
-      // 4-bar root progression (Cm -> Ab -> Fm -> G in normal; Dm -> Bb -> Gm -> A in intense)
-      const roots = isIntense ? [73.42, 58.27, 98.0, 55.0] : [65.41, 51.91, 43.65, 49.0];
+      const biomeRoots = [
+        [65.41, 51.91, 43.65, 49.0],   // Neon Citadel (C minor)
+        [73.42, 58.27, 49.0, 55.0],    // Cryo Foundry (D Dorian/minor)
+        [55.0, 43.65, 49.0, 61.74],    // Magma Core (A Phrygian)
+        [61.74, 49.0, 55.0, 73.42]     // Quantum Grid (B minor)
+      ];
+      const roots = isIntense ? [73.42, 58.27, 98.0, 55.0] : biomeRoots[biomeIdx % 4];
       const root = roots[bar];
       const octaveMult = (sub % 2 === 1) ? 2 : 1;
       this.tone(root * octaveMult, 'sawtooth', stepDur * 0.78, 0.024, root * octaveMult * 0.99);
 
-      // Evolving 16-step synth lead phrases
-      const normalMelody = [
-        523.25, 0, 622.25, 587.33, 523.25, 0, 392.0, 466.16,
-        523.25, 622.25, 783.99, 0, 698.46, 622.25, 587.33, 0
+      const biomeLeads = [
+        [523.25, 0, 622.25, 587.33, 523.25, 0, 392.0, 466.16, 523.25, 622.25, 783.99, 0, 698.46, 622.25, 587.33, 0],
+        [587.33, 0, 698.46, 659.25, 880.0, 0, 698.46, 587.33, 523.25, 587.33, 698.46, 880.0, 783.99, 0, 659.25, 0],
+        [440.0, 466.16, 554.37, 0, 466.16, 440.0, 392.0, 0, 440.0, 554.37, 659.25, 587.33, 554.37, 466.16, 440.0, 0],
+        [493.88, 587.33, 739.99, 0, 659.25, 587.33, 493.88, 0, 739.99, 880.0, 987.77, 0, 880.0, 739.99, 659.25, 0]
       ];
       const intenseMelody = [
         587.33, 698.46, 880.0, 0, 932.33, 880.0, 698.46, 587.33,
         659.25, 0, 698.46, 880.0, 1046.5, 932.33, 880.0, 659.25
       ];
-      const note = (isIntense ? intenseMelody : normalMelody)[sub];
+      const note = (isIntense ? intenseMelody : biomeLeads[biomeIdx % 4])[sub];
       if (note > 0 && (bar % 2 === 0 || isIntense || sub < 8)) {
         const transpose = bar === 3 ? 1.122 : 1.0;
-        this.tone(note * transpose, isIntense ? 'sawtooth' : 'triangle', stepDur * 0.7, 0.018);
+        const leadWave = isIntense ? 'sawtooth' : (biomeIdx % 2 === 1 ? 'sine' : 'triangle');
+        this.tone(note * transpose, leadWave, stepDur * 0.72, 0.019);
       }
       this.bgmStep++;
     }
@@ -1536,7 +1667,7 @@ class SoundEngine {
       gain.gain.setValueAtTime(vol, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
       osc.connect(gain);
-      gain.connect(this.ctx.destination);
+      gain.connect(this.outNode());
       osc.start(now);
       osc.stop(now + duration);
     } catch (_) {}
@@ -1563,9 +1694,14 @@ class SoundEngine {
       gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
       src.connect(filter);
       filter.connect(gain);
-      gain.connect(this.ctx.destination);
+      gain.connect(this.outNode());
       src.start(now);
     } catch (_) {}
+  }
+
+  playMenuTick() {
+    this.init();
+    this.tone(660, 'sine', 0.045, 0.055, 880);
   }
 
   playPlaceBomb() {
@@ -1582,6 +1718,38 @@ class SoundEngine {
   playThrow() {
     this.init();
     this.tone(250, 'sine', 0.17, 0.14, 820);
+  }
+
+  playWarp() {
+    this.init();
+    this.tone(320, 'sine', 0.18, 0.12, 1240);
+    this.tone(640, 'triangle', 0.16, 0.09, 1680, 0.05);
+  }
+
+  playPortalLocked() {
+    this.init();
+    this.tone(180, 'sawtooth', 0.09, 0.1, 130);
+    this.tone(140, 'sawtooth', 0.12, 0.1, 95, 0.09);
+  }
+
+  playBlockSlam() {
+    this.init();
+    this.noise(0.18, 0.18, 520);
+    this.tone(95, 'sine', 0.19, 0.2, 30);
+  }
+
+  playBossRoar() {
+    this.init();
+    this.noise(0.38, 0.16, 750);
+    this.tone(110, 'sawtooth', 0.45, 0.18, 42);
+    this.tone(165, 'sawtooth', 0.42, 0.12, 55, 0.04);
+  }
+
+  playMedal() {
+    this.init();
+    [587.33, 783.99, 987.77, 1174.66, 1567.98].forEach((n, idx) =>
+      this.tone(n, 'triangle', 0.18, 0.12, null, idx * 0.055)
+    );
   }
 
   playLaserAim() {
@@ -1659,14 +1827,14 @@ class SoundEngine {
 const sfx = new SoundEngine();
 
 /* ============================================================================
-   2. CATALOGS, BIOMES & BESPOKE 2.5D VECTOR EMBLEM / PORTRAIT RENDERERS
+   2. CATALOGS, BIOMES, CAREER MEDALS & BESPOKE 2.5D VECTOR EMBLEM RENDERERS
    ============================================================================ */
 const POWERUP_CATALOG = [
   { id: 'bomb', color: '#00f0ff', name: 'BOMB UP', tag: '+1 CAPACITY' },
   { id: 'flame', color: '#ffcc33', name: 'FIRE UP', tag: '+1 RANGE' },
   { id: 'fullfire', color: '#ff5e00', name: 'SOLAR CORE', tag: 'MAX BLAST (8)' },
   { id: 'speed', color: '#05ffa1', name: 'JET SKATE', tag: '+1 SPEED TIER' },
-  { id: 'kick', color: '#38bdf8', name: 'BOMB KICK', tag: 'SLIDE BOMBS' },
+  { id: 'kick', color: '#38bdf8', name: 'BOMB KICK', tag: 'SLIDE / [X] STOP' },
   { id: 'glove', color: '#ff7b1c', name: 'POWER GLOVE', tag: 'HOLD & THROW [E]' },
   { id: 'remote', color: '#c77dff', name: 'REMOTE MINE', tag: 'DETONATE [R]' },
   { id: 'line', color: '#ffd166', name: 'LINE VOLLEY', tag: 'ROW DEPLOY [F]' },
@@ -1684,12 +1852,92 @@ const ENEMY_CATALOG = [
   { id: 'drone', color: '#ff4d8d', name: 'CYBER DRONE', tag: 'SCAN & PATROL' },
   { id: 'hunter', color: '#ff7b1c', name: 'SEEKER HOUND', tag: 'LOS TURBO CHARGE' },
   { id: 'phantom', color: '#a855f7', name: 'PHASE WRAITH', tag: 'WALL-PASS & BLINK' },
-  { id: 'knight', color: '#38bdf8', name: 'AEGIS PALADIN', tag: 'RIOT SHIELD & RAGE' },
+  { id: 'knight', color: '#38bdf8', name: 'AEGIS PALADIN', tag: 'FLANK REAR SHIELD' },
   { id: 'sapper', color: '#ffcc33', name: 'DEMO ROVER', tag: 'PLANTS & KICKS' },
   { id: 'sniper', color: '#f72585', name: 'RAIL SPIDER', tag: 'LASER SNIPER SHOT' },
-  { id: 'rival', color: '#ef4444', name: 'RIVAL BOMBER', tag: 'BFS DUELIST AI' },
-  { id: 'boss', color: '#ff2a6d', name: 'OMEGA MECH', tag: '3-PHASE WAR CORE' }
+  { id: 'rival', color: '#ef4444', name: 'RIVAL BOMBER', tag: 'FFA DUELIST AI' },
+  { id: 'boss', color: '#ff2a6d', name: 'OMEGA MECH', tag: '3 BOSS VARIANTS' }
 ];
+
+const MEDAL_CATALOG = [
+  { id: 'chain_master', color: '#00f0ff', name: 'CHAIN ARCHITECT', tag: 'REACH x4 BLAST CHAIN' },
+  { id: 'chrono_ghost', color: '#38bdf8', name: 'CHRONO PHANTOM', tag: 'TRIGGER CHRONO DODGE' },
+  { id: 'backstabber', color: '#ff2a6d', name: 'SHIELD BREAKER', tag: 'FLANK PALADIN REAR' },
+  { id: 'lob_sniper', color: '#ff7b1c', name: 'AIRMAIL BONK', tag: 'STUN FOE BY THROW' },
+  { id: 'untouchable', color: '#05ffa1', name: 'UNTOUCHABLE', tag: 'FLAWLESS SECTOR CLEAR' },
+  { id: 'boss_slayer', color: '#ffcc33', name: 'TITAN SLAYER', tag: 'DESTROY AN OMEGA BOSS' },
+  { id: 'royale_crown', color: '#c77dff', name: 'ROYALE CHAMPION', tag: 'WIN BATTLE ROYALE' },
+  { id: 'apex_conqueror', color: '#ff5e00', name: 'NIGHTMARE ACE', tag: 'CLEAR ON APEX 2.0x' }
+];
+
+function drawMedalEmblem(g, id, color) {
+  g.save();
+  // Hexagonal military honor badge
+  g.fillStyle = 'rgba(10, 20, 38, 0.96)';
+  g.strokeStyle = color;
+  g.lineWidth = 2.6;
+  g.beginPath();
+  for (let i = 0; i < 6; i++) {
+    const a = (i * Math.PI) / 3 - Math.PI / 2;
+    const px = Math.cos(a) * 26;
+    const py = Math.sin(a) * 26;
+    if (i === 0) g.moveTo(px, py); else g.lineTo(px, py);
+  }
+  g.closePath();
+  g.fill();
+  g.stroke();
+
+  g.strokeStyle = 'rgba(255,255,255,0.22)';
+  g.lineWidth = 1.2;
+  g.beginPath();
+  for (let i = 0; i < 6; i++) {
+    const a = (i * Math.PI) / 3 - Math.PI / 2;
+    const px = Math.cos(a) * 20;
+    const py = Math.sin(a) * 20;
+    if (i === 0) g.moveTo(px, py); else g.lineTo(px, py);
+  }
+  g.closePath();
+  g.stroke();
+
+  g.fillStyle = color;
+  g.strokeStyle = '#ffffff';
+  g.lineWidth = 1.8;
+  g.lineCap = 'round';
+  g.lineJoin = 'round';
+  if (id === 'chain_master') {
+    g.beginPath(); g.arc(-5, 0, 6, 0, Math.PI * 2); g.stroke();
+    g.beginPath(); g.arc(5, 0, 6, 0, Math.PI * 2); g.stroke();
+  } else if (id === 'chrono_ghost') {
+    g.beginPath(); g.arc(0, 0, 9, 0, Math.PI * 2); g.stroke();
+    g.beginPath(); g.moveTo(0, -5); g.lineTo(0, 0); g.lineTo(4, 3); g.stroke();
+  } else if (id === 'backstabber') {
+    g.beginPath(); g.moveTo(0, -11); g.lineTo(5, 4); g.lineTo(0, 1); g.lineTo(-5, 4); g.closePath(); g.fill();
+    g.beginPath(); g.moveTo(0, 1); g.lineTo(0, 10); g.stroke();
+  } else if (id === 'lob_sniper') {
+    g.beginPath(); g.arc(0, 2, 7, 0, Math.PI * 2); g.fill();
+    g.beginPath(); g.moveTo(-10, -7); g.quadraticCurveTo(0, -14, 10, -7); g.stroke();
+  } else if (id === 'untouchable') {
+    g.beginPath();
+    for (let i = 0; i < 5; i++) {
+      const a1 = (i * Math.PI * 2) / 5 - Math.PI / 2;
+      const a2 = a1 + Math.PI / 5;
+      g.lineTo(Math.cos(a1) * 11, Math.sin(a1) * 11);
+      g.lineTo(Math.cos(a2) * 4.5, Math.sin(a2) * 4.5);
+    }
+    g.closePath(); g.fill();
+  } else if (id === 'boss_slayer') {
+    g.beginPath(); g.roundRect(-8, -7, 16, 14, 3); g.fill();
+    g.fillStyle = '#050b14'; g.fillRect(-5, -3, 10, 4);
+  } else if (id === 'royale_crown') {
+    g.beginPath();
+    g.moveTo(-10, 7); g.lineTo(-11, -5); g.lineTo(-4, 1); g.lineTo(0, -8); g.lineTo(4, 1); g.lineTo(11, -5); g.lineTo(10, 7);
+    g.closePath(); g.fill();
+  } else {
+    g.beginPath(); g.moveTo(0, -11); g.lineTo(9, 0); g.lineTo(0, 11); g.lineTo(-9, 0); g.closePath(); g.fill();
+    g.fillStyle = '#ffffff'; g.beginPath(); g.arc(0, 0, 3.2, 0, Math.PI * 2); g.fill();
+  }
+  g.restore();
+}
 
 const BIOMES = [
   { name: 'NEON CITADEL', bgTop: '#0b2038', bgBot: '#040b16', plateA: '#0d223a', plateB: '#09192c', conduit: 'rgba(0, 240, 255, 0.14)', wallTop: '#244b70', wallFront: '#10253b', wallEdge: '#00f0ff', crateTop: '#8e443d', crateFront: '#52221e', crateAccent: '#ff9e66', moteColor: '#00f0ff' },
@@ -1952,24 +2200,107 @@ const ui = {
   royaleHud: document.getElementById('royale-hud')
 };
 
+function safeGetStorage(key, fallback = '') {
+  try {
+    return localStorage.getItem(key) ?? fallback;
+  } catch (_) {
+    return fallback;
+  }
+}
+
+function safeSetStorage(key, val) {
+  try {
+    localStorage.setItem(key, String(val));
+  } catch (_) {}
+}
+
 let gameMode = 'CAMPAIGN';
 let difficultyTier = 'NORMAL';
 let state = 'START';
 let score = 0;
 let lives = 3;
 let level = 1;
-let best = Number(localStorage.getItem('neonSiegeBest') || 0);
+let best = Number(safeGetStorage('neonSiegeBest', '0') || 0);
 let prevBestAtStart = best;
 ui.best.textContent = best;
+
+let unlockedMedals = new Set();
+try {
+  const rawMedals = JSON.parse(safeGetStorage('apexOverdriveMedals', '[]'));
+  if (Array.isArray(rawMedals)) rawMedals.forEach(m => unlockedMedals.add(m));
+} catch (_) {}
+
+function refreshMedalCodexUI() {
+  const container = document.getElementById('medal-codex-list');
+  const header = document.getElementById('medal-header');
+  if (header) header.textContent = `CAREER HONORS & MEDALS (${unlockedMedals.size}/${MEDAL_CATALOG.length})`;
+  const pauseMedals = document.getElementById('pause-medals');
+  if (pauseMedals) pauseMedals.textContent = `${unlockedMedals.size}/${MEDAL_CATALOG.length}`;
+  if (!container) return;
+  container.innerHTML = '';
+  MEDAL_CATALOG.forEach(m => {
+    const owned = unlockedMedals.has(m.id);
+    const el = document.createElement('div');
+    el.className = `armory-tile ${owned ? 'medal-unlocked' : 'medal-locked'}`;
+    const c = document.createElement('canvas');
+    c.width = 88;
+    c.height = 88;
+    const g = c.getContext('2d');
+    g.translate(44, 44);
+    drawMedalEmblem(g, m.id, owned ? m.color : '#64748b');
+    const title = document.createElement('b');
+    title.textContent = m.name;
+    const sub = document.createElement('small');
+    sub.style.color = owned ? m.color : '#94a3b8';
+    sub.textContent = owned ? `✓ ${m.tag}` : m.tag;
+    el.append(c, title, sub);
+    container.appendChild(el);
+  });
+}
+
+function unlockMedal(id) {
+  if (state !== 'PLAYING' && state !== 'LEVEL_COMPLETE') return;
+  if (unlockedMedals.has(id)) return;
+  const meta = MEDAL_CATALOG.find(m => m.id === id);
+  if (!meta) return;
+  unlockedMedals.add(id);
+  safeSetStorage('apexOverdriveMedals', JSON.stringify([...unlockedMedals]));
+  sfx.playMedal();
+  refreshMedalCodexUI();
+
+  const stack = document.getElementById('toast-stack');
+  if (stack) {
+    const toast = document.createElement('div');
+    toast.className = 'medal-toast';
+    toast.style.borderColor = meta.color;
+    const c = document.createElement('canvas');
+    c.width = 64;
+    c.height = 64;
+    const g = c.getContext('2d');
+    g.translate(32, 32);
+    drawMedalEmblem(g, meta.id, meta.color);
+    const txt = document.createElement('div');
+    txt.className = 'medal-toast-txt';
+    txt.innerHTML = `<span>MEDAL UNLOCKED</span><strong>${meta.name}</strong>`;
+    toast.append(c, txt);
+    stack.appendChild(toast);
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      toast.style.transition = 'opacity 0.3s ease';
+      setTimeout(() => toast.remove(), 320);
+    }, 3400);
+  }
+}
 
 let stageTime = 150;
 let hurryUpActive = false;
 let suddenDeathTimer = 0;
 let suddenDeathIndex = 0;
 let spiralCoords = [];
+let fallingBlocks = [];
 
 let map = [];
-let crateDamaged = []; // tracks reinforced crates that cracked once
+let crateDamaged = [];
 let specials = [];
 let scorchMarks = [];
 let bombs = [];
@@ -1992,7 +2323,11 @@ let royaleRoster = [];
 
 let shake = 0;
 let hitStop = 0;
+let finishSlowMoTimer = 0;
+let screenFlash = 0;
 let hurtFlash = 0;
+let stageHurtCount = 0;
+let portalWarnCd = 0;
 let chronoTime = 0;
 let sectorBannerTimer = 0;
 let bossKlaxonTimer = 0;
@@ -2006,6 +2341,19 @@ let killStreakTimer = 0;
 let last = 0;
 let elapsed = 0;
 let levelTimer = null;
+
+// 110ms Arcade Input Buffer for buttery frame-perfect responsiveness
+const inputBuffer = { type: null, timer: 0 };
+function queueAction(type) {
+  inputBuffer.type = type;
+  inputBuffer.timer = 0.115;
+}
+
+function pulseHaptic(ms = 12) {
+  try {
+    if (navigator.vibrate) navigator.vibrate(ms);
+  } catch (_) {}
+}
 
 function getDiffConfig() {
   if (difficultyTier === 'APEX') return { speedMult: 1.26, scoreMult: 2.0, extraEnemies: 3, bossHpBonus: 6, aggroChance: 0.9 };
@@ -2035,6 +2383,8 @@ const player = {
   range: 2,
   invuln: 0,
   walk: 0,
+  squashX: 1,
+  squashY: 1,
   dashCd: 0,
   dashing: 0,
   overdriveMeter: 0,
@@ -2060,6 +2410,11 @@ const player = {
   curseTimer: 0,
   warpLock: 0
 };
+
+function triggerSquash(sx, sy) {
+  player.squashX = sx;
+  player.squashY = sy;
+}
 
 /* ============================================================================
    4. ARENA GENERATION, SAFE RESPAWN & STATIC FLOOR CACHE
@@ -2256,6 +2611,8 @@ function initEnemies() {
         hp: maxHp,
         maxHp,
         maxBombs: 2,
+        canKick: true,
+        warpLock: 0,
         speed: (1.92 + Math.min(0.85, level * 0.1)) * diff.speedMult,
         range: 2 + Math.floor(level / 2),
         dx: idx % 2 === 0 ? -1 : 1,
@@ -2276,7 +2633,7 @@ function initEnemies() {
   ui.royaleHud.classList.add('hidden');
 
   if (isBossStage) {
-    const bossVariant = Math.floor((level - 1) / 3) % 3;
+    const bossVariant = (gameMode === 'BOSS_RUSH' ? (level - 1) : Math.floor((level - 1) / 3)) % 3;
     const bossTitles = ['OMEGA TANK-CORE', 'CRYO OVERLORD', 'SOLAR EMPEROR'];
     const maxHp = 8 + level * 2 + diff.bossHpBonus;
     boss = {
@@ -2294,12 +2651,14 @@ function initEnemies() {
       attackTimer: 2.6,
       boltTimer: 3.1,
       summonTimer: 8.8,
+      spiralAngle: 0,
       recoil: 0,
       treadScroll: 0,
       phase: 1,
       reticles: []
     };
     bossKlaxonTimer = 2.2;
+    if (state === 'PLAYING') sfx.playBossRoar();
     ui.bossHud.classList.remove('hidden');
     syncBossUI();
   } else {
@@ -2348,6 +2707,8 @@ function initEnemies() {
         hp: maxHp,
         maxHp,
         maxBombs: kind === 'rival' ? 2 : 1,
+        canKick: kind === 'sapper' || kind === 'rival',
+        warpLock: 0,
         shielded: kind === 'knight',
         enraged: false,
         aggro: false,
@@ -2422,8 +2783,14 @@ function resetPlayerPosition() {
   player.y = sp.r * TILE + (TILE - player.h) / 2;
   player.invuln = 2.5;
   player.walk = 0;
+  player.squashX = 1;
+  player.squashY = 1;
   player.dashing = 0;
   player.jumpTime = 0;
+  player.jumpStartX = player.x;
+  player.jumpStartY = player.y;
+  player.jumpTargetX = player.x;
+  player.jumpTargetY = player.y;
   player.heldBomb = null;
   player.curse = null;
   player.curseTimer = 0;
@@ -2486,11 +2853,19 @@ function startLevel() {
   hurryUpActive = false;
   suddenDeathTimer = 0;
   suddenDeathIndex = 0;
+  fallingBlocks = [];
+  finishSlowMoTimer = 0;
+  screenFlash = 0;
+  stageHurtCount = 0;
+  portalWarnCd = 0;
+  inputBuffer.type = null;
+  inputBuffer.timer = 0;
   sectorBannerTimer = 2.6;
   spiralCoords = buildSpiralCoords();
   buildFloorCache((level - 1) % BIOMES.length);
   initAmbientMotes();
   initMap();
+  state = 'PLAYING';
   initEnemies();
   resetPlayerPosition();
   bombs = [];
@@ -2512,7 +2887,6 @@ function startLevel() {
   killStreak = 0;
   killStreakTimer = 0;
   hurtFlash = 0;
-  state = 'PLAYING';
   hideScreens();
   syncUI();
 }
@@ -2534,6 +2908,9 @@ function goHomeMenu() {
   levelTimer = null;
   state = 'START';
   score = 0;
+  fallingBlocks = [];
+  finishSlowMoTimer = 0;
+  screenFlash = 0;
   hideScreens();
   document.getElementById('start-screen').classList.remove('hidden');
   buildFloorCache(0);
@@ -2552,7 +2929,7 @@ function addScore(pts) {
   score += pts;
   if (score > best) {
     best = score;
-    localStorage.setItem('neonSiegeBest', best);
+    safeSetStorage('neonSiegeBest', best);
   }
 }
 
@@ -2604,6 +2981,9 @@ function activateOverdrive() {
   player.overdriveMeter = 0;
   player.overdriveTime = 8.5;
   player.invuln = Math.max(player.invuln, 8.5);
+  triggerSquash(1.3, 0.75);
+  screenFlash = 0.28;
+  pulseHaptic(30);
   sfx.playOverdrive();
   shake = 0.36;
   addShockwave(player.x + 15, player.y + 15, 240, '#ffcc33', 5);
@@ -2743,9 +3123,10 @@ function rectHitsWall(x, y, w, h, opts = {}) {
 }
 
 function triggerDash() {
-  if (state !== 'PLAYING' || player.dashCd > 0 || player.jumpTime > 0) return;
+  if (state !== 'PLAYING' || player.dashCd > 0 || player.jumpTime > 0) return false;
   player.dashing = 0.16;
   player.dashCd = 1.4;
+  triggerSquash(1.26, 0.78);
 
   const pc = Math.floor((player.x + player.w / 2) / TILE);
   const pr = Math.floor((player.y + player.h / 2) / TILE);
@@ -2759,12 +3140,15 @@ function triggerDash() {
     addScore(200);
     addOverdriveCharge(28);
     sfx.playDash(true);
+    pulseHaptic(18);
+    unlockMedal('chrono_ghost');
     addShockwave(player.x + 15, player.y + 15, 260, '#00f0ff', 4);
     addFloatText(player.x + 15, player.y - 12, 'CHRONO DODGE +200', '#00f0ff', 1.3);
   } else {
     sfx.playDash(false);
   }
   syncUI();
+  return true;
 }
 
 function launchThrownBomb(b, fromX, fromY, startC, startR, dx, dy, dist = 3) {
@@ -2788,7 +3172,7 @@ function launchThrownBomb(b, fromX, fromY, startC, startR, dx, dy, dist = 3) {
 }
 
 function useGloveOrMountAction() {
-  if (state !== 'PLAYING' || player.jumpTime > 0) return;
+  if (state !== 'PLAYING' || player.jumpTime > 0) return false;
   const cx = player.x + player.w / 2;
   const cy = player.y + player.h / 2;
   const pc = Math.floor(cx / TILE);
@@ -2800,10 +3184,12 @@ function useGloveOrMountAction() {
   if (player.heldBomb) {
     const b = player.heldBomb;
     player.heldBomb = null;
+    triggerSquash(1.18, 0.84);
+    pulseHaptic(14);
     launchThrownBomb(b, cx, cy - 18, pc, pr, dx, dy, 3);
     addFloatText(cx, cy - 12, 'POWER THROW!', '#ff7b1c', 1.08);
     syncUI();
-    return;
+    return true;
   }
 
   // 2. Power Glove: Lift bomb underneath overhead, OR Power-Punch bomb in front!
@@ -2811,18 +3197,21 @@ function useGloveOrMountAction() {
     const underIdx = bombs.findIndex(b => b.c === pc && b.r === pr);
     if (underIdx >= 0) {
       player.heldBomb = bombs.splice(underIdx, 1)[0];
+      triggerSquash(0.86, 1.18);
       sfx.playPlaceBomb();
       addFloatText(cx, cy - 12, 'BOMB LIFTED! [E]', '#ffcc33', 1.05);
       syncUI();
-      return;
+      return true;
     }
     const frontIdx = bombs.findIndex(b => b.c === pc + dx && b.r === pr + dy);
     if (frontIdx >= 0) {
       const b = bombs.splice(frontIdx, 1)[0];
+      triggerSquash(1.22, 0.82);
+      pulseHaptic(14);
       launchThrownBomb(b, b.x, b.y, b.c, b.r, dx, dy, 3);
       addShockwave(cx + dx * 20, cy + dy * 20, 48, '#ff7b1c', 2.5);
       addFloatText(cx, cy - 12, 'MEGA PUNCH!', '#ff7b1c', 1.1);
-      return;
+      return true;
     }
   }
 
@@ -2848,12 +3237,14 @@ function useGloveOrMountAction() {
         addFloatText(e.x, e.y - 12, 'SLAMMED!', '#ff2a6d');
       }
     }
+    triggerSquash(1.28, 0.76);
+    pulseHaptic(22);
     shake = 0.36;
     sfx.playKick();
     addShockwave(cx, cy, 118, '#ff2a6d', 4);
     addFloatText(cx, cy - 12, shattered ? `TITAN SLAM +${shattered * 25}` : 'TITAN SLAM!', '#ff2a6d', 1.15);
     syncUI();
-    return;
+    return true;
   }
 
   // 4. Striker Louie Mech: Sonic Wave Kick
@@ -2871,10 +3262,12 @@ function useGloveOrMountAction() {
         if (e.c === tc && e.r === tr) e.stunned = 2.2;
       }
     }
+    triggerSquash(1.18, 0.84);
+    pulseHaptic(14);
     sfx.playKick();
     addShockwave(cx + dx * 28, cy + dy * 28, 95, '#ffcc33', 3);
     addFloatText(cx, cy - 10, 'SONIC PULSE!', '#ffcc33', 1.1);
-    return;
+    return true;
   }
 
   // 5. Hopper Louie Mech: Rocket Leap 2 tiles over walls/bombs to an open bomb-free tile
@@ -2889,10 +3282,13 @@ function useGloveOrMountAction() {
       player.jumpTargetX = destC * TILE + (TILE - player.w) / 2;
       player.jumpTargetY = destR * TILE + (TILE - player.h) / 2;
       player.invuln = Math.max(player.invuln, 0.38);
+      triggerSquash(0.8, 1.26);
       sfx.playThrow();
       addFloatText(cx, cy - 10, 'MECH LEAP!', '#05ffa1');
+      return true;
     }
   }
+  return false;
 }
 
 function updateScarfPhysics() {
@@ -2914,6 +3310,10 @@ function updateScarfPhysics() {
 }
 
 function updatePlayer(dt) {
+  player.squashX += (1 - player.squashX) * Math.min(1, dt * 14);
+  player.squashY += (1 - player.squashY) * Math.min(1, dt * 14);
+  if (portalWarnCd > 0) portalWarnCd = Math.max(0, portalWarnCd - dt);
+
   if (player.dashCd > 0) player.dashCd = Math.max(0, player.dashCd - dt);
   if (player.overdriveTime > 0) {
     player.overdriveTime = Math.max(0, player.overdriveTime - dt);
@@ -2933,13 +3333,55 @@ function updatePlayer(dt) {
     }
   }
 
+  // Power Glove Stasis Fuse: held bombs tick slowly (0.45x) and self-detonate if held too long!
+  if (player.heldBomb) {
+    player.heldBomb.t -= dt * 0.45;
+    if (player.heldBomb.t <= 0) {
+      const hb = player.heldBomb;
+      player.heldBomb = null;
+      const hbc = Math.max(1, Math.min(COLS - 2, Math.floor((player.x + player.w / 2) / TILE)));
+      const hbr = Math.max(1, Math.min(ROWS - 2, Math.floor((player.y + player.h / 2) / TILE)));
+      hb.c = hbc;
+      hb.r = hbr;
+      hb.x = hbc * TILE + TILE / 2;
+      hb.y = hbr * TILE + TILE / 2;
+      detonateBombObject(hb);
+      syncUI();
+    }
+  }
+
   if (player.jumpTime > 0) {
-    player.jumpTime -= dt;
+    player.jumpTime = Math.max(0, player.jumpTime - dt);
     const prog = Math.min(1, 1 - player.jumpTime / 0.32);
-    player.x = player.jumpStartX + (player.jumpTargetX - player.jumpStartX) * prog;
-    player.y = player.jumpStartY + (player.jumpTargetY - player.jumpStartY) * prog;
-    updateScarfPhysics();
-    return;
+    if (Number.isFinite(player.jumpTargetX) && Number.isFinite(player.jumpStartX)) {
+      player.x = player.jumpStartX + (player.jumpTargetX - player.jumpStartX) * prog;
+      player.y = player.jumpStartY + (player.jumpTargetY - player.jumpStartY) * prog;
+    }
+    if (player.jumpTime > 0) {
+      if (inputBuffer.timer > 0) inputBuffer.timer = Math.max(0, inputBuffer.timer - dt);
+      updateScarfPhysics();
+      return;
+    }
+    triggerSquash(1.22, 0.8);
+  }
+
+  // Consume 115ms Arcade Input Buffer when action becomes valid
+  if (inputBuffer.timer > 0) {
+    inputBuffer.timer -= dt;
+    let consumed = false;
+    if (inputBuffer.type === 'bomb') consumed = placeBomb();
+    else if (inputBuffer.type === 'dash') consumed = triggerDash();
+    else if (inputBuffer.type === 'skill') consumed = useGloveOrMountAction();
+    else if (inputBuffer.type === 'remote') consumed = detonateRemoteBombs();
+    else if (inputBuffer.type === 'line') consumed = deployLineBombs();
+    else if (inputBuffer.type === 'overdrive' && player.overdriveMeter >= 100 && player.overdriveTime <= 0) {
+      activateOverdrive();
+      consumed = true;
+    }
+    if (consumed || inputBuffer.timer <= 0) {
+      inputBuffer.type = null;
+      inputBuffer.timer = 0;
+    }
   }
 
   let ax = (keys.right ? 1 : 0) - (keys.left ? 1 : 0);
@@ -2987,6 +3429,7 @@ function updatePlayer(dt) {
     if (hitX.type === 'bomb' && player.kick && ax !== 0) {
       hitX.bomb.vx = Math.sign(ax) * 9.6;
       hitX.bomb.vy = 0;
+      triggerSquash(1.16, 0.86);
       sfx.playKick();
     } else if (ax !== 0 && ay === 0) {
       const idealY = Math.round(player.y / TILE) * TILE + (TILE - player.h) / 2;
@@ -3011,6 +3454,7 @@ function updatePlayer(dt) {
     if (hitY.type === 'bomb' && player.kick && ay !== 0) {
       hitY.bomb.vx = 0;
       hitY.bomb.vy = Math.sign(ay) * 9.6;
+      triggerSquash(0.86, 1.16);
       sfx.playKick();
     } else if (ay !== 0 && ax === 0) {
       const idealX = Math.round(player.x / TILE) * TILE + (TILE - player.w) / 2;
@@ -3038,18 +3482,27 @@ function updatePlayer(dt) {
         player.x = sp.pairC * TILE + (TILE - player.w) / 2;
         player.y = sp.pairR * TILE + (TILE - player.h) / 2;
         player.warpLock = 0.65;
+        triggerSquash(0.82, 1.24);
+        sfx.playWarp();
         burst(player.x + 15, player.y + 15, '#00f0ff', 18);
         addShockwave(player.x + 15, player.y + 15, 70, '#00f0ff', 2);
       } else if (sp.type === 'exit' && sp.open && !levelTimer) {
         completeCurrentLevel();
+      } else if (sp.type === 'exit' && sp.revealed && !sp.open && portalWarnCd <= 0) {
+        portalWarnCd = 1.6;
+        sfx.playPortalLocked();
+        addFloatText(player.x + 15, player.y - 12, 'PORTAL LOCKED — CLEAR FOES!', '#ffcc33', 1.05);
       }
     }
   }
   if (player.warpLock > 0) player.warpLock = Math.max(0, player.warpLock - dt);
 
+  const pxCenter = player.x + player.w / 2;
+  const pyCenter = player.y + player.h / 2;
   for (let i = powerups.length - 1; i >= 0; i--) {
     const p = powerups[i];
-    if (pc === p.c && pr === p.r) {
+    const pDist = Math.hypot(pxCenter - (p.c * TILE + TILE / 2), pyCenter - (p.r * TILE + TILE / 2));
+    if ((pc === p.c && pr === p.r) || pDist < 26) {
       applyPowerup(p);
       powerups.splice(i, 1);
       syncUI();
@@ -3062,6 +3515,7 @@ function applyPowerup(p) {
   const cy = p.r * TILE + TILE / 2;
   addScore(100);
   addOverdriveCharge(15);
+  pulseHaptic(12);
 
   const meta = POWERUP_CATALOG.find(item => item.id === p.type) || { name: p.type, color: '#ffd166' };
   burst(cx, cy, meta.color, 20);
@@ -3148,20 +3602,24 @@ function createBombAt(c, r) {
 }
 
 function placeBomb() {
-  if (state !== 'PLAYING') return;
+  if (state !== 'PLAYING' || player.jumpTime > 0) return false;
   const activePlayerBombs = bombs.filter(b => b.owner === 'player').length + (player.heldBomb ? 1 : 0);
   const maxAllowed = player.overdriveTime > 0 ? 9 : player.maxBombs;
-  if (activePlayerBombs >= maxAllowed) return;
+  if (activePlayerBombs >= maxAllowed) return false;
 
   const c = Math.floor((player.x + player.w / 2) / TILE);
   const r = Math.floor((player.y + player.h / 2) / TILE);
   if (createBombAt(c, r)) {
+    triggerSquash(1.2, 0.82);
+    pulseHaptic(10);
     sfx.playPlaceBomb();
+    return true;
   }
+  return false;
 }
 
 function deployLineBombs() {
-  if (state !== 'PLAYING' || (!player.lineBomb && player.overdriveTime <= 0)) return;
+  if (state !== 'PLAYING' || player.jumpTime > 0 || (!player.lineBomb && player.overdriveTime <= 0)) return false;
   const c0 = Math.floor((player.x + player.w / 2) / TILE);
   const r0 = Math.floor((player.y + player.h / 2) / TILE);
   const dx = player.dirX || (player.dirY === 0 ? 1 : 0);
@@ -3177,13 +3635,17 @@ function deployLineBombs() {
     if (createBombAt(tc, tr)) placed++;
   }
   if (placed > 0) {
+    triggerSquash(1.22, 0.8);
+    pulseHaptic(14);
     sfx.playPlaceBomb();
     addFloatText(player.x + 15, player.y - 10, `LINE VOLLEY x${placed}!`, '#ffd166');
+    return true;
   }
+  return false;
 }
 
 function detonateRemoteBombs() {
-  if (state !== 'PLAYING') return;
+  if (state !== 'PLAYING') return false;
   let triggered = 0;
   for (const b of bombs) {
     if (b.owner === 'player' && (b.remote || player.remote)) {
@@ -3193,20 +3655,26 @@ function detonateRemoteBombs() {
   }
   if (triggered > 0) {
     addFloatText(player.x + 15, player.y - 10, 'REMOTE DETONATION!', '#c77dff');
+    return true;
   }
+  return false;
 }
 
 function stopKickedBombs() {
+  if (state !== 'PLAYING' || !player.kick) return;
+  let stopped = 0;
   for (const b of bombs) {
-    if (b.vx !== 0 || b.vy !== 0) {
+    if (b.owner === 'player' && (b.vx !== 0 || b.vy !== 0)) {
       b.vx = 0;
       b.vy = 0;
       b.c = Math.floor(b.x / TILE);
       b.r = Math.floor(b.y / TILE);
       b.x = b.c * TILE + TILE / 2;
       b.y = b.r * TILE + TILE / 2;
+      stopped++;
     }
   }
+  if (stopped > 0) sfx.playMenuTick();
 }
 
 function updateBombs(dt) {
@@ -3239,6 +3707,7 @@ function updateBombs(dt) {
       for (const e of enemies) {
         if (e.c === finalC && e.r === finalR) {
           e.stunned = 2.4;
+          unlockMedal('lob_sniper');
           addFloatText(e.x, e.y - 14, 'BONK! STUNNED', '#ff7b1c');
         }
       }
@@ -3257,6 +3726,9 @@ function updateBombs(dt) {
 
   for (const b of bombs) {
     b.t -= dt;
+    if (!b.remote && Math.random() < dt * (b.t < 0.7 ? 20 : 8)) {
+      burst(b.x + 11, b.y - 24, b.t < 0.6 ? '#ff2a6d' : '#ffe066', 1);
+    }
 
     if (b.vx !== 0 || b.vy !== 0) {
       const nx = b.x + b.vx * dt * 60;
@@ -3273,13 +3745,19 @@ function updateBombs(dt) {
         }
       }
 
+      if (b.owner !== 'player' && state === 'PLAYING' && player.jumpTime <= 0 &&
+          Math.hypot((player.x + 15) - nx, (player.y + 15) - ny) < 27) {
+        b.vx = 0;
+        b.vy = 0;
+      }
+
       if (boss && Math.hypot(boss.x - nx, boss.y - ny) < 42) {
         b.vx = 0;
         b.vy = 0;
         b.t = 0;
       }
 
-      if (!map[nextR] || map[nextR][nextC] !== 0 || bombs.some(other => other !== b && other.c === nextC && other.r === nextR)) {
+      if ((b.vx === 0 && b.vy === 0) || !map[nextR] || map[nextR][nextC] !== 0 || bombs.some(other => other !== b && other.c === nextC && other.r === nextR)) {
         b.vx = 0;
         b.vy = 0;
         b.c = Math.floor(b.x / TILE);
@@ -3299,6 +3777,7 @@ function updateBombs(dt) {
           b.x = b.c * TILE + TILE / 2;
           b.y = b.r * TILE + TILE / 2;
           b.warped = true;
+          if (state === 'PLAYING') sfx.playWarp();
           burst(b.x, b.y, '#00f0ff', 14);
         }
       }
@@ -3347,10 +3826,13 @@ function detonateBombObject(b) {
     maxComboStage = Math.max(maxComboStage, comboCount);
     comboTimer = 3.5;
     addFloatText(b.x, b.y - 14, `CHAIN x${comboCount}!`, '#00f0ff', 1.2);
+    if (comboCount >= 4) unlockMedal('chain_master');
+    if (chainDepth >= 3) screenFlash = Math.max(screenFlash, 0.22);
   }
 
   if (state === 'PLAYING') {
     sfx.playExplode(chainDepth, b.ice, b.pierce);
+    pulseHaptic(chainDepth >= 2 ? 22 : 14);
   }
   addShockwave(b.x, b.y, 50 + b.range * 25, b.ice ? '#70e2ff' : b.pierce ? '#ff2a6d' : '#ff9e2c', 3.5);
   addBlast(b.c, b.r, 'center', 0, 0, b.ice, b.pierce, b.owner);
@@ -3478,10 +3960,17 @@ function updateExplosions(dt) {
     for (const en of enemies) {
       const dist = Math.hypot(s.x - en.x, s.y - en.y);
       if (dist > 6 && dist < 110) {
-        en.x += ((s.x - en.x) / dist) * 40 * dt;
-        en.y += ((s.y - en.y) / dist) * 40 * dt;
-        en.c = Math.floor(en.x / TILE);
-        en.r = Math.floor(en.y / TILE);
+        const snx = en.x + ((s.x - en.x) / dist) * 40 * dt;
+        const sny = en.y + ((s.y - en.y) / dist) * 40 * dt;
+        if (!rectHitsWall(snx - en.rad, sny - en.rad, en.rad * 2, en.rad * 2, {
+          includeBombs: false,
+          canWallPass: en.kind === 'phantom'
+        }).hit) {
+          en.x = snx;
+          en.y = sny;
+          en.c = Math.floor(en.x / TILE);
+          en.r = Math.floor(en.y / TILE);
+        }
       }
     }
   }
@@ -3504,21 +3993,32 @@ function updateExplosions(dt) {
       if (blast.isIce && e.frozen <= 0) {
         e.frozen = 4.0;
         e.invuln = 0.4;
-        addScore(Math.round(50 * diff.scoreMult));
+        if (blast.owner === 'player') addScore(Math.round(50 * diff.scoreMult));
         addFloatText(e.x, e.y - 12, 'FROZEN!', '#70e2ff');
         continue;
       }
       if (e.kind === 'knight' && !blast.isPierce && e.shielded !== false) {
-        e.shielded = false;
-        e.enraged = true;
-        e.speed *= 1.35;
-        e.stunned = 1.05;
-        e.invuln = 0.65;
-        if (state === 'PLAYING') sfx.playShieldBreak();
-        burst(e.x, e.y, '#00f0ff', 24);
-        addShockwave(e.x, e.y, 68, '#38bdf8', 2.8);
-        addFloatText(e.x, e.y - 12, 'SHIELD SHATTERED! BERSERK!', '#38bdf8', 1.1);
-        continue;
+        const fdx = e.dx || 0;
+        const fdy = (e.dx === 0 && e.dy === 0) ? 1 : (e.dy || 0);
+        const isBackstab = (blast.dx * fdx + blast.dy * fdy) > 0.3;
+        if (isBackstab) {
+          if (state === 'PLAYING' && blast.owner === 'player') {
+            addScore(300);
+            unlockMedal('backstabber');
+            addFloatText(e.x, e.y - 24, 'BACKSTAB CRIT! +300', '#ff2a6d', 1.22);
+          }
+        } else {
+          e.shielded = false;
+          e.enraged = true;
+          e.speed *= 1.35;
+          e.stunned = 1.05;
+          e.invuln = 0.65;
+          if (state === 'PLAYING') sfx.playShieldBreak();
+          burst(e.x, e.y, '#00f0ff', 24);
+          addShockwave(e.x, e.y, 68, '#38bdf8', 2.8);
+          addFloatText(e.x, e.y - 12, 'SHIELD SHATTERED! BERSERK!', '#38bdf8', 1.1);
+          continue;
+        }
       }
       if (e.hp && e.hp > 1) {
         e.hp--;
@@ -3530,24 +4030,29 @@ function updateExplosions(dt) {
       }
 
       if (state === 'PLAYING') {
-        stageKills++;
-        totalKills++;
-        killStreak++;
-        killStreakTimer = 2.6;
-        const basePts = e.kind === 'rival' ? 320 : e.kind === 'sniper' || e.kind === 'knight' ? 180 : 130;
-        const pts = Math.round(basePts * comboCount * diff.scoreMult);
-        addScore(pts);
-        addOverdriveCharge(20);
-        addFloatText(e.x, e.y - 10, `+${pts}`, '#ffcc33', 1.2);
+        if (blast.owner === 'player' || gameMode !== 'BATTLE_ROYALE') {
+          stageKills++;
+          totalKills++;
+          killStreak++;
+          killStreakTimer = 2.6;
+          const basePts = e.kind === 'rival' ? 320 : e.kind === 'sniper' || e.kind === 'knight' ? 180 : 130;
+          const pts = Math.round(basePts * comboCount * diff.scoreMult);
+          addScore(pts);
+          addOverdriveCharge(20);
+          addFloatText(e.x, e.y - 10, `+${pts}`, '#ffcc33', 1.2);
 
-        if (killStreak >= 2) {
-          const streakBonus = Math.round(killStreak * 150 * diff.scoreMult);
-          addScore(streakBonus);
-          addOverdriveCharge(12);
-          const label = killStreak === 2 ? 'DOUBLE KILL!' : killStreak === 3 ? 'TRIPLE KILL!' : 'APEX EXTERMINATION!';
-          addFloatText(e.x, e.y - 28, `${label} +${streakBonus}`, '#05ffa1', 1.32);
+          if (killStreak >= 2) {
+            const streakBonus = Math.round(killStreak * 150 * diff.scoreMult);
+            addScore(streakBonus);
+            addOverdriveCharge(12);
+            const label = killStreak === 2 ? 'DOUBLE KILL!' : killStreak === 3 ? 'TRIPLE KILL!' : 'APEX EXTERMINATION!';
+            addFloatText(e.x, e.y - 28, `${label} +${streakBonus}`, '#05ffa1', 1.32);
+          }
+          hitStop = 0.045;
+        } else {
+          const killerName = String(blast.owner).replace('rival_', '');
+          addFloatText(e.x, e.y - 14, `${killerName} KO'D ${e.rivalName || 'FOE'}!`, '#ff7b1c', 1.15);
         }
-        hitStop = 0.045;
       }
 
       burst(e.x, e.y, e.rivalColor || '#ff2a6d', 34);
@@ -3572,6 +4077,7 @@ function updateExplosions(dt) {
       if (state === 'PLAYING') {
         shake = 0.42;
         hitStop = 0.06;
+        pulseHaptic(22);
       }
       burst(boss.x, boss.y, '#ffcc33', 36);
       addShockwave(boss.x, boss.y, 135, '#ff2a6d', 4);
@@ -3582,6 +4088,12 @@ function updateExplosions(dt) {
         addScore(bossClearPts);
         stageKills++;
         totalKills++;
+        if (state === 'PLAYING') {
+          unlockMedal('boss_slayer');
+          screenFlash = 0.45;
+          finishSlowMoTimer = 0.48;
+          pulseHaptic(45);
+        }
         burst(boss.x, boss.y, '#00f0ff', 85);
         addShockwave(boss.x, boss.y, 270, '#ffcc33', 6);
         addFloatText(boss.x, boss.y, `${boss.title} DESTROYED! +${bossClearPts}`, '#05ffa1', 1.45);
@@ -3601,6 +4113,7 @@ function updateExplosions(dt) {
   }
 
   if (state === 'PLAYING' && !enemies.length && !boss && !levelTimer) {
+    finishSlowMoTimer = Math.max(finishSlowMoTimer, 0.38);
     levelTimer = setTimeout(() => {
       if (state === 'PLAYING') completeCurrentLevel();
     }, 650);
@@ -3626,6 +4139,12 @@ function completeCurrentLevel() {
   syncUI();
   state = 'LEVEL_COMPLETE';
 
+  if (stageHurtCount === 0) unlockMedal('untouchable');
+  if (gameMode === 'BATTLE_ROYALE') unlockMedal('royale_crown');
+  if (difficultyTier === 'APEX') unlockMedal('apex_conqueror');
+
+  const vTitle = document.getElementById('victory-title');
+  if (vTitle) vTitle.textContent = gameMode === 'BATTLE_ROYALE' ? 'VICTORY ROYALE!' : 'SECTOR CLEARED';
   document.getElementById('stage-rank').textContent = computeRank(stageTime, maxComboStage, stageKills);
   document.getElementById('level-bonus-score').textContent = score.toLocaleString();
   document.getElementById('sum-time').textContent = `+${timeBonus}`;
@@ -3636,6 +4155,9 @@ function completeCurrentLevel() {
 
 function hurt() {
   if (state !== 'PLAYING') return;
+  stageHurtCount++;
+  triggerSquash(1.3, 0.72);
+  pulseHaptic(35);
   sfx.playHurt();
   hurtFlash = 0.55;
 
@@ -3718,6 +4240,7 @@ function bombThreatensCell(b, targetC, targetR) {
 
 function isTileThreatenedByBomb(c, r) {
   if (explosions.some(ex => ex.c === c && ex.r === r)) return true;
+  if (fallingBlocks.some(fb => fb.c === c && fb.r === r)) return true;
   if (boss && boss.reticles.some(ret => ret.c === c && ret.r === r)) return true;
   return bombs.some(b => bombThreatensCell(b, c, r));
 }
@@ -3757,8 +4280,8 @@ function findBestEscapeDir(c0, r0, canPhase = false) {
   return null;
 }
 
-function hasSafeEscapeAfterBomb(c0, r0, bRange) {
-  const fakeBomb = { c: c0, r: r0, range: bRange, pierce: false };
+function hasSafeEscapeAfterBomb(c0, r0, bRange, isPierce = false) {
+  const fakeBomb = { c: c0, r: r0, range: bRange, pierce: isPierce };
   const visited = new Set([`${c0},${r0}`]);
   const queue = [{ c: c0, r: r0, dist: 0 }];
   while (queue.length > 0) {
@@ -3870,6 +4393,21 @@ function chooseDir(e) {
   if (e.kind === 'rival' || e.kind === 'sapper') {
     let targetX = player.x + 15;
     let targetY = player.y + 15;
+
+    // True Free-For-All Battle Royale targeting: hunt nearest living Bomber (Player or Rival)!
+    if (gameMode === 'BATTLE_ROYALE' && e.kind === 'rival') {
+      let bestDist = (state === 'PLAYING' && lives > 0) ? Math.hypot(targetX - e.x, targetY - e.y) : Infinity;
+      for (const o of enemies) {
+        if (o === e) continue;
+        const dOther = Math.hypot(o.x - e.x, o.y - e.y);
+        if (dOther < bestDist) {
+          bestDist = dOther;
+          targetX = o.x;
+          targetY = o.y;
+        }
+      }
+    }
+
     if (e.kind === 'rival' && powerups.length > 0) {
       const nearPow = powerups.find(p => p.type !== 'skull' && Math.hypot(p.c * TILE - e.x, p.r * TILE - e.y) < TILE * 5);
       if (nearPow) {
@@ -3941,6 +4479,7 @@ function updateEnemiesAndBoss(dt) {
 
   for (const e of enemies) {
     if (e.invuln > 0) e.invuln -= dt;
+    if (e.warpLock > 0) e.warpLock = Math.max(0, e.warpLock - effDt);
     if (e.frozen > 0) {
       e.frozen -= dt;
       continue;
@@ -4040,6 +4579,10 @@ function updateEnemiesAndBoss(dt) {
         if (pw.c === e.c && pw.r === e.r && pw.type !== 'skull') {
           if (pw.type === 'bomb') e.maxBombs = Math.min(4, (e.maxBombs || 1) + 1);
           else if (pw.type === 'flame' || pw.type === 'fullfire') e.range = Math.min(5, (e.range || 2) + 1);
+          else if (pw.type === 'kick') e.canKick = true;
+          else if (pw.type === 'pierce') e.pierce = true;
+          else if (pw.type === 'ice') e.ice = true;
+          else if (pw.type === 'shield') e.hp = Math.min((e.maxHp || 2) + 1, (e.hp || 1) + 1);
           else e.speed = Math.min(3.0, e.speed + 0.14);
           powerups.splice(pi, 1);
           burst(e.x, e.y, e.rivalColor || '#ffcc33', 10);
@@ -4055,12 +4598,12 @@ function updateEnemiesAndBoss(dt) {
 
       if (e.bombCd <= 0 && myActiveBombs < (e.maxBombs || 1) && (nearCrate || nearPlayer || nearOtherRival) && !isTileThreatenedByBomb(e.c, e.r)) {
         e.bombCd = (e.kind === 'rival' ? 2.2 : 3.2) + Math.random() * 1.4;
-        if (!bombs.some(b => b.c === e.c && b.r === e.r) && hasSafeEscapeAfterBomb(e.c, e.r, bRange)) {
+        if (!bombs.some(b => b.c === e.c && b.r === e.r) && hasSafeEscapeAfterBomb(e.c, e.r, bRange, !!e.pierce)) {
           bombs.push({
             c: e.c, r: e.r,
             x: e.c * TILE + TILE / 2, y: e.r * TILE + TILE / 2,
             vx: 0, vy: 0, t: 2.15, maxT: 2.15, range: bRange,
-            solid: false, remote: false, pierce: false, ice: false, owner: e.uid, chainDepth: 1
+            solid: false, remote: false, pierce: !!e.pierce, ice: !!e.ice, owner: e.uid, chainDepth: 1
           });
           chooseDir(e);
         }
@@ -4100,11 +4643,23 @@ function updateEnemiesAndBoss(dt) {
       e.y = ny;
       e.c = Math.floor(e.x / TILE);
       e.r = Math.floor(e.y / TILE);
+      if (e.kind === 'rival' && !e.warpLock) {
+        const wp = specials.find(s => s.type === 'warp' && s.c === e.c && s.r === e.r);
+        if (wp && !isTileThreatenedByBomb(wp.pairC, wp.pairR)) {
+          e.c = wp.pairC;
+          e.r = wp.pairR;
+          e.x = e.c * TILE + TILE / 2;
+          e.y = e.r * TILE + TILE / 2;
+          e.warpLock = 1.4;
+          if (state === 'PLAYING') sfx.playWarp();
+          burst(e.x, e.y, '#00f0ff', 14);
+        }
+      }
       if ((e.c !== prevC || e.r !== prevR) && e.escaping) {
         chooseDir(e);
       }
     } else {
-      if ((e.kind === 'sapper' || e.kind === 'rival') && colCheck.type === 'bomb' && colCheck.bomb) {
+      if ((e.canKick || e.kind === 'sapper' || e.kind === 'rival') && colCheck.type === 'bomb' && colCheck.bomb) {
         const kb = colCheck.bomb;
         if (kb.vx === 0 && kb.vy === 0) {
           kb.vx = e.dx * 7.5;
@@ -4145,6 +4700,7 @@ function updateEnemiesAndBoss(dt) {
     const newPhase = hpRatio <= 0.34 ? 3 : hpRatio <= 0.67 ? 2 : 1;
     if (newPhase !== boss.phase) {
       boss.phase = newPhase;
+      if (state === 'PLAYING') sfx.playBossRoar();
       addShockwave(boss.x, boss.y, 230, '#ff2a6d', 5);
       addFloatText(boss.x, boss.y - 34, newPhase === 3 ? 'OVERCLOCK PHASE!' : 'PHASE II ENGAGED!', '#ff2a6d', 1.35);
       syncBossUI();
@@ -4172,26 +4728,47 @@ function updateEnemiesAndBoss(dt) {
       spawnCrateDebris(bc, br, biome.crateTop);
     }
 
-    // Phase 2 & 3 Boss Plasma Cannon Salvo (8-way in Phase 3 or Solar Emperor!)
-    if (boss.phase >= 2) {
-      boss.boltTimer = (boss.boltTimer || 3.2) - effDt;
+    // Signature Boss Projectile Patterns (Variant 0: Heavy Salvo, Variant 1: Cryo 8-Way Nova, Variant 2: Rotating Solar Spiral!)
+    if (boss.variant === 2 || boss.variant === 1 || boss.phase >= 2) {
+      boss.boltTimer = (boss.boltTimer || 3.0) - effDt;
       if (boss.boltTimer <= 0) {
-        boss.boltTimer = boss.phase === 3 ? 2.3 : 3.3;
         boss.recoil = 1.0;
         if (state === 'PLAYING') sfx.playRailShot();
-        const salvoDirs = boss.phase === 3 || boss.variant === 2
-          ? [...dirs, { x: 0.707, y: 0.707 }, { x: -0.707, y: 0.707 }, { x: 0.707, y: -0.707 }, { x: -0.707, y: -0.707 }]
-          : dirs;
         const boltCol = boss.variant === 1 ? '#70e2ff' : boss.variant === 2 ? '#ffcc33' : '#ff2a6d';
-        for (const d of salvoDirs) {
-          enemyBolts.push({
-            x: boss.x + d.x * 28,
-            y: boss.y + d.y * 28,
-            vx: d.x * 4.5,
-            vy: d.y * 4.5,
-            color: boltCol,
-            life: 1.6
-          });
+
+        if (boss.variant === 2) {
+          // Solar Emperor: Rotating 4-Point Spiral Barrage
+          boss.boltTimer = boss.phase === 3 ? 1.15 : boss.phase === 2 ? 1.55 : 2.1;
+          boss.spiralAngle = (boss.spiralAngle || 0) + 0.44;
+          for (let k = 0; k < 4; k++) {
+            const ang = boss.spiralAngle + (k * Math.PI) / 2;
+            const dx = Math.cos(ang);
+            const dy = Math.sin(ang);
+            enemyBolts.push({
+              x: boss.x + dx * 28,
+              y: boss.y + dy * 28,
+              vx: dx * 4.6,
+              vy: dy * 4.6,
+              color: boltCol,
+              life: 1.75
+            });
+          }
+        } else {
+          // Cryo Overlord (8-way Frost Nova) & Omega Tank-Core (4/8-way Plasma Cannon)
+          boss.boltTimer = boss.phase === 3 ? 2.2 : 3.2;
+          const salvoDirs = (boss.phase === 3 || boss.variant === 1)
+            ? [...dirs, { x: 0.707, y: 0.707 }, { x: -0.707, y: 0.707 }, { x: 0.707, y: -0.707 }, { x: -0.707, y: -0.707 }]
+            : dirs;
+          for (const d of salvoDirs) {
+            enemyBolts.push({
+              x: boss.x + d.x * 28,
+              y: boss.y + d.y * 28,
+              vx: d.x * 4.4,
+              vy: d.y * 4.4,
+              color: boltCol,
+              life: 1.6
+            });
+          }
         }
         burst(boss.x, boss.y, boltCol, 18);
       }
@@ -4220,17 +4797,36 @@ function updateEnemiesAndBoss(dt) {
     if (boss.attackTimer <= 0) {
       boss.attackTimer = boss.phase === 3 ? 2.0 : boss.phase === 2 ? 2.4 : 2.9;
       boss.recoil = 0.8;
-      const count = boss.phase === 3 ? 5 : boss.phase === 2 ? 4 : 3;
+      const pushRet = (tc, tr, delay = 1.25) => {
+        if (tc >= 1 && tc <= COLS - 2 && tr >= 1 && tr <= ROWS - 2 && map[tr][tc] !== 1 &&
+            !boss.reticles.some(r0 => r0.c === tc && r0.r === tr)) {
+          boss.reticles.push({ c: tc, r: tr, t: delay, maxT: delay, ice: boss.variant === 1 });
+        }
+      };
+
+      if (boss.variant === 0) {
+        // Omega Tank-Core: Cruciform Artillery Cluster + Random Scatter
+        const cc = Math.max(2, Math.min(COLS - 3, pc));
+        const cr = Math.max(2, Math.min(ROWS - 3, pr));
+        pushRet(cc, cr, 1.35);
+        if (boss.phase >= 2) {
+          pushRet(cc + 1, cr, 1.35); pushRet(cc - 1, cr, 1.35);
+          pushRet(cc, cr + 1, 1.35); pushRet(cc, cr - 1, 1.35);
+        }
+      } else if (boss.variant === 2 && boss.phase >= 2) {
+        // Solar Emperor: Diagonal X-Lance Strike around player
+        pushRet(pc, pr, 1.3);
+        pushRet(pc + 1, pr + 1, 1.3); pushRet(pc - 1, pr + 1, 1.3);
+        pushRet(pc + 1, pr - 1, 1.3); pushRet(pc - 1, pr - 1, 1.3);
+      }
+
+      const count = boss.phase === 3 ? 4 : boss.phase === 2 ? 3 : 3;
       for (let k = 0; k < count; k++) {
         const tc = 2 + Math.floor(Math.random() * (COLS - 4));
         const tr = 2 + Math.floor(Math.random() * (ROWS - 4));
-        if (map[tr][tc] !== 1) {
-          boss.reticles.push({ c: tc, r: tr, t: 1.25, maxT: 1.25, ice: boss.variant === 1 });
-        }
+        pushRet(tc, tr, 1.25);
       }
-      if (boss.phase >= 2 && map[pr] && map[pr][pc] !== 1) {
-        boss.reticles.push({ c: pc, r: pr, t: 1.35, maxT: 1.35, ice: boss.variant === 1 });
-      }
+      if (boss.variant === 1 && boss.phase >= 2) pushRet(pc, pr, 1.35);
     }
 
     for (let i = boss.reticles.length - 1; i >= 0; i--) {
@@ -4254,6 +4850,7 @@ function updateStageTimerAndSuddenDeath(dt) {
   if (sectorBannerTimer > 0) sectorBannerTimer = Math.max(0, sectorBannerTimer - dt);
   if (bossKlaxonTimer > 0) bossKlaxonTimer = Math.max(0, bossKlaxonTimer - dt);
   if (hurtFlash > 0) hurtFlash = Math.max(0, hurtFlash - dt * 1.8);
+  if (screenFlash > 0) screenFlash = Math.max(0, screenFlash - dt * 1.9);
 
   stageTime = Math.max(0, stageTime - dt);
   const hurryThreshold = gameMode === 'BATTLE_ROYALE' ? 45 : 40;
@@ -4268,33 +4865,59 @@ function updateStageTimerAndSuddenDeath(dt) {
     const dropInterval = stageTime <= 0 ? 0.28 : 0.54;
     if (suddenDeathTimer <= 0 && suddenDeathIndex < spiralCoords.length - 20) {
       suddenDeathTimer = dropInterval;
-      const cell = spiralCoords[suddenDeathIndex++];
-      const isExit = specials.some(s => s.type === 'exit' && s.r === cell.r && s.c === cell.c);
-      if (!isExit) {
-        for (const b of bombs) {
-          if (b.c === cell.c && b.r === cell.r) b.t = 0;
-        }
-        powerups = powerups.filter(p => !(p.c === cell.c && p.r === cell.r));
-        for (let i = enemies.length - 1; i >= 0; i--) {
-          if (enemies[i].c === cell.c && enemies[i].r === cell.r) {
-            burst(enemies[i].x, enemies[i].y, '#ff2a6d', 24);
-            addFloatText(enemies[i].x, enemies[i].y - 10, 'CRUSHED!', '#ff2a6d');
-            enemies.splice(i, 1);
-            syncRoyaleUI();
-          }
-        }
-        map[cell.r][cell.c] = 1;
-        burst(cell.c * TILE + 24, cell.r * TILE + 24, '#ff2a6d', 12);
-
-        if (rectOverlapsTile(player.x, player.y, player.w, player.h, cell.c, cell.r)) {
-          hurt();
-          if (state === 'PLAYING') {
-            const safeSp = findSafeSpawnTile();
-            player.x = safeSp.c * TILE + (TILE - player.w) / 2;
-            player.y = safeSp.r * TILE + (TILE - player.h) / 2;
-          }
+      while (suddenDeathIndex < spiralCoords.length - 20 &&
+             map[spiralCoords[suddenDeathIndex].r][spiralCoords[suddenDeathIndex].c] === 1) {
+        suddenDeathIndex++;
+      }
+      if (suddenDeathIndex < spiralCoords.length - 20) {
+        const cell = spiralCoords[suddenDeathIndex++];
+        const isExit = specials.some(s => s.type === 'exit' && s.r === cell.r && s.c === cell.c);
+        if (!isExit && !fallingBlocks.some(fb => fb.r === cell.r && fb.c === cell.c)) {
+          fallingBlocks.push({ r: cell.r, c: cell.c, z: 220, t: 0.44, maxT: 0.44 });
         }
       }
+    }
+  }
+
+  // Animate 3D Sky-Falling Sudden Death Blocks & Slam Impact!
+  for (let i = fallingBlocks.length - 1; i >= 0; i--) {
+    const fb = fallingBlocks[i];
+    fb.t -= dt;
+    const prog = 1 - Math.max(0, fb.t / fb.maxT);
+    fb.z = 220 * (1 - prog * prog);
+    if (fb.t <= 0) {
+      fallingBlocks.splice(i, 1);
+      for (const b of bombs) {
+        if (b.c === fb.c && b.r === fb.r) b.t = 0;
+      }
+      powerups = powerups.filter(p => !(p.c === fb.c && p.r === fb.r));
+      for (let ei = enemies.length - 1; ei >= 0; ei--) {
+        if (enemies[ei].c === fb.c && enemies[ei].r === fb.r) {
+          burst(enemies[ei].x, enemies[ei].y, '#ff2a6d', 24);
+          addFloatText(enemies[ei].x, enemies[ei].y - 10, 'CRUSHED!', '#ff2a6d');
+          enemies.splice(ei, 1);
+          syncRoyaleUI();
+        }
+      }
+      map[fb.r][fb.c] = 1;
+      if (crateDamaged[fb.r]) crateDamaged[fb.r][fb.c] = false;
+      if (state === 'PLAYING') {
+        sfx.playBlockSlam();
+        shake = Math.max(shake, 0.16);
+        pulseHaptic(18);
+      }
+      burst(fb.c * TILE + 24, fb.r * TILE + 24, '#ff2a6d', 14);
+      addShockwave(fb.c * TILE + 24, fb.r * TILE + 24, 52, '#ff2a6d', 2.5);
+
+      if (rectOverlapsTile(player.x, player.y, player.w, player.h, fb.c, fb.r)) {
+        hurt();
+        if (state === 'PLAYING') {
+          const safeSp = findSafeSpawnTile();
+          player.x = safeSp.c * TILE + (TILE - player.w) / 2;
+          player.y = safeSp.r * TILE + (TILE - player.h) / 2;
+        }
+      }
+      if (state === 'PLAYING') syncUI();
     }
   }
 }
@@ -4397,9 +5020,11 @@ function drawGlow(x, y, rad, hexColor, alpha = 0.38) {
   ctx.restore();
 }
 
-function drawWallBlock(x, y, biome) {
+function drawWallBlock(x, y, biome, r = -1, c = -1) {
+  const isPerimeter = r === 0 || r === ROWS - 1 || c === 0 || c === COLS - 1;
+
   // Drop shadow
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.52)';
   roundRectPath(x + 2, y + 6, TILE - 4, TILE - 3, 7);
   ctx.fill();
 
@@ -4409,7 +5034,7 @@ function drawWallBlock(x, y, biome) {
   ctx.fill();
 
   // Front vertical armor ribs
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.32)';
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.34)';
   ctx.fillRect(x + 11, y + TILE - 13, 4, 9);
   ctx.fillRect(x + TILE - 15, y + TILE - 13, 4, 9);
 
@@ -4422,7 +5047,7 @@ function drawWallBlock(x, y, biome) {
   ctx.fill();
 
   // Specular top rim
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.22)';
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.24)';
   ctx.lineWidth = 1;
   ctx.beginPath();
   ctx.moveTo(x + 7, y + 3.5);
@@ -4431,11 +5056,29 @@ function drawWallBlock(x, y, biome) {
 
   // Recessed neon circuit inlay
   ctx.strokeStyle = biome.wallEdge;
-  ctx.globalAlpha = 0.48;
+  ctx.globalAlpha = isPerimeter ? 0.34 : 0.58;
   ctx.lineWidth = 1.4;
   roundRectPath(x + 7, y + 6, TILE - 14, TILE - 21, 3);
   ctx.stroke();
   ctx.globalAlpha = 1;
+
+  // Interior Reactor Pillars get a pulsing central plasma conduit node!
+  if (!isPerimeter && r > 0 && c > 0) {
+    ctx.fillStyle = 'rgba(4, 10, 20, 0.68)';
+    ctx.beginPath();
+    ctx.arc(x + TILE / 2, y + 18, 5.5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = biome.wallEdge;
+    ctx.globalAlpha = 0.72 + Math.sin(elapsed * 3.5 + r + c) * 0.22;
+    ctx.beginPath();
+    ctx.arc(x + TILE / 2, y + 18, 3.3, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.arc(x + TILE / 2, y + 18, 1.3, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  }
 
   // 4 metallic corner rivets
   ctx.fillStyle = 'rgba(255, 255, 255, 0.35)';
@@ -4818,7 +5461,7 @@ function drawBombsAndTelegraphs() {
 }
 
 function drawExplosionsAndSingularities() {
-  // Cruciform high-energy plasma beams
+  // Cruciform high-energy plasma beams + crackling electric lightning filaments
   for (const bs of beamStrips) {
     const ratio = Math.max(0, bs.t / bs.maxT);
     const outerCol = bs.isIce ? '#38bdf8' : bs.isPierce ? '#ff2a6d' : '#ff7b1c';
@@ -4840,6 +5483,24 @@ function drawExplosionsAndSingularities() {
     ctx.strokeStyle = '#ffffff';
     ctx.lineWidth = 9 * ratio;
     ctx.beginPath(); ctx.moveTo(bs.x1, bs.y1); ctx.lineTo(bs.x2, bs.y2); ctx.stroke();
+
+    // High-voltage jagged plasma arc along beam spine
+    const segLen = Math.hypot(bs.x2 - bs.x1, bs.y2 - bs.y1);
+    const steps = Math.max(3, Math.floor(segLen / 22));
+    const nx = -(bs.y2 - bs.y1) / (segLen || 1);
+    const ny = (bs.x2 - bs.x1) / (segLen || 1);
+    ctx.strokeStyle = bs.isPierce ? '#00f0ff' : '#ffffff';
+    ctx.lineWidth = (bs.isPierce ? 2.4 : 1.6) * ratio;
+    ctx.beginPath();
+    ctx.moveTo(bs.x1, bs.y1);
+    for (let s = 1; s < steps; s++) {
+      const f = s / steps;
+      const jitter = Math.sin(elapsed * 55 + s * 3.7 + bs.x1) * (bs.isPierce ? 9.5 : 5.5) * ratio;
+      ctx.lineTo(bs.x1 + (bs.x2 - bs.x1) * f + nx * jitter, bs.y1 + (bs.y2 - bs.y1) * f + ny * jitter);
+    }
+    ctx.lineTo(bs.x2, bs.y2);
+    ctx.stroke();
+
     ctx.restore();
   }
 
@@ -4915,7 +5576,9 @@ function renderCyberBomber(g, opts) {
     dirY = 1,
     walk = 0,
     overdrive = false,
-    holdingBomb = false
+    holdingBomb = false,
+    blinking = false,
+    hurt = false
   } = opts;
 
   const stride = Math.sin(walk) * 4.5;
@@ -5010,7 +5673,7 @@ function renderCyberBomber(g, opts) {
     g.beginPath(); g.arc(-sideSign * 3, -9, 3.2, 0, Math.PI * 2); g.fill();
   }
 
-  // Visor & Expressive Glowing Eyes
+  // Visor & Expressive Glowing Eyes (supports natural blink, hurt wince ><, and Overdrive focus!)
   if (!facingUp) {
     const vx = facingSide ? (sideSign > 0 ? -2 : -11) : -9.5;
     const vw = facingSide ? 13 : 19;
@@ -5022,14 +5685,39 @@ function renderCyberBomber(g, opts) {
     g.lineWidth = 1;
     g.stroke();
 
-    // Glowing vertical Bomberman eyes!
-    g.fillStyle = overdrive ? '#ffcc33' : eyeCol;
-    if (facingSide) {
+    const activeEyeCol = hurt ? '#ff2a6d' : overdrive ? '#ffcc33' : eyeCol;
+    g.fillStyle = activeEyeCol;
+    g.strokeStyle = activeEyeCol;
+    g.lineWidth = 1.7;
+
+    if (hurt && !facingSide) {
+      // Expressive >< hurt wince eyes!
+      g.beginPath();
+      g.moveTo(-6.5, -11); g.lineTo(-3, -8.8); g.lineTo(-6.5, -6.6);
+      g.moveTo(6.5, -11); g.lineTo(3, -8.8); g.lineTo(6.5, -6.6);
+      g.stroke();
+    } else if (blinking) {
+      if (facingSide) {
+        const ex = sideSign > 0 ? 4.5 : -6.5;
+        g.fillRect(ex - 2, -9.2, 4, 1.4);
+      } else {
+        g.fillRect(-6, -9.2, 4, 1.4);
+        g.fillRect(2, -9.2, 4, 1.4);
+      }
+    } else if (facingSide) {
       const ex = sideSign > 0 ? 4.5 : -6.5;
       g.beginPath(); g.roundRect(ex - 1.5, -11.5, 3, 5.5, 1.4); g.fill();
     } else {
       g.beginPath(); g.roundRect(-5.5, -11.5, 3, 5.5, 1.4); g.fill();
       g.beginPath(); g.roundRect(2.5, -11.5, 3, 5.5, 1.4); g.fill();
+      if (overdrive) {
+        // Determined angled brow mask
+        g.fillStyle = '#060e1a';
+        g.beginPath();
+        g.moveTo(-7, -12.5); g.lineTo(-1, -10.5); g.lineTo(-7, -10.8); g.closePath();
+        g.moveTo(7, -12.5); g.lineTo(1, -10.5); g.lineTo(7, -10.8); g.closePath();
+        g.fill();
+      }
     }
   } else {
     // Back of helmet collar vent
@@ -5530,7 +6218,7 @@ function drawPlayerWithSuit() {
   // Ground shadow
   ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
   ctx.beginPath();
-  ctx.ellipse(x, player.y + player.h - 1, 13, 5, 0, 0, Math.PI * 2);
+  ctx.ellipse(x, player.y + player.h - 1, 13 * (player.squashX || 1), 5, 0, 0, Math.PI * 2);
   ctx.fill();
 
   const suitColor = player.overdriveTime > 0 ? '#ffcc33' : player.pierce ? '#ff2a6d' : '#00f0ff';
@@ -5560,6 +6248,7 @@ function drawPlayerWithSuit() {
 
   ctx.save();
   ctx.translate(x, y + bob);
+  ctx.scale(player.squashX || 1, player.squashY || 1);
 
   // Articulated 2.5D Cyber-Louie Mecha Mounts!
   if (player.mount) {
@@ -5623,11 +6312,19 @@ function drawPlayerWithSuit() {
     dirY: player.dirY,
     walk: player.walk,
     overdrive: player.overdriveTime > 0,
-    holdingBomb: !!player.heldBomb
+    holdingBomb: !!player.heldBomb,
+    blinking: Math.sin(elapsed * 1.85) > 0.985,
+    hurt: hurtFlash > 0.15
   });
 
-  // Overhead Held Bomb!
+  // Overhead Held Bomb + Stasis Fuse Ring!
   if (player.heldBomb) {
+    const hbPct = Math.max(0, Math.min(1, player.heldBomb.t / (player.heldBomb.maxT || 2.15)));
+    ctx.strokeStyle = player.heldBomb.t < 0.7 ? '#ff2a6d' : '#ffcc33';
+    ctx.lineWidth = 2.2;
+    ctx.beginPath();
+    ctx.arc(0, -32, 18, -Math.PI / 2, -Math.PI / 2 + hbPct * Math.PI * 2);
+    ctx.stroke();
     renderBombSphere(0, -32, player.heldBomb, 0.88, false);
   }
 
@@ -5755,6 +6452,23 @@ function draw() {
 
   drawFloorAndScorch();
   drawSpecialTiles();
+
+  // Floor target shadows for incoming 3D Sudden Death Sky-Blocks!
+  for (const fb of fallingBlocks) {
+    const cx = fb.c * TILE + TILE / 2;
+    const cy = fb.r * TILE + TILE / 2;
+    const prox = 1 - Math.max(0, fb.z / 220);
+    ctx.save();
+    ctx.fillStyle = `rgba(0, 0, 0, ${0.22 + prox * 0.45})`;
+    ctx.beginPath();
+    ctx.ellipse(cx, cy + 4, 8 + prox * 14, 4 + prox * 8, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = `rgba(255, 42, 109, ${0.45 + prox * 0.5})`;
+    ctx.lineWidth = 2;
+    ctx.strokeRect(fb.c * TILE + 4, fb.r * TILE + 4, TILE - 8, TILE - 8);
+    ctx.restore();
+  }
+
   drawPowerups();
   drawBombsAndTelegraphs();
 
@@ -5767,12 +6481,19 @@ function draw() {
         renderQueue.push({
           sortY: (r + 1) * TILE - 4,
           fn: () => {
-            if (tile === 1) drawWallBlock(c * TILE, r * TILE, biome);
+            if (tile === 1) drawWallBlock(c * TILE, r * TILE, biome, r, c);
             else drawCrateBlock(c * TILE, r * TILE, tile === 3, crateDamaged[r] && crateDamaged[r][c], biome);
           }
         });
       }
     }
+  }
+
+  for (const fb of fallingBlocks) {
+    renderQueue.push({
+      sortY: (fb.r + 1) * TILE - 2,
+      fn: () => drawWallBlock(fb.c * TILE, fb.r * TILE - fb.z, biome, fb.r, fb.c)
+    });
   }
 
   for (const e of enemies) {
@@ -5803,13 +6524,20 @@ function draw() {
   drawEnemyProjectiles();
   drawParticlesAndShockwaves();
 
-  // Screen-Space Vignettes (Chrono / Overdrive / Hurt Flash)
+  // Screen-Space Vignettes (Chrono / Screen Flash / Hurt Flash)
   if (chronoTime > 0) {
     ctx.save();
     const grad = ctx.createRadialGradient(LOGICAL_W / 2, LOGICAL_H / 2, LOGICAL_W * 0.22, LOGICAL_W / 2, LOGICAL_H / 2, LOGICAL_W * 0.65);
     grad.addColorStop(0, 'rgba(0, 240, 255, 0)');
     grad.addColorStop(1, 'rgba(0, 240, 255, 0.25)');
     ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, LOGICAL_W, LOGICAL_H);
+    ctx.restore();
+  }
+
+  if (screenFlash > 0) {
+    ctx.save();
+    ctx.fillStyle = `rgba(255, 244, 204, ${screenFlash * 0.36})`;
     ctx.fillRect(0, 0, LOGICAL_W, LOGICAL_H);
     ctx.restore();
   }
@@ -5840,7 +6568,7 @@ function draw() {
     ctx.fillStyle = '#ffffff';
     ctx.textAlign = 'center';
     ctx.fillText(
-      boss ? `WARNING: ${boss.title}` : `SECTOR 0${level} — ${biome.name}`,
+      boss ? `WARNING: ${boss.title}` : `SECTOR ${String(level).padStart(2, '0')} — ${biome.name}`,
       LOGICAL_W / 2,
       80
     );
@@ -5857,6 +6585,8 @@ function draw() {
 /* ============================================================================
    10. POPULATE SUIT MATRIX & CODEX CANVASES + CONTROLLERS & MAIN LOOP
    ============================================================================ */
+let prevStateBeforeCodex = 'START';
+
 function initVectorIconsAndBestiary() {
   // 1. Suit Matrix Dock Canvases
   document.querySelectorAll('.suit-node[data-pwid]').forEach(node => {
@@ -5915,6 +6645,9 @@ function initVectorIconsAndBestiary() {
     el.append(c, title, sub);
     enemyCodexContainer.appendChild(el);
   });
+
+  // 4. 8 Persistent Career Medals
+  refreshMedalCodexUI();
 }
 
 function loop(now) {
@@ -5922,7 +6655,8 @@ function loop(now) {
   last = now;
   elapsed += dt;
 
-  sfx.updateBgm(dt, state === 'PLAYING', !!boss || hurryUpActive || player.overdriveTime > 0);
+  pollGamepad();
+  sfx.updateBgm(dt, state === 'PLAYING', !!boss || hurryUpActive || player.overdriveTime > 0, (level - 1) % BIOMES.length);
 
   if (hitStop > 0) {
     hitStop -= dt;
@@ -5932,15 +6666,17 @@ function loop(now) {
   }
 
   if (state === 'PLAYING') {
-    updateStageTimerAndSuddenDeath(dt);
-    updatePlayer(dt);
-    updateBombs(dt);
-    updateExplosions(dt);
-    updateEnemiesAndBoss(dt);
-    updateEffects(dt);
+    if (finishSlowMoTimer > 0) finishSlowMoTimer = Math.max(0, finishSlowMoTimer - dt);
+    const simDt = finishSlowMoTimer > 0 ? dt * 0.28 : dt;
+    updateStageTimerAndSuddenDeath(simDt);
+    updatePlayer(simDt);
+    updateBombs(simDt);
+    updateExplosions(simDt);
+    updateEnemiesAndBoss(simDt);
+    updateEffects(simDt);
     syncUI();
-  } else if (state === 'START' || state === 'CODEX') {
-    // Live Attract-Mode Arena (score & best isolated!)
+  } else if (state === 'START' || (state === 'CODEX' && prevStateBeforeCodex === 'START')) {
+    // Live Attract-Mode Arena ONLY when launched from Main Menu (never unpauses active matches!)
     player.invuln = 2.5;
     updateBombs(dt);
     updateExplosions(dt);
@@ -5958,10 +6694,114 @@ function loop(now) {
   requestAnimationFrame(loop);
 }
 
+// Multi-Source Input Merger (Keyboard + HTML5 Gamepad + Mobile Touch never overwrite each other!)
+const kbKeys = { up: false, down: false, left: false, right: false };
+const gpKeys = { up: false, down: false, left: false, right: false };
+const touchKeys = { up: false, down: false, left: false, right: false };
+
+function syncDirectionalKeys() {
+  for (const k of ['up', 'down', 'left', 'right']) {
+    keys[k] = !!(kbKeys[k] || gpKeys[k] || touchKeys[k]);
+    const dirEl = document.getElementById(k);
+    if (dirEl) dirEl.classList.toggle('lit', keys[k]);
+  }
+}
+
 function setKey(k, v) {
-  keys[k] = v;
-  const dirEl = document.getElementById(k);
-  if (dirEl) dirEl.classList.toggle('lit', v);
+  kbKeys[k] = v;
+  syncDirectionalKeys();
+}
+
+function cycleMenuMode(delta) {
+  const cards = [...document.querySelectorAll('.poster-card')];
+  if (!cards.length) return;
+  const curIdx = Math.max(0, cards.findIndex(c => c.dataset.mode === gameMode));
+  const nextIdx = (curIdx + delta + cards.length) % cards.length;
+  cards.forEach(c => c.classList.remove('selected'));
+  cards[nextIdx].classList.add('selected');
+  gameMode = cards[nextIdx].dataset.mode;
+  sfx.playMenuTick();
+  initEnemies();
+  syncUI();
+}
+
+function cycleMenuDifficulty(delta) {
+  const pills = [...document.querySelectorAll('.diff-pill')];
+  if (!pills.length) return;
+  const curIdx = Math.max(0, pills.findIndex(p => p.dataset.diff === difficultyTier));
+  const nextIdx = (curIdx + delta + pills.length) % pills.length;
+  pills.forEach(p => p.classList.remove('active'));
+  pills[nextIdx].classList.add('active');
+  difficultyTier = pills[nextIdx].dataset.diff;
+  sfx.playMenuTick();
+  initEnemies();
+  syncUI();
+}
+
+// Full HTML5 Gamepad API Controller Support (Xbox / DualSense / Switch Pro)
+const prevGpBtns = {};
+function pollGamepad() {
+  if (!navigator.getGamepads) return;
+  let pad = null;
+  try {
+    const pads = navigator.getGamepads();
+    for (let i = 0; i < pads.length; i++) {
+      if (pads[i] && pads[i].connected) { pad = pads[i]; break; }
+    }
+  } catch (_) { return; }
+  if (!pad) return;
+
+  const axX = pad.axes && pad.axes.length > 0 ? pad.axes[0] : 0;
+  const axY = pad.axes && pad.axes.length > 1 ? pad.axes[1] : 0;
+  const btn = idx => !!(pad.buttons[idx] && (pad.buttons[idx].pressed || pad.buttons[idx].value > 0.5));
+  const justPressed = idx => btn(idx) && !prevGpBtns[idx];
+
+  gpKeys.up = btn(12) || axY < -0.32;
+  gpKeys.down = btn(13) || axY > 0.32;
+  gpKeys.left = btn(14) || axX < -0.32;
+  gpKeys.right = btn(15) || axX > 0.32;
+  syncDirectionalKeys();
+
+  if (state === 'START') {
+    if (justPressed(14)) cycleMenuMode(-1);
+    if (justPressed(15)) cycleMenuMode(1);
+    if (justPressed(12)) cycleMenuDifficulty(-1);
+    if (justPressed(13)) cycleMenuDifficulty(1);
+    if (justPressed(0) || justPressed(9)) startGame();
+    if (justPressed(8)) openCodex();
+  } else if (state === 'CODEX') {
+    if (justPressed(1) || justPressed(0) || justPressed(8) || justPressed(9)) closeCodex();
+  } else if (state === 'LEVEL_COMPLETE') {
+    if (justPressed(0) || justPressed(9)) { level++; startLevel(); }
+  } else if (state === 'GAME_OVER') {
+    if (justPressed(0) || justPressed(9)) startGame();
+    if (justPressed(1)) goHomeMenu();
+  } else if (state === 'PAUSED') {
+    if (justPressed(0) || justPressed(9)) togglePause();
+    if (justPressed(8)) openCodex();
+  } else if (state === 'PLAYING') {
+    if (justPressed(0) && !placeBomb()) queueAction('bomb');
+    if ((justPressed(1) || justPressed(7)) && !triggerDash()) queueAction('dash');
+    if (justPressed(2) && !useGloveOrMountAction()) queueAction('skill');
+    if (justPressed(3)) {
+      if (player.remote && bombs.some(b => b.owner === 'player')) {
+        if (!detonateRemoteBombs()) queueAction('remote');
+      } else if (!deployLineBombs()) {
+        queueAction('line');
+      }
+    }
+    if (justPressed(4)) stopKickedBombs();
+    if (justPressed(5) || justPressed(6)) {
+      if (player.overdriveMeter >= 100 && player.overdriveTime <= 0) activateOverdrive();
+      else queueAction('overdrive');
+    }
+    if (justPressed(9)) togglePause();
+    if (justPressed(8)) openCodex();
+  }
+
+  for (let i = 0; i < pad.buttons.length; i++) {
+    prevGpBtns[i] = btn(i);
+  }
 }
 
 const bindings = {
@@ -5972,14 +6812,39 @@ const bindings = {
 };
 
 window.addEventListener('keydown', e => {
-  if (state === 'CODEX' && e.code === 'Escape') {
-    closeCodex();
+  if (state === 'CODEX') {
+    if (e.code === 'Escape' || e.code === 'Space' || e.code === 'Enter') {
+      e.preventDefault();
+      closeCodex();
+    }
     return;
   }
-  if (state === 'START' && (e.code === 'Space' || e.code === 'Enter')) {
-    e.preventDefault();
-    startGame();
-    return;
+  if (state === 'START') {
+    if (e.code === 'Space' || e.code === 'Enter') {
+      e.preventDefault();
+      startGame();
+      return;
+    }
+    if (e.code === 'ArrowLeft' || e.code === 'KeyA') {
+      e.preventDefault();
+      cycleMenuMode(-1);
+      return;
+    }
+    if (e.code === 'ArrowRight' || e.code === 'KeyD') {
+      e.preventDefault();
+      cycleMenuMode(1);
+      return;
+    }
+    if (e.code === 'ArrowUp' || e.code === 'KeyW') {
+      e.preventDefault();
+      cycleMenuDifficulty(-1);
+      return;
+    }
+    if (e.code === 'ArrowDown' || e.code === 'KeyS') {
+      e.preventDefault();
+      cycleMenuDifficulty(1);
+      return;
+    }
   }
   if (state === 'LEVEL_COMPLETE' && (e.code === 'Space' || e.code === 'Enter')) {
     e.preventDefault();
@@ -5992,32 +6857,43 @@ window.addEventListener('keydown', e => {
     startGame();
     return;
   }
+  if (state === 'PAUSED' && e.code === 'Enter') {
+    e.preventDefault();
+    togglePause();
+    return;
+  }
   if (bindings[e.code]) {
     setKey(bindings[e.code], true);
     e.preventDefault();
   }
   if (e.code === 'Space') {
-    if (!e.repeat) placeBomb();
+    if (!e.repeat && !placeBomb()) queueAction('bomb');
     e.preventDefault();
   }
   if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') {
-    if (!e.repeat) triggerDash();
+    if (!e.repeat && !triggerDash()) queueAction('dash');
     e.preventDefault();
   }
   if (e.code === 'KeyE') {
-    if (!e.repeat) useGloveOrMountAction();
+    if (!e.repeat && !useGloveOrMountAction()) queueAction('skill');
   }
   if (e.code === 'KeyR') {
-    if (!e.repeat) detonateRemoteBombs();
+    if (!e.repeat) {
+      if (state === 'PAUSED') startGame();
+      else if (!detonateRemoteBombs()) queueAction('remote');
+    }
   }
   if (e.code === 'KeyF') {
-    if (!e.repeat) deployLineBombs();
+    if (!e.repeat && !deployLineBombs()) queueAction('line');
   }
   if (e.code === 'KeyX') {
     if (!e.repeat) stopKickedBombs();
   }
   if (e.code === 'KeyQ') {
-    if (!e.repeat) activateOverdrive();
+    if (!e.repeat) {
+      if (player.overdriveMeter >= 100 && player.overdriveTime <= 0) activateOverdrive();
+      else queueAction('overdrive');
+    }
   }
   if (e.code === 'KeyP' || e.code === 'Escape') togglePause();
   if (e.code === 'KeyM') sfx.toggleMute();
@@ -6028,10 +6904,10 @@ window.addEventListener('keyup', e => {
 });
 
 window.addEventListener('blur', () => {
-  setKey('up', false);
-  setKey('down', false);
-  setKey('left', false);
-  setKey('right', false);
+  kbKeys.up = kbKeys.down = kbKeys.left = kbKeys.right = false;
+  gpKeys.up = gpKeys.down = gpKeys.left = gpKeys.right = false;
+  touchKeys.up = touchKeys.down = touchKeys.left = touchKeys.right = false;
+  syncDirectionalKeys();
 });
 
 function toggleFullscreen() {
@@ -6044,9 +6920,10 @@ function toggleFullscreen() {
   } catch (_) {}
 }
 
-// Smooth Slide-Capable Analog Mobile D-Pad + Action Buttons
+// Smooth Slide-Capable Analog Mobile D-Pad + Moving Thumbstick Nub + Action Buttons
 (function setupMobileControls() {
   const pad = document.getElementById('dpad-pad');
+  const nub = document.getElementById('dpad-nub');
   let activePointer = null;
 
   const updatePadFromClient = (clientX, clientY) => {
@@ -6054,19 +6931,27 @@ function toggleFullscreen() {
     const dx = clientX - (rect.left + rect.width / 2);
     const dy = clientY - (rect.top + rect.height / 2);
     const dist = Math.hypot(dx, dy);
-    setKey('up', false);
-    setKey('down', false);
-    setKey('left', false);
-    setKey('right', false);
-    if (dist < 10) return;
-    if (Math.abs(dx) > Math.abs(dy) * 0.65) {
-      if (dx > 0) setKey('right', true);
-      else setKey('left', true);
+    touchKeys.up = touchKeys.down = touchKeys.left = touchKeys.right = false;
+
+    if (nub) {
+      const maxMove = 24;
+      const clamped = Math.min(dist, maxMove);
+      const nx = dist > 0.5 ? (dx / dist) * clamped : 0;
+      const ny = dist > 0.5 ? (dy / dist) * clamped : 0;
+      nub.style.transform = `translate(${nx.toFixed(1)}px, ${ny.toFixed(1)}px)`;
     }
-    if (Math.abs(dy) > Math.abs(dx) * 0.65) {
-      if (dy > 0) setKey('down', true);
-      else setKey('up', true);
+
+    if (dist >= 10) {
+      if (Math.abs(dx) > Math.abs(dy) * 0.65) {
+        if (dx > 0) touchKeys.right = true;
+        else touchKeys.left = true;
+      }
+      if (Math.abs(dy) > Math.abs(dx) * 0.65) {
+        if (dy > 0) touchKeys.down = true;
+        else touchKeys.up = true;
+      }
     }
+    syncDirectionalKeys();
   };
 
   if (pad) {
@@ -6074,6 +6959,7 @@ function toggleFullscreen() {
       e.preventDefault();
       activePointer = e.pointerId;
       pad.setPointerCapture(e.pointerId);
+      pulseHaptic(8);
       updatePadFromClient(e.clientX, e.clientY);
     });
     pad.addEventListener('pointermove', e => {
@@ -6085,10 +6971,9 @@ function toggleFullscreen() {
     const clearPad = e => {
       if (activePointer === e.pointerId) {
         activePointer = null;
-        setKey('up', false);
-        setKey('down', false);
-        setKey('left', false);
-        setKey('right', false);
+        touchKeys.up = touchKeys.down = touchKeys.left = touchKeys.right = false;
+        if (nub) nub.style.transform = 'translate(0px, 0px)';
+        syncDirectionalKeys();
       }
     };
     pad.addEventListener('pointerup', clearPad);
@@ -6104,20 +6989,28 @@ function toggleFullscreen() {
     });
   };
 
-  bindTap('bomb', placeBomb);
-  bindTap('touch-dash', triggerDash);
-  bindTap('touch-skill', useGloveOrMountAction);
+  bindTap('bomb', () => { if (!placeBomb()) queueAction('bomb'); });
+  bindTap('touch-dash', () => { if (!triggerDash()) queueAction('dash'); });
+  bindTap('touch-skill', () => { if (!useGloveOrMountAction()) queueAction('skill'); });
   bindTap('touch-det', () => {
-    if (player.remote && bombs.some(b => b.owner === 'player')) detonateRemoteBombs();
-    else deployLineBombs();
+    if (player.kick && bombs.some(b => b.owner === 'player' && (b.vx !== 0 || b.vy !== 0))) {
+      stopKickedBombs();
+    } else if (player.remote && bombs.some(b => b.owner === 'player')) {
+      if (!detonateRemoteBombs()) queueAction('remote');
+    } else if (!deployLineBombs()) {
+      queueAction('line');
+    }
   });
-  bindTap('touch-od', activateOverdrive);
+  bindTap('touch-od', () => {
+    if (player.overdriveMeter >= 100 && player.overdriveTime <= 0) activateOverdrive();
+    else queueAction('overdrive');
+  });
 })();
 
-document.getElementById('btn-dash').onclick = triggerDash;
-document.getElementById('btn-glove').onclick = useGloveOrMountAction;
-document.getElementById('btn-remote').onclick = detonateRemoteBombs;
-document.getElementById('btn-line').onclick = deployLineBombs;
+document.getElementById('btn-dash').onclick = () => { if (!triggerDash()) queueAction('dash'); };
+document.getElementById('btn-glove').onclick = () => { if (!useGloveOrMountAction()) queueAction('skill'); };
+document.getElementById('btn-remote').onclick = () => { if (!detonateRemoteBombs()) queueAction('remote'); };
+document.getElementById('btn-line').onclick = () => { if (!deployLineBombs()) queueAction('line'); };
 document.getElementById('btn-overdrive').onclick = activateOverdrive;
 
 
@@ -6153,30 +7046,61 @@ document.querySelectorAll('.poster-card').forEach(card => {
   });
 });
 
+function syncPauseModalTelemetry() {
+  const modeEl = document.getElementById('pause-mode');
+  const secEl = document.getElementById('pause-sector');
+  const medEl = document.getElementById('pause-medals');
+  if (modeEl) modeEl.textContent = gameMode.replace('_', ' ');
+  if (secEl) secEl.textContent = String(level).padStart(2, '0');
+  if (medEl) medEl.textContent = `${unlockedMedals.size}/${MEDAL_CATALOG.length}`;
+}
+
 function togglePause() {
+  if (state === 'CODEX' && (prevStateBeforeCodex === 'PLAYING' || prevStateBeforeCodex === 'PAUSED')) {
+    closeCodex();
+    return;
+  }
   if (state === 'PLAYING') {
     state = 'PAUSED';
+    sfx.playMenuTick();
+    syncPauseModalTelemetry();
     document.getElementById('pause-screen').classList.remove('hidden');
   } else if (state === 'PAUSED') {
     state = 'PLAYING';
+    sfx.playMenuTick();
     document.getElementById('pause-screen').classList.add('hidden');
   }
 }
 
-let prevStateBeforeCodex = 'START';
 function openCodex() {
-  if (state !== 'CODEX') prevStateBeforeCodex = state;
+  if (state === 'CODEX') {
+    closeCodex();
+    return;
+  }
+  prevStateBeforeCodex = state;
   state = 'CODEX';
+  sfx.playMenuTick();
+  refreshMedalCodexUI();
+  document.querySelectorAll('.overlay').forEach(x => x.classList.add('hidden'));
   document.getElementById('codex-screen').classList.remove('hidden');
 }
 
 function closeCodex() {
+  sfx.playMenuTick();
   document.getElementById('codex-screen').classList.add('hidden');
   state = prevStateBeforeCodex;
+  if (state === 'START') document.getElementById('start-screen').classList.remove('hidden');
+  else if (state === 'PAUSED') {
+    syncPauseModalTelemetry();
+    document.getElementById('pause-screen').classList.remove('hidden');
+  } else if (state === 'LEVEL_COMPLETE') document.getElementById('level-complete-screen').classList.remove('hidden');
+  else if (state === 'GAME_OVER') document.getElementById('game-over-screen').classList.remove('hidden');
 }
 
 document.getElementById('start-btn').onclick = startGame;
 document.getElementById('restart-btn').onclick = startGame;
+document.getElementById('retry-pause-btn').onclick = startGame;
+document.getElementById('codex-pause-btn').onclick = openCodex;
 document.getElementById('restart-pause-btn').onclick = goHomeMenu;
 document.getElementById('menu-over-btn').onclick = goHomeMenu;
 document.getElementById('homeBtn').onclick = goHomeMenu;
