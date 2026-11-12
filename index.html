@@ -442,12 +442,12 @@
     .icon-matrix {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 6px;
+      gap: 5px;
     }
 
     .suit-node {
       aspect-ratio: 1;
-      border-radius: 10px;
+      border-radius: 8px;
       background: rgba(4, 10, 22, 0.85);
       border: 1px solid rgba(255, 255, 255, 0.09);
       display: grid;
@@ -456,7 +456,7 @@
       filter: grayscale(1);
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       position: relative;
-      padding: 3px;
+      padding: 2px;
     }
 
     .suit-node canvas {
@@ -808,11 +808,17 @@
     .theme-codex-grid {
       width: 100%;
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 9px;
     }
 
-    @media (max-width: 640px) {
+    @media (max-width: 840px) {
+      .theme-codex-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 560px) {
       .theme-codex-grid {
         grid-template-columns: 1fr;
       }
@@ -830,24 +836,32 @@
 
     .theme-codex-head {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: space-between;
-      gap: 8px;
+      gap: 6px;
+    }
+
+    .theme-codex-head .theme-origin-pill {
+      white-space: nowrap;
+      flex-shrink: 0;
+      margin-top: 0;
+      font-size: 8.2px;
+      padding: 2px 6px;
     }
 
     .theme-codex-title {
       font-family: 'Orbitron', sans-serif;
-      font-size: 12px;
+      font-size: 11.2px;
       font-weight: 900;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.05em;
     }
 
     .theme-codex-sub {
       font-family: 'Orbitron', monospace;
-      font-size: 9px;
+      font-size: 8.5px;
       font-weight: 700;
       color: var(--text-muted);
-      letter-spacing: 0.06em;
+      letter-spacing: 0.05em;
     }
 
     .theme-codex-row {
@@ -1075,7 +1089,7 @@
 
     /* ARMORY & BESTIARY MODAL WITH LIVE RENDERED PORTRAIT CANVASES */
     .armory-card {
-      width: min(95vw, 860px);
+      width: min(96vw, 940px);
       max-height: 91vh;
       background: linear-gradient(180deg, rgba(11, 22, 44, 0.98), rgba(5, 10, 22, 0.99));
       border: 1.5px solid rgba(0, 240, 255, 0.42);
@@ -1135,6 +1149,11 @@
       width: 44px;
       height: 44px;
       display: block;
+    }
+
+    #enemy-codex-list .armory-tile canvas {
+      width: 58px;
+      height: 58px;
     }
 
     .armory-tile b {
@@ -1519,13 +1538,21 @@
           <div class="dock-section-title">ACTIVE SUIT MODULES</div>
           <div class="icon-matrix">
             <div class="suit-node" id="chip-kick" data-pwid="kick" title="Bomb Kick [X to Stop]"></div>
-            <div class="suit-node" id="chip-glove" data-pwid="glove" title="Power Glove & Punch"></div>
-            <div class="suit-node" id="chip-remote" data-pwid="remote" title="Remote Detonator"></div>
-            <div class="suit-node" id="chip-line" data-pwid="line" title="Line Bomb"></div>
-            <div class="suit-node" id="chip-pierce" data-pwid="pierce" title="Pierce Blast"></div>
+            <div class="suit-node" id="chip-remote" data-pwid="remote" title="Remote Mine [R]"></div>
+            <div class="suit-node" id="chip-line" data-pwid="line" title="Line Volley [F]"></div>
             <div class="suit-node" id="chip-ice" data-pwid="ice" title="Cryo Bomb"></div>
-            <div class="suit-node" id="chip-shield" data-pwid="shield" title="Plasma Aegis"></div>
-            <div class="suit-node" id="chip-ghost" data-pwid="wallpass" title="Phase Suit"></div>
+            <div class="suit-node" id="chip-shield" data-pwid="shield" title="Aegis Vest"></div>
+            <div class="suit-node" id="chip-glove" data-pwid="glove" title="Power Glove & Punch [E]"></div>
+            <div class="suit-node" id="chip-pierce" data-pwid="pierce" title="Pierce Core"></div>
+            <div class="suit-node" id="chip-fullfire" data-pwid="fullfire" title="Solar Core (Max Fire)"></div>
+            <div class="suit-node" id="chip-louie" data-pwid="louie" title="Cyber Louie Mount [E]"></div>
+            <div class="suit-node" id="chip-cluster" data-pwid="cluster" title="Cluster Spore (3x3 Burst)"></div>
+            <div class="suit-node" id="chip-magnet" data-pwid="magnet" title="Magnet Core (Auto-Pull)"></div>
+            <div class="suit-node" id="chip-plasma" data-pwid="plasma" title="Tesla Coil (Chain Arc)"></div>
+            <div class="suit-node" id="chip-bouncy" data-pwid="bouncy" title="Rubber Core (Ricochet)"></div>
+            <div class="suit-node" id="chip-bombpass" data-pwid="bombpass" title="Phase Boots (Bomb Pass)"></div>
+            <div class="suit-node" id="chip-ghost" data-pwid="wallpass" title="Phase Suit (Crate Pass)"></div>
+            <div class="suit-node" id="chip-gravity" data-pwid="gravity" title="Gravity Core (Vortex Bomb)"></div>
           </div>
         </div>
 
@@ -1583,12 +1610,14 @@
         </div>
 
         <div class="diff-strip" id="theme-strip">
-          <span class="diff-caption">THEME</span>
+          <span class="diff-caption">WORLD</span>
           <button class="theme-pill active" data-theme="AUTO" style="--tp-col:#00f0ff;">AUTO</button>
           <button class="theme-pill" data-theme="0" style="--tp-col:#00f0ff;"><span class="theme-dot"></span>CITADEL</button>
           <button class="theme-pill" data-theme="1" style="--tp-col:#70e2ff;"><span class="theme-dot"></span>CRYO</button>
           <button class="theme-pill" data-theme="2" style="--tp-col:#ff7b1c;"><span class="theme-dot"></span>MAGMA</button>
-          <button class="theme-pill" data-theme="3" style="--tp-col:#05ffa1;"><span class="theme-dot"></span>QUANTUM</button>
+          <button class="theme-pill" data-theme="3" style="--tp-col:#84cc16;"><span class="theme-dot"></span>BIO-DOME</button>
+          <button class="theme-pill" data-theme="4" style="--tp-col:#facc15;"><span class="theme-dot"></span>SKY-FORT</button>
+          <button class="theme-pill" data-theme="5" style="--tp-col:#05ffa1;"><span class="theme-dot"></span>QUANTUM</button>
         </div>
       </div>
 
@@ -1600,7 +1629,7 @@
             <span class="poster-badge-corner">1P CAMPAIGN</span>
           </div>
           <div class="poster-title">NEON CAMPAIGN</div>
-          <span class="poster-tag">SECTORS &amp; BOSSES</span>
+          <span class="poster-tag">6 WORLDS &amp; BOSSES</span>
         </div>
 
         <div class="poster-card" data-mode="BATTLE_ROYALE" style="--card-accent:#ffcc33;--card-glow:rgba(255,204,51,0.42);">
@@ -1615,7 +1644,7 @@
         <div class="poster-card" data-mode="BOSS_RUSH" style="--card-accent:#ff2a6d;--card-glow:rgba(255,42,109,0.42);">
           <div class="poster-art">
             <img id="art-boss" alt="Boss Rush Cover Art" />
-            <span class="poster-badge-corner">COLOSSEUM</span>
+            <span class="poster-badge-corner">6 BOSSES</span>
           </div>
           <div class="poster-title">BOSS RUSH</div>
           <span class="poster-tag">OMEGA MECH WAR</span>
@@ -1633,7 +1662,7 @@
 
       <div class="launch-bar">
         <button class="aaa-play-btn" id="start-btn">▶ DEPLOY NOW</button>
-        <button class="aaa-armory-btn" id="open-codex-start">THEMES, ARMORY &amp; MEDALS</button>
+        <button class="aaa-armory-btn" id="open-codex-start">WORLDS, ARMORY &amp; BESTIARY</button>
       </div>
 
       <div class="key-strip">
@@ -1652,11 +1681,11 @@
   <!-- WORLD THEMES, ARMORY, BESTIARY & CAREER MEDALS -->
   <section id="codex-screen" class="overlay hidden">
     <div class="armory-card">
-      <div class="logo-sub" style="letter-spacing:0.16em;color:var(--cyan);">SECTOR WORLD THEMES &amp; FACTION LOADOUTS (4)</div>
+      <div class="logo-sub" style="letter-spacing:0.16em;color:var(--cyan);">SECTOR WORLD THEMES &amp; FACTION LOADOUTS (6)</div>
       <div class="theme-codex-grid" id="theme-codex-list"></div>
-      <div class="logo-sub" style="letter-spacing:0.16em;margin-top:6px;">COMBAT SUITS &amp; POWER-UP ARMORY (16)</div>
+      <div class="logo-sub" style="letter-spacing:0.16em;margin-top:6px;">COMBAT SUITS &amp; POWER-UP ARMORY (22)</div>
       <div class="armory-grid" id="codex-list"></div>
-      <div class="logo-sub" style="letter-spacing:0.16em;color:var(--crimson);margin-top:6px;">HOSTILE CYBER-UNITS &amp; BOSS BESTIARY (8)</div>
+      <div class="logo-sub" style="letter-spacing:0.16em;color:var(--crimson);margin-top:6px;">HOSTILE CYBER-UNITS &amp; BOSS BESTIARY (15)</div>
       <div class="armory-grid" id="enemy-codex-list"></div>
       <div class="logo-sub" style="letter-spacing:0.16em;color:var(--emerald);margin-top:6px;" id="medal-header">CAREER HONORS &amp; MEDALS (0/8)</div>
       <div class="armory-grid" id="medal-codex-list"></div>
@@ -1794,12 +1823,14 @@ class SoundEngine {
       }
 
       const biomeRoots = [
-        [65.41, 51.91, 43.65, 49.0],   // Neon Citadel (C minor)
-        [73.42, 58.27, 49.0, 55.0],    // Cryo Foundry (D Dorian/minor)
-        [55.0, 43.65, 49.0, 61.74],    // Magma Core (A Phrygian)
-        [61.74, 49.0, 55.0, 73.42]     // Quantum Grid (B minor)
+        [65.41, 51.91, 43.65, 49.0],   // 0: Neon Citadel (C minor)
+        [73.42, 58.27, 49.0, 55.0],    // 1: Cryo Foundry (D Dorian)
+        [55.0, 43.65, 49.0, 61.74],    // 2: Magma Core (A Phrygian)
+        [82.41, 65.41, 73.42, 61.74],  // 3: Verdant Bio-Dome (E Aeolian/Dorian)
+        [87.31, 65.41, 73.42, 98.0],   // 4: Storm Sky-Fortress (F Lydian/Heroic)
+        [61.74, 49.0, 55.0, 73.42]     // 5: Quantum Abyss (B minor)
       ];
-      const roots = isIntense ? [73.42, 58.27, 98.0, 55.0] : biomeRoots[biomeIdx % 4];
+      const roots = isIntense ? [73.42, 58.27, 98.0, 55.0] : biomeRoots[biomeIdx % 6];
       const root = roots[bar];
       const octaveMult = (sub % 2 === 1) ? 2 : 1;
       this.tone(root * octaveMult, 'sawtooth', stepDur * 0.78, 0.024, root * octaveMult * 0.99);
@@ -1808,13 +1839,15 @@ class SoundEngine {
         [523.25, 0, 622.25, 587.33, 523.25, 0, 392.0, 466.16, 523.25, 622.25, 783.99, 0, 698.46, 622.25, 587.33, 0],
         [587.33, 0, 698.46, 659.25, 880.0, 0, 698.46, 587.33, 523.25, 587.33, 698.46, 880.0, 783.99, 0, 659.25, 0],
         [440.0, 466.16, 554.37, 0, 466.16, 440.0, 392.0, 0, 440.0, 554.37, 659.25, 587.33, 554.37, 466.16, 440.0, 0],
+        [659.25, 0, 783.99, 739.99, 587.33, 659.25, 0, 493.88, 659.25, 783.99, 987.77, 0, 880.0, 783.99, 659.25, 0],
+        [698.46, 880.0, 1046.5, 0, 987.77, 880.0, 783.99, 698.46, 880.0, 1046.5, 1174.66, 0, 1046.5, 880.0, 783.99, 0],
         [493.88, 587.33, 739.99, 0, 659.25, 587.33, 493.88, 0, 739.99, 880.0, 987.77, 0, 880.0, 739.99, 659.25, 0]
       ];
       const intenseMelody = [
         587.33, 698.46, 880.0, 0, 932.33, 880.0, 698.46, 587.33,
         659.25, 0, 698.46, 880.0, 1046.5, 932.33, 880.0, 659.25
       ];
-      const note = (isIntense ? intenseMelody : biomeLeads[biomeIdx % 4])[sub];
+      const note = (isIntense ? intenseMelody : biomeLeads[biomeIdx % 6])[sub];
       if (note > 0 && (bar % 2 === 0 || isIntense || sub < 8)) {
         const transpose = bar === 3 ? 1.122 : 1.0;
         const leadWave = isIntense ? 'sawtooth' : (biomeIdx % 2 === 1 ? 'sine' : 'triangle');
@@ -1884,6 +1917,25 @@ class SoundEngine {
   playKick() {
     this.init();
     this.tone(160, 'sawtooth', 0.13, 0.15, 520);
+  }
+
+  playBounce() {
+    this.init();
+    this.tone(280, 'sine', 0.11, 0.14, 680);
+    this.tone(540, 'triangle', 0.08, 0.09, 920, 0.025);
+  }
+
+  playZap() {
+    this.init();
+    this.noise(0.11, 0.14, 4200);
+    this.tone(1280, 'sawtooth', 0.13, 0.12, 340);
+    this.tone(860, 'square', 0.09, 0.08, 1520, 0.03);
+  }
+
+  playSlimeSplit() {
+    this.init();
+    this.tone(220, 'sine', 0.14, 0.14, 580);
+    this.tone(330, 'triangle', 0.12, 0.11, 760, 0.04);
   }
 
   playThrow() {
@@ -2003,31 +2055,44 @@ const sfx = new SoundEngine();
 const POWERUP_CATALOG = [
   { id: 'bomb', color: '#00f0ff', name: 'BOMB UP', tag: '+1 CAPACITY' },
   { id: 'flame', color: '#ffcc33', name: 'FIRE UP', tag: '+1 RANGE' },
-  { id: 'fullfire', color: '#ff5e00', name: 'SOLAR CORE', tag: 'MAX BLAST (8)' },
   { id: 'speed', color: '#05ffa1', name: 'JET SKATE', tag: '+1 SPEED TIER' },
+  { id: 'heart', color: '#ff4d8d', name: 'VITAL CORE', tag: '+1 EXTRA LIFE' },
   { id: 'kick', color: '#38bdf8', name: 'BOMB KICK', tag: 'SLIDE / [X] STOP' },
-  { id: 'glove', color: '#ff7b1c', name: 'POWER GLOVE', tag: 'HOLD & THROW [E]' },
   { id: 'remote', color: '#c77dff', name: 'REMOTE MINE', tag: 'DETONATE [R]' },
   { id: 'line', color: '#ffd166', name: 'LINE VOLLEY', tag: 'ROW DEPLOY [F]' },
-  { id: 'pierce', color: '#ff2a6d', name: 'PIERCE CORE', tag: 'PENETRATE CRATES' },
   { id: 'ice', color: '#70e2ff', name: 'CRYO BOMB', tag: 'FREEZE HOSTILES' },
   { id: 'shield', color: '#ffe66d', name: 'AEGIS VEST', tag: 'ABSORB 1 HIT' },
-  { id: 'wallpass', color: '#a8ff78', name: 'PHASE SUIT', tag: 'PASS CRATES' },
+  { id: 'glove', color: '#ff7b1c', name: 'POWER GLOVE', tag: 'HOLD & THROW [E]' },
+  { id: 'pierce', color: '#ff2a6d', name: 'PIERCE CORE', tag: 'PENETRATE CRATES' },
+  { id: 'fullfire', color: '#ff5e00', name: 'SOLAR CORE', tag: 'MAX BLAST (8)' },
   { id: 'louie', color: '#00f5d4', name: 'CYBER LOUIE', tag: 'MECH MOUNT [E]' },
-  { id: 'heart', color: '#ff4d8d', name: 'VITAL CORE', tag: '+1 EXTRA LIFE' },
+  { id: 'cluster', color: '#84cc16', name: 'CLUSTER SPORE', tag: '3x3 SPORE BURST' },
+  { id: 'magnet', color: '#22d3ee', name: 'MAGNET CORE', tag: 'AUTO-PULL ITEMS' },
   { id: 'skull', color: '#d946ef', name: 'BIO-SKULL', tag: 'RISK / TAG FOE' },
-  { id: 'chrono', color: '#00f0ff', name: 'CHRONO DRIVE', tag: 'TIME DILATION' }
+  { id: 'plasma', color: '#facc15', name: 'TESLA COIL', tag: 'CHAIN LIGHTNING' },
+  { id: 'bouncy', color: '#f472b6', name: 'RUBBER CORE', tag: 'RICOCHET BOMBS' },
+  { id: 'bombpass', color: '#60a5fa', name: 'PHASE BOOTS', tag: 'WALK OVER BOMBS' },
+  { id: 'wallpass', color: '#a8ff78', name: 'PHASE SUIT', tag: 'PASS CRATES' },
+  { id: 'chrono', color: '#00f0ff', name: 'CHRONO DRIVE', tag: 'TIME DILATION' },
+  { id: 'gravity', color: '#a855f7', name: 'GRAVITY CORE', tag: 'VORTEX PULL BOMB' }
 ];
 
 const ENEMY_CATALOG = [
-  { id: 'drone', color: '#ff4d8d', name: 'CYBER DRONE', tag: 'SCAN & PATROL' },
-  { id: 'hunter', color: '#ff7b1c', name: 'SEEKER HOUND', tag: 'LOS TURBO CHARGE' },
-  { id: 'phantom', color: '#a855f7', name: 'PHASE WRAITH', tag: 'WALL-PASS & BLINK' },
-  { id: 'knight', color: '#38bdf8', name: 'AEGIS PALADIN', tag: 'FLANK REAR SHIELD' },
-  { id: 'sapper', color: '#ffcc33', name: 'DEMO ROVER', tag: 'PLANTS & KICKS' },
-  { id: 'sniper', color: '#f72585', name: 'RAIL SPIDER', tag: 'LASER SNIPER SHOT' },
-  { id: 'rival', color: '#ef4444', name: 'RIVAL BOMBER', tag: 'FFA DUELIST AI' },
-  { id: 'boss', color: '#ff2a6d', name: 'OMEGA MECH', tag: '4 THEME BOSSES' }
+  { id: 'drone', color: '#ff4d8d', name: 'AEGIS GUNSHIP', tag: 'TWIN-ROTOR MECH' },
+  { id: 'sapper', color: '#ffcc33', name: 'SIEGE DOZER', tag: 'PLANTS & KICKS' },
+  { id: 'sniper', color: '#f72585', name: 'RAIL ARACHNID', tag: 'LASER SNIPER SHOT' },
+  { id: 'knight', color: '#38bdf8', name: 'GLACIER PALADIN', tag: 'FLANK REAR SHIELD' },
+  { id: 'cryogolem', color: '#70e2ff', name: 'FROST COLOSSUS', tag: '2-HP CRYO SLAM' },
+  { id: 'hunter', color: '#ff7b1c', name: 'CERBERUS HOUND', tag: 'MAGMA FANG CHARGE' },
+  { id: 'pyromancer', color: '#ff5e00', name: 'INFERNO WARLOCK', tag: 'BOMBS & FIREBALL' },
+  { id: 'mantis', color: '#84cc16', name: 'RAZOR MANTIS', tag: 'SCYTHE DASH LUNGE' },
+  { id: 'slime', color: '#10b981', name: 'HYDRA BIO-OOZE', tag: 'SPLITS INTO 2x MINI' },
+  { id: 'valkyrie', color: '#facc15', name: 'STORM VALKYRIE', tag: 'HOVER & TESLA LANCE' },
+  { id: 'zephyr', color: '#38bdf8', name: 'THUNDER RAPTOR', tag: 'SONIC GALE SWOOP' },
+  { id: 'phantom', color: '#a855f7', name: 'VOID REAPER', tag: 'WALL-PASS & SCYTHE' },
+  { id: 'gravitor', color: '#05ffa1', name: 'ASTRAL ARCHON', tag: 'VOID ORB BARRAGE' },
+  { id: 'rival', color: '#ef4444', name: 'APEX DUELIST', tag: 'ACE RIVAL BOMBER' },
+  { id: 'boss', color: '#ff2a6d', name: 'OMEGA TITANS', tag: '6 WORLD BOSSES' }
 ];
 
 const MEDAL_CATALOG = [
@@ -2137,12 +2202,12 @@ const BIOMES = [
     bgTop: '#0d2b45', bgBot: '#051220', plateA: '#102d47', plateB: '#0a2034',
     conduit: 'rgba(112, 226, 255, 0.17)', wallTop: '#2f6187', wallFront: '#16354f', wallEdge: '#70e2ff',
     crateTop: '#3665b5', crateFront: '#1d396b', crateAccent: '#a6ecff', moteColor: '#d9f7ff',
-    enemies: ['drone', 'knight', 'hunter'],
-    earlyEnemies: ['drone', 'knight'],
+    enemies: ['knight', 'cryogolem'],
+    earlyEnemies: ['knight', 'cryogolem'],
     signaturePowerups: ['ice', 'shield', 'glove'],
     bossVariant: 1,
     bossTitle: 'CRYO OVERLORD',
-    bossMinion: 'knight',
+    bossMinion: 'cryogolem',
     hardCrateChance: 0.17
   },
   {
@@ -2154,30 +2219,64 @@ const BIOMES = [
     bgTop: '#2b1114', bgBot: '#0e0507', plateA: '#261114', plateB: '#1a0b0d',
     conduit: 'rgba(255, 123, 28, 0.17)', wallTop: '#4a282d', wallFront: '#261316', wallEdge: '#ff7b1c',
     crateTop: '#822d10', crateFront: '#4a1706', crateAccent: '#ffcc33', moteColor: '#ff9e2c',
-    enemies: ['hunter', 'sapper', 'rival'],
-    earlyEnemies: ['hunter', 'sapper'],
+    enemies: ['hunter', 'pyromancer'],
+    earlyEnemies: ['hunter', 'pyromancer'],
     signaturePowerups: ['pierce', 'fullfire', 'louie'],
     bossVariant: 2,
     bossTitle: 'SOLAR EMPEROR',
-    bossMinion: 'hunter',
+    bossMinion: 'pyromancer',
     hardCrateChance: 0.24
   },
   {
+    id: 'biodome',
+    name: 'VERDANT BIO-DOME',
+    shortName: 'BIO-DOME',
+    subtitle: 'MUTAGEN SPORES & XENO SWARM',
+    themeStyle: 'biodome',
+    bgTop: '#0d2818', bgBot: '#041009', plateA: '#0f2b1a', plateB: '#091d11',
+    conduit: 'rgba(132, 204, 22, 0.17)', wallTop: '#255c36', wallFront: '#112e1b', wallEdge: '#84cc16',
+    crateTop: '#5e7a1e', crateFront: '#33440d', crateAccent: '#d9f99d', moteColor: '#a3e635',
+    enemies: ['mantis', 'slime'],
+    earlyEnemies: ['slime', 'mantis'],
+    signaturePowerups: ['cluster', 'magnet', 'skull'],
+    bossVariant: 3,
+    bossTitle: 'VENOM BROOD-QUEEN',
+    bossMinion: 'slime',
+    hardCrateChance: 0.16
+  },
+  {
+    id: 'skyfort',
+    name: 'STORM SKY-FORTRESS',
+    shortName: 'SKY-FORT',
+    subtitle: 'TESLA ARCS & TURBO RUNWAYS',
+    themeStyle: 'skyfort',
+    bgTop: '#162447', bgBot: '#070e22', plateA: '#18294f', plateB: '#101c38',
+    conduit: 'rgba(250, 204, 21, 0.17)', wallTop: '#3b5284', wallFront: '#1b2847', wallEdge: '#facc15',
+    crateTop: '#2b588f', crateFront: '#153052', crateAccent: '#fde047', moteColor: '#fef08a',
+    enemies: ['valkyrie', 'zephyr'],
+    earlyEnemies: ['valkyrie', 'zephyr'],
+    signaturePowerups: ['plasma', 'bouncy', 'bombpass'],
+    bossVariant: 4,
+    bossTitle: 'TEMPEST SKY-TITAN',
+    bossMinion: 'valkyrie',
+    hardCrateChance: 0.18
+  },
+  {
     id: 'quantum',
-    name: 'QUANTUM GRID',
+    name: 'QUANTUM ABYSS',
     shortName: 'QUANTUM',
-    subtitle: 'PHASE & CHRONO RIFT',
+    subtitle: 'PHASE RIFT & GRAVITY SINGULARITY',
     themeStyle: 'quantum',
     bgTop: '#082622', bgBot: '#030d0c', plateA: '#0b2924', plateB: '#071c19',
     conduit: 'rgba(5, 255, 161, 0.16)', wallTop: '#1d5c52', wallFront: '#0d302b', wallEdge: '#05ffa1',
     crateTop: '#4e3b7a', crateFront: '#2b1f47', crateAccent: '#05ffa1', moteColor: '#05ffa1',
-    enemies: ['phantom', 'sniper', 'rival'],
-    earlyEnemies: ['phantom', 'sniper'],
-    signaturePowerups: ['wallpass', 'chrono', 'skull'],
-    bossVariant: 3,
+    enemies: ['phantom', 'gravitor', 'rival'],
+    earlyEnemies: ['phantom', 'gravitor'],
+    signaturePowerups: ['wallpass', 'chrono', 'gravity'],
+    bossVariant: 5,
     bossTitle: 'QUANTUM NEXUS',
     bossMinion: 'phantom',
-    hardCrateChance: 0.16
+    hardCrateChance: 0.17
   }
 ];
 
@@ -2382,6 +2481,94 @@ function drawPowerupEmblem(g, id, r = 11) {
       g.beginPath(); g.moveTo(0, -r * 0.38); g.lineTo(0, 0); g.lineTo(r * 0.32, r * 0.18); g.stroke();
       break;
     }
+    case 'cluster': {
+      g.fillStyle = '#84cc16';
+      for (const [ox, oy] of [[0, -r * 0.42], [-r * 0.42, r * 0.3], [r * 0.42, r * 0.3]]) {
+        g.beginPath(); g.arc(ox, oy, r * 0.3, 0, Math.PI * 2); g.fill();
+        g.fillStyle = '#ecfccb';
+        g.beginPath(); g.arc(ox - r * 0.08, oy - r * 0.08, r * 0.1, 0, Math.PI * 2); g.fill();
+        g.fillStyle = '#84cc16';
+      }
+      g.fillStyle = '#facc15';
+      g.beginPath(); g.arc(0, r * 0.06, r * 0.16, 0, Math.PI * 2); g.fill();
+      break;
+    }
+    case 'magnet': {
+      g.strokeStyle = '#22d3ee';
+      g.lineWidth = 3.2;
+      g.beginPath();
+      g.moveTo(-r * 0.46, -r * 0.56);
+      g.lineTo(-r * 0.46, r * 0.08);
+      g.arc(0, r * 0.08, r * 0.46, Math.PI, 0, true);
+      g.lineTo(r * 0.46, -r * 0.56);
+      g.stroke();
+      g.fillStyle = '#ff4d8d';
+      g.fillRect(-r * 0.62, -r * 0.68, r * 0.32, r * 0.26);
+      g.fillStyle = '#ffffff';
+      g.fillRect(r * 0.3, -r * 0.68, r * 0.32, r * 0.26);
+      break;
+    }
+    case 'plasma': {
+      g.strokeStyle = '#38bdf8';
+      g.lineWidth = 1.6;
+      g.beginPath(); g.arc(0, 0, r * 0.68, 0, Math.PI * 2); g.stroke();
+      g.fillStyle = '#facc15';
+      g.beginPath();
+      g.moveTo(r * 0.18, -r * 0.78);
+      g.lineTo(-r * 0.44, r * 0.04);
+      g.lineTo(r * 0.04, r * 0.04);
+      g.lineTo(-r * 0.2, r * 0.78);
+      g.lineTo(r * 0.48, -r * 0.08);
+      g.lineTo(r * 0.02, -r * 0.08);
+      g.closePath();
+      g.fill();
+      break;
+    }
+    case 'bouncy': {
+      const bg = g.createRadialGradient(-r * 0.2, -r * 0.2, 1, 0, 0, r * 0.62);
+      bg.addColorStop(0, '#fbcfe8');
+      bg.addColorStop(0.5, '#f472b6');
+      bg.addColorStop(1, '#be185d');
+      g.fillStyle = bg;
+      g.beginPath(); g.arc(0, -r * 0.08, r * 0.48, 0, Math.PI * 2); g.fill();
+      g.strokeStyle = '#ffffff';
+      g.lineWidth = 1.7;
+      g.beginPath();
+      g.moveTo(-r * 0.68, r * 0.56);
+      g.quadraticCurveTo(-r * 0.35, r * 0.15, 0, r * 0.56);
+      g.quadraticCurveTo(r * 0.35, r * 0.15, r * 0.68, r * 0.56);
+      g.stroke();
+      break;
+    }
+    case 'bombpass': {
+      g.strokeStyle = 'rgba(255,255,255,0.55)';
+      g.setLineDash([2.2, 2.2]);
+      g.lineWidth = 1.6;
+      g.beginPath(); g.arc(r * 0.24, r * 0.1, r * 0.44, 0, Math.PI * 2); g.stroke();
+      g.setLineDash([]);
+      g.fillStyle = '#60a5fa';
+      g.beginPath();
+      g.moveTo(-r * 0.62, -r * 0.45);
+      g.lineTo(-r * 0.18, -r * 0.45);
+      g.lineTo(-r * 0.12, r * 0.12);
+      g.lineTo(r * 0.36, r * 0.28);
+      g.lineTo(r * 0.36, r * 0.58);
+      g.lineTo(-r * 0.66, r * 0.58);
+      g.closePath();
+      g.fill();
+      break;
+    }
+    case 'gravity': {
+      g.strokeStyle = '#c084fc';
+      g.lineWidth = 1.8;
+      g.beginPath(); g.ellipse(0, 0, r * 0.76, r * 0.34, -0.45, 0, Math.PI * 2); g.stroke();
+      g.strokeStyle = '#38bdf8';
+      g.beginPath(); g.ellipse(0, 0, r * 0.76, r * 0.34, 0.55, 0, Math.PI * 2); g.stroke();
+      g.fillStyle = '#1e1b4b';
+      g.strokeStyle = '#f0abfc';
+      g.beginPath(); g.arc(0, 0, r * 0.32, 0, Math.PI * 2); g.fill(); g.stroke();
+      break;
+    }
   }
   g.restore();
 }
@@ -2542,6 +2729,7 @@ let bombs = [];
 let thrownBombs = [];
 let explosions = [];
 let beamStrips = [];
+let lightningArcs = [];
 let singularities = [];
 let powerups = [];
 let enemies = [];
@@ -2592,10 +2780,18 @@ function pulseHaptic(ms = 12) {
 
 let selectedThemeMode = 'AUTO';
 
+function isCurrentStageBoss() {
+  return (gameMode === 'BOSS_RUSH') || (gameMode === 'CAMPAIGN' && level % 2 === 0);
+}
+
 function getActiveBiomeIndex() {
   if (selectedThemeMode !== 'AUTO') {
     const idx = Number(selectedThemeMode);
     if (Number.isInteger(idx) && idx >= 0 && idx < BIOMES.length) return idx;
+  }
+  // In Campaign AUTO mode, each World spans a 2-Stage Act (Stage 1: Sector Patrol -> Stage 2: World Boss!)
+  if (gameMode === 'CAMPAIGN') {
+    return (Math.floor((level - 1) / 2) % BIOMES.length + BIOMES.length) % BIOMES.length;
   }
   return ((level - 1) % BIOMES.length + BIOMES.length) % BIOMES.length;
 }
@@ -2649,6 +2845,12 @@ const player = {
   ice: false,
   wallPass: false,
   bombPass: false,
+  cluster: false,
+  magnet: false,
+  plasma: false,
+  bouncy: false,
+  gravity: false,
+  boostTimer: 0,
   mount: null,
   mountHp: 0,
   jumpTime: 0,
@@ -2757,8 +2959,36 @@ function buildFloorCache(biomeIdx) {
           for (let vy = -6; vy <= 6; vy += 6) {
             floorCtx.fillRect(cx - 10, cy + vy - 1, 20, 2);
           }
+        } else if (biome.themeStyle === 'biodome') {
+          // Verdant Bio-Dome: Hexagonal organic bio-cell & glowing mutagen nucleus
+          floorCtx.strokeStyle = 'rgba(132, 204, 22, 0.11)';
+          floorCtx.beginPath();
+          for (let k = 0; k < 6; k++) {
+            const ang = (k * Math.PI) / 3;
+            const hx = cx + Math.cos(ang) * 10;
+            const hy = cy + Math.sin(ang) * 10;
+            if (k === 0) floorCtx.moveTo(hx, hy); else floorCtx.lineTo(hx, hy);
+          }
+          floorCtx.closePath();
+          floorCtx.stroke();
+          floorCtx.fillStyle = 'rgba(163, 230, 53, 0.16)';
+          floorCtx.beginPath();
+          floorCtx.arc(cx, cy, 2.2, 0, Math.PI * 2);
+          floorCtx.fill();
+        } else if (biome.themeStyle === 'skyfort') {
+          // Storm Sky-Fortress: Titanium flight-deck chevron & cobalt-gold beacons
+          floorCtx.strokeStyle = 'rgba(250, 204, 21, 0.11)';
+          floorCtx.lineWidth = 1.4;
+          floorCtx.beginPath();
+          floorCtx.moveTo(cx - 8, cy + 4);
+          floorCtx.lineTo(cx, cy - 5);
+          floorCtx.lineTo(cx + 8, cy + 4);
+          floorCtx.stroke();
+          floorCtx.fillStyle = 'rgba(56, 189, 248, 0.16)';
+          floorCtx.fillRect(cx - 9, cy + 7, 4, 2);
+          floorCtx.fillRect(cx + 5, cy + 7, 4, 2);
         } else if (biome.themeStyle === 'quantum') {
-          // Quantum Grid: Concentric dimensional diamond glyph
+          // Quantum Abyss: Concentric dimensional diamond glyph
           floorCtx.strokeStyle = 'rgba(5, 255, 161, 0.095)';
           floorCtx.beginPath();
           floorCtx.moveTo(cx, cy - 9);
@@ -2802,6 +3032,30 @@ function initAmbientMotes() {
         color: i % 2 === 0 ? '#ffcc33' : '#ff5e00',
         alpha: 0.3 + Math.random() * 0.5
       });
+    } else if (biome.themeStyle === 'biodome') {
+      // Floating bioluminescent pollen spores
+      ambientMotes.push({
+        x: Math.random() * LOGICAL_W,
+        y: Math.random() * LOGICAL_H,
+        r: 1.5 + Math.random() * 2.4,
+        vx: (Math.random() - 0.5) * 18,
+        vy: -9 - Math.random() * 14,
+        sway: Math.random() * Math.PI * 2,
+        color: i % 3 === 0 ? '#fde047' : i % 2 === 0 ? '#a3e635' : '#34d399',
+        alpha: 0.28 + Math.random() * 0.46
+      });
+    } else if (biome.themeStyle === 'skyfort') {
+      // High-altitude jetstream wind sparks
+      ambientMotes.push({
+        x: Math.random() * LOGICAL_W,
+        y: Math.random() * LOGICAL_H,
+        r: 1.2 + Math.random() * 2.0,
+        vx: 42 + Math.random() * 52,
+        vy: (Math.random() - 0.5) * 12,
+        sway: Math.random() * Math.PI * 2,
+        color: i % 2 === 0 ? '#facc15' : '#7dd3fc',
+        alpha: 0.28 + Math.random() * 0.48
+      });
     } else if (biome.themeStyle === 'quantum') {
       // Zero-gravity dimensional rift motes
       ambientMotes.push({
@@ -2836,7 +3090,7 @@ function initMap() {
   specials = [];
   scorchMarks = [];
   const biome = getActiveBiome();
-  const isBossStage = (gameMode === 'BOSS_RUSH') || (gameMode === 'CAMPAIGN' && level % 3 === 0);
+  const isBossStage = isCurrentStageBoss();
   const isRoyale = gameMode === 'BATTLE_ROYALE';
   const hardChance = biome.hardCrateChance || 0.16;
 
@@ -2880,7 +3134,7 @@ function initMap() {
   specials.push({ r: w1.r, c: w1.c, type: 'warp', pairR: w2.r, pairC: w2.c });
   specials.push({ r: w2.r, c: w2.c, type: 'warp', pairR: w1.r, pairC: w1.c });
 
-  // Quantum Grid Signature Twist: 4-Way Dimensional Rift Network (West <-> East Warp Gates too!)
+  // Quantum Abyss Signature Twist: 4-Way Dimensional Rift Network (West <-> East Warp Gates!)
   if (biome.themeStyle === 'quantum') {
     const w3 = { r: Math.floor(ROWS / 2), c: 1 };
     const w4 = { r: Math.floor(ROWS / 2), c: COLS - 2 };
@@ -2888,6 +3142,23 @@ function initMap() {
     map[w4.r][w4.c] = 0;
     specials.push({ r: w3.r, c: w3.c, type: 'warp', pairR: w4.r, pairC: w4.c });
     specials.push({ r: w4.r, c: w4.c, type: 'warp', pairR: w3.r, pairC: w3.c });
+  } else if (biome.themeStyle === 'biodome') {
+    // Verdant Bio-Dome Signature Twist: Diagonal Mycelium Bio-Tunnels + Twin Spore Amp Nodes
+    const b1 = { r: 3, c: 1 };
+    const b2 = { r: ROWS - 4, c: COLS - 2 };
+    map[b1.r][b1.c] = 0;
+    map[b2.r][b2.c] = 0;
+    specials.push({ r: b1.r, c: b1.c, type: 'warp', pairR: b2.r, pairC: b2.c });
+    specials.push({ r: b2.r, c: b2.c, type: 'warp', pairR: b1.r, pairC: b1.c });
+  } else if (biome.themeStyle === 'skyfort') {
+    // Storm Sky-Fortress Signature Twist: High-Velocity Turbo Sky-Runway Boost Pads!
+    const midR = Math.floor(ROWS / 2);
+    for (const [bc, bdirX] of [[3, 1], [COLS - 4, -1]]) {
+      if (map[midR][bc] !== 1) {
+        map[midR][bc] = 0;
+        specials.push({ r: midR, c: bc, type: 'boost', dirX: bdirX, dirY: 0 });
+      }
+    }
   }
 
   const ampR = Math.floor(ROWS / 2);
@@ -2925,7 +3196,7 @@ function initEnemies() {
   royaleRoster = [];
   const diff = getDiffConfig();
   const biome = getActiveBiome();
-  const isBossStage = (gameMode === 'BOSS_RUSH') || (gameMode === 'CAMPAIGN' && level % 3 === 0);
+  const isBossStage = isCurrentStageBoss();
 
   if (gameMode === 'BATTLE_ROYALE') {
     ui.bossHud.classList.add('hidden');
@@ -3011,7 +3282,7 @@ function initEnemies() {
   const wanted = Math.min(14, baseWanted + diff.extraEnemies);
   let guard = 0;
 
-  // Theme-Exclusive Enemy Faction Roster (never spawns all enemy types together in one stage!)
+  // Theme-Exclusive Enemy Faction Roster (100% disjoint per World Theme!)
   const useGentleStart = (gameMode === 'CAMPAIGN' && level === 1 && difficultyTier === 'NORMAL' && !isBossStage);
   const archetypes = [...(useGentleStart ? biome.earlyEnemies : biome.enemies)];
 
@@ -3025,16 +3296,23 @@ function initEnemies() {
       }
 
       const baseSpd =
-        kind === 'hunter' ? 1.5 :
-        kind === 'rival'  ? 1.75 :
-        kind === 'sapper' ? 1.4 :
-        kind === 'phantom'? 1.3 :
-        kind === 'sniper' ? 1.24 :
-        kind === 'knight' ? 1.28 : 1.2;
+        kind === 'rival'      ? 1.75 :
+        kind === 'zephyr'     ? 1.56 :
+        kind === 'hunter'     ? 1.5 :
+        kind === 'mantis'     ? 1.48 :
+        kind === 'valkyrie'   ? 1.42 :
+        kind === 'sapper'     ? 1.4 :
+        kind === 'pyromancer' ? 1.35 :
+        kind === 'gravitor'   ? 1.32 :
+        kind === 'phantom'    ? 1.3 :
+        kind === 'knight'     ? 1.28 :
+        kind === 'slime'      ? 1.25 :
+        kind === 'sniper'     ? 1.24 :
+        kind === 'cryogolem'  ? 1.12 : 1.22;
 
       const rivalColors = ['#ef4444', '#ffcc33', '#a855f7', '#05ffa1'];
-      const rCol = rivalColors[enemies.length % rivalColors.length];
-      const maxHp = kind === 'rival' ? 2 : 1;
+      const rCol = kind === 'rival' ? rivalColors[enemies.length % rivalColors.length] : biome.wallEdge;
+      const maxHp = (kind === 'rival' || kind === 'cryogolem') ? 2 : 1;
 
       enemies.push({
         uid: `e_${nextEnemyId++}`,
@@ -3042,8 +3320,9 @@ function initEnemies() {
         y: r * TILE + TILE / 2,
         r,
         c,
-        rad: 14,
+        rad: kind === 'cryogolem' ? 15 : 14,
         kind,
+        isMini: false,
         rivalColor: rCol,
         hp: maxHp,
         maxHp,
@@ -3063,10 +3342,11 @@ function initEnemies() {
         stunned: 0,
         invuln: 0,
         bombCd: 1.6 + Math.random() * 1.6,
+        frostCd: 2.2 + Math.random() * 1.6,
         aimTimer: 0,
         aimDx: 1,
         aimDy: 0,
-        shotCd: 1.4 + Math.random() * 1.4,
+        shotCd: 1.5 + Math.random() * 1.4,
         blinkCd: 3.5 + Math.random() * 2.0,
         walkPhase: Math.random() * 6
       });
@@ -3125,6 +3405,7 @@ function resetPlayerPosition() {
   player.invuln = 2.5;
   player.walk = 0;
   player.trailEnergy = 0;
+  player.boostTimer = 0;
   player.squashX = 1;
   player.squashY = 1;
   player.dashing = 0;
@@ -3155,6 +3436,12 @@ function configureFullReset() {
   player.ice = false;
   player.wallPass = false;
   player.bombPass = false;
+  player.cluster = false;
+  player.magnet = false;
+  player.plasma = false;
+  player.bouncy = false;
+  player.gravity = false;
+  player.boostTimer = 0;
   player.mount = null;
   player.mountHp = 0;
 
@@ -3182,6 +3469,9 @@ function configureFullReset() {
     player.pierce = true;
     player.ice = true;
     player.shield = true;
+    player.bouncy = true;
+    player.plasma = true;
+    player.magnet = true;
     player.mount = 'hopper';
     player.mountHp = 1;
     player.overdriveMeter = 100;
@@ -3215,6 +3505,7 @@ function startLevel() {
   enemyBolts = [];
   explosions = [];
   beamStrips = [];
+  lightningArcs = [];
   singularities = [];
   powerups = [];
   particles = [];
@@ -3422,13 +3713,21 @@ function syncUI() {
     if (el) el.classList.toggle('active', !!cond);
   };
   toggleChip('chip-kick', player.kick);
-  toggleChip('chip-glove', player.glove || !!player.mount);
   toggleChip('chip-remote', player.remote);
   toggleChip('chip-line', player.lineBomb);
-  toggleChip('chip-pierce', player.pierce || player.overdriveTime > 0);
   toggleChip('chip-ice', player.ice);
   toggleChip('chip-shield', player.shield);
-  toggleChip('chip-ghost', player.wallPass || player.bombPass);
+  toggleChip('chip-glove', player.glove);
+  toggleChip('chip-pierce', player.pierce || player.overdriveTime > 0);
+  toggleChip('chip-fullfire', player.range >= 8);
+  toggleChip('chip-louie', !!player.mount);
+  toggleChip('chip-cluster', player.cluster);
+  toggleChip('chip-magnet', player.magnet);
+  toggleChip('chip-plasma', player.plasma);
+  toggleChip('chip-bouncy', player.bouncy);
+  toggleChip('chip-bombpass', player.bombPass);
+  toggleChip('chip-ghost', player.wallPass);
+  toggleChip('chip-gravity', player.gravity);
 
   document.querySelectorAll('.suit-node[data-pwid]').forEach(node => {
     const featured = biome.signaturePowerups.includes(node.dataset.pwid);
@@ -3794,6 +4093,10 @@ function updatePlayer(dt) {
   let spd = player.baseSpeed + (player.speedTier - 1) * 0.42;
   if (player.mount === 'striker') spd += 0.75;
   if (player.overdriveTime > 0) spd += 0.9;
+  if (player.boostTimer > 0) {
+    player.boostTimer = Math.max(0, player.boostTimer - dt);
+    spd += 1.05;
+  }
   if (player.curse === 'turbo') spd *= 1.62;
   if (player.curse === 'slow') spd *= 0.56;
   if (player.dashing > 0) {
@@ -3874,7 +4177,7 @@ function updatePlayer(dt) {
 
   if (isMoving) {
     player.walk += dt * 14;
-    const targetE = player.dashing > 0 || player.overdriveTime > 0
+    const targetE = player.dashing > 0 || player.overdriveTime > 0 || player.boostTimer > 0
       ? 1.0
       : Math.min(1.0, 0.56 + (player.speedTier - 1) * 0.09);
     player.trailEnergy = Math.min(targetE, (player.trailEnergy || 0) + dt * 15);
@@ -3899,6 +4202,12 @@ function updatePlayer(dt) {
         sfx.playWarp();
         burst(player.x + 15, player.y + 15, '#00f0ff', 18);
         addShockwave(player.x + 15, player.y + 15, 70, '#00f0ff', 2);
+      } else if (sp.type === 'boost' && (player.boostTimer || 0) < 0.85) {
+        player.boostTimer = 1.45;
+        triggerSquash(1.18, 0.84);
+        sfx.playDash(false);
+        burst(player.x + 15, player.y + 15, '#facc15', 10);
+        addFloatText(player.x + 15, player.y - 12, 'TAILWIND BOOST!', '#facc15', 1.02);
       } else if (sp.type === 'exit' && sp.open && !levelTimer) {
         completeCurrentLevel();
       } else if (sp.type === 'exit' && sp.revealed && !sp.open && portalWarnCd <= 0) {
@@ -3914,8 +4223,29 @@ function updatePlayer(dt) {
   const pyCenter = player.y + player.h / 2;
   for (let i = powerups.length - 1; i >= 0; i--) {
     const p = powerups[i];
-    const pDist = Math.hypot(pxCenter - (p.c * TILE + TILE / 2), pyCenter - (p.r * TILE + TILE / 2));
-    if ((pc === p.c && pr === p.r) || pDist < 26) {
+    let px = p.x ?? (p.c * TILE + TILE / 2);
+    let py = p.y ?? (p.r * TILE + TILE / 2);
+    let pDist = Math.hypot(pxCenter - px, pyCenter - py);
+    if (player.magnet && p.type !== 'skull' && pDist > 4 && pDist < TILE * 3.85) {
+      const pullStep = Math.min(pDist, 225 * dt);
+      px += ((pxCenter - px) / pDist) * pullStep;
+      py += ((pyCenter - py) / pDist) * pullStep;
+      p.x = px;
+      p.y = py;
+      p.c = Math.max(1, Math.min(COLS - 2, Math.floor(px / TILE)));
+      p.r = Math.max(1, Math.min(ROWS - 2, Math.floor(py / TILE)));
+      pDist = Math.hypot(pxCenter - px, pyCenter - py);
+      if (particles.length < 220 && Math.random() < dt * 14) {
+        particles.push({
+          x: px, y: py,
+          vx: (Math.random() - 0.5) * 20,
+          vy: (Math.random() - 0.5) * 20,
+          life: 0.22, max: 0.22,
+          color: '#22d3ee', size: 2.2
+        });
+      }
+    }
+    if ((pc === p.c && pr === p.r && p.x == null) || pDist < 26) {
       applyPowerup(p);
       powerups.splice(i, 1);
       syncUI();
@@ -3924,8 +4254,8 @@ function updatePlayer(dt) {
 }
 
 function applyPowerup(p) {
-  const cx = p.c * TILE + TILE / 2;
-  const cy = p.r * TILE + TILE / 2;
+  const cx = p.x ?? (p.c * TILE + TILE / 2);
+  const cy = p.y ?? (p.r * TILE + TILE / 2);
   addScore(100);
   addOverdriveCharge(15);
   pulseHaptic(12);
@@ -3963,7 +4293,13 @@ function applyPowerup(p) {
     case 'pierce': player.pierce = true; break;
     case 'ice': player.ice = true; break;
     case 'shield': player.shield = true; break;
-    case 'wallpass': player.wallPass = true; player.bombPass = true; break;
+    case 'wallpass': player.wallPass = true; break;
+    case 'bombpass': player.bombPass = true; break;
+    case 'cluster': player.cluster = true; break;
+    case 'magnet': player.magnet = true; break;
+    case 'plasma': player.plasma = true; break;
+    case 'bouncy': player.bouncy = true; break;
+    case 'gravity': player.gravity = true; break;
     case 'heart': lives = Math.min(9, lives + 1); break;
     case 'chrono':
       chronoTime = Math.max(chronoTime, 3.2);
@@ -3990,6 +4326,7 @@ function createBombAt(c, r) {
   if (bombs.some(b => b.c === c && b.r === r)) return false;
 
   const isAmp = specials.some(s => s.type === 'amp' && s.r === r && s.c === c);
+  const boostPad = specials.find(s => s.type === 'boost' && s.r === r && s.c === c);
   const bRange = (player.overdriveTime > 0 ? 8 : player.range) + (isAmp ? 3 : 0);
   const fuse = player.remote ? 9.5 : (player.overdriveTime > 0 ? 1.45 : 2.15);
 
@@ -3998,8 +4335,8 @@ function createBombAt(c, r) {
     r,
     x: c * TILE + TILE / 2,
     y: r * TILE + TILE / 2,
-    vx: 0,
-    vy: 0,
+    vx: boostPad ? (player.dirX || boostPad.dirX || 1) * 11.2 : 0,
+    vy: boostPad ? (player.dirY || boostPad.dirY || 0) * 11.2 : 0,
     t: fuse,
     maxT: fuse,
     range: bRange,
@@ -4007,6 +4344,11 @@ function createBombAt(c, r) {
     remote: player.remote,
     pierce: player.pierce || player.overdriveTime > 0 || isAmp,
     ice: player.ice,
+    cluster: player.cluster,
+    plasma: player.plasma,
+    bouncy: player.bouncy,
+    bouncesLeft: player.bouncy ? 5 : 0,
+    gravity: player.gravity,
     owner: 'player',
     chainDepth: 1
   });
@@ -4143,17 +4485,41 @@ function updateBombs(dt) {
       burst(b.x + 11, b.y - 24, b.t < 0.6 ? '#ff2a6d' : '#ffe066', 1);
     }
 
+    // Gravity Core Singularity Bomb: gently pulls nearby enemies into the blast zone!
+    if (b.gravity) {
+      for (const en of enemies) {
+        const dist = Math.hypot(b.x - en.x, b.y - en.y);
+        if (dist > 8 && dist < TILE * 2.85) {
+          const gnx = en.x + ((b.x - en.x) / dist) * 58 * dt;
+          const gny = en.y + ((b.y - en.y) / dist) * 58 * dt;
+          if (!rectHitsWall(gnx - en.rad, gny - en.rad, en.rad * 2, en.rad * 2, {
+            includeBombs: false,
+            canWallPass: en.kind === 'phantom'
+          }).hit) {
+            en.x = gnx;
+            en.y = gny;
+            en.c = Math.floor(en.x / TILE);
+            en.r = Math.floor(en.y / TILE);
+          }
+        }
+      }
+    }
+
     if (b.vx !== 0 || b.vy !== 0) {
+      const origVx = b.vx;
+      const origVy = b.vy;
       const nx = b.x + b.vx * dt * 60;
       const ny = b.y + b.vy * dt * 60;
       const nextC = Math.floor((nx + Math.sign(b.vx) * 18) / TILE);
       const nextR = Math.floor((ny + Math.sign(b.vy) * 18) / TILE);
+      let stoppedByUnit = false;
 
       for (const e of enemies) {
         if (Math.hypot(e.x - nx, e.y - ny) < 28) {
           e.stunned = 2.4;
           b.vx = 0;
           b.vy = 0;
+          stoppedByUnit = true;
           addFloatText(e.x, e.y - 12, 'STUNNED!', '#38bdf8');
         }
       }
@@ -4162,21 +4528,38 @@ function updateBombs(dt) {
           Math.hypot((player.x + 15) - nx, (player.y + 15) - ny) < 27) {
         b.vx = 0;
         b.vy = 0;
+        stoppedByUnit = true;
       }
 
       if (boss && Math.hypot(boss.x - nx, boss.y - ny) < 42) {
         b.vx = 0;
         b.vy = 0;
         b.t = 0;
+        stoppedByUnit = true;
       }
 
-      if ((b.vx === 0 && b.vy === 0) || !map[nextR] || map[nextR][nextC] !== 0 || bombs.some(other => other !== b && other.c === nextC && other.r === nextR)) {
-        b.vx = 0;
-        b.vy = 0;
-        b.c = Math.floor(b.x / TILE);
-        b.r = Math.floor(b.y / TILE);
-        b.x = b.c * TILE + TILE / 2;
-        b.y = b.r * TILE + TILE / 2;
+      const hitObstacle = !map[nextR] || map[nextR][nextC] !== 0 || bombs.some(other => other !== b && other.c === nextC && other.r === nextR);
+      if (stoppedByUnit || hitObstacle) {
+        if (!stoppedByUnit && b.bouncy && (b.bouncesLeft || 0) > 0) {
+          b.vx = -origVx;
+          b.vy = -origVy;
+          b.bouncesLeft--;
+          b.warped = false;
+          b.c = Math.floor(b.x / TILE);
+          b.r = Math.floor(b.y / TILE);
+          b.x = b.c * TILE + TILE / 2;
+          b.y = b.r * TILE + TILE / 2;
+          if (state === 'PLAYING') sfx.playBounce();
+          addShockwave(b.x, b.y, 40, '#f472b6', 2.2);
+          if (b.bouncesLeft === 4) addFloatText(b.x, b.y - 14, 'RICOCHET!', '#f472b6', 0.95);
+        } else {
+          b.vx = 0;
+          b.vy = 0;
+          b.c = Math.floor(b.x / TILE);
+          b.r = Math.floor(b.y / TILE);
+          b.x = b.c * TILE + TILE / 2;
+          b.y = b.r * TILE + TILE / 2;
+        }
       } else {
         b.x = nx;
         b.y = ny;
@@ -4192,6 +4575,13 @@ function updateBombs(dt) {
           b.warped = true;
           if (state === 'PLAYING') sfx.playWarp();
           burst(b.x, b.y, '#00f0ff', 14);
+        }
+
+        const boostPad = specials.find(s => s.type === 'boost' && s.c === b.c && s.r === b.r);
+        if (boostPad && Math.hypot(b.vx, b.vy) < 12.2) {
+          b.vx = Math.sign(b.vx) * 12.4;
+          b.vy = Math.sign(b.vy) * 12.4;
+          burst(b.x, b.y, '#facc15', 8);
         }
       }
     } else {
@@ -4228,6 +4618,12 @@ function isSignatureModuleOwned(id) {
     case 'ice': return player.ice;
     case 'shield': return player.shield;
     case 'wallpass': return player.wallPass;
+    case 'bombpass': return player.bombPass;
+    case 'cluster': return player.cluster;
+    case 'magnet': return player.magnet;
+    case 'plasma': return player.plasma;
+    case 'bouncy': return player.bouncy;
+    case 'gravity': return player.gravity;
     case 'fullfire': return player.range >= 8;
     case 'louie': return !!player.mount;
     default: return false;
@@ -4241,13 +4637,13 @@ function rollPowerupType() {
     for (let i = 0; i < count; i++) weighted.push(id);
   };
 
-  // Universal Core Upgrades (available across all 4 World Themes)
+  // Universal Core Upgrades (available across all 6 World Themes)
   pushMany('bomb', player.maxBombs < 9 ? 4 : 1);
   pushMany('flame', player.range < 8 ? 4 : 1);
   pushMany('speed', player.speedTier < 6 ? 3 : 1);
   pushMany('heart', 1);
 
-  // Active World Theme's Exclusive Signature Power-Ups (strictly isolated per Theme!)
+  // Active World Theme's Exclusive Signature Power-Ups (strictly isolated per World!)
   for (const sigId of biome.signaturePowerups) {
     if (sigId === 'skull') {
       pushMany('skull', 1);
@@ -4260,6 +4656,50 @@ function rollPowerupType() {
   }
 
   return weighted[Math.floor(Math.random() * weighted.length)];
+}
+
+function spawnHydraMiniSlimes(parent) {
+  if (!parent || parent.kind !== 'slime' || parent.isMini) return;
+  if (state === 'PLAYING') sfx.playSlimeSplit();
+  addShockwave(parent.x, parent.y, 62, '#84cc16', 2.8);
+  addFloatText(parent.x, parent.y - 22, 'HYDRA SPLIT x2!', '#84cc16', 1.08);
+  const offsets = [[-8, 0, -1, 0], [8, 0, 1, 0]];
+  for (const [ox, oy, odx, ody] of offsets) {
+    const mx = parent.c * TILE + TILE / 2 + ox;
+    const my = parent.r * TILE + TILE / 2 + oy;
+    const mini = {
+      uid: `e_${nextEnemyId++}`,
+      x: mx,
+      y: my,
+      r: parent.r,
+      c: parent.c,
+      rad: 10,
+      kind: 'slime',
+      isMini: true,
+      rivalColor: '#84cc16',
+      hp: 1,
+      maxHp: 1,
+      maxBombs: 0,
+      canKick: false,
+      warpLock: 0,
+      shielded: false,
+      enraged: false,
+      aggro: false,
+      range: 2,
+      speed: parent.speed * 1.36,
+      dx: odx,
+      dy: ody,
+      turn: 0.25,
+      hue: 0,
+      frozen: 0,
+      stunned: 0,
+      invuln: 0.65,
+      bombCd: 9,
+      walkPhase: Math.random() * 6
+    };
+    chooseDir(mini);
+    enemies.push(mini);
+  }
 }
 
 function detonateBombObject(b) {
@@ -4278,10 +4718,11 @@ function detonateBombObject(b) {
     sfx.playExplode(chainDepth, b.ice, b.pierce);
     pulseHaptic(chainDepth >= 2 ? 22 : 14);
   }
-  addShockwave(b.x, b.y, 50 + b.range * 25, b.ice ? '#70e2ff' : b.pierce ? '#ff2a6d' : '#ff9e2c', 3.5);
+  addShockwave(b.x, b.y, 50 + b.range * 25, b.ice ? '#70e2ff' : b.pierce ? '#ff2a6d' : b.plasma ? '#facc15' : '#ff9e2c', 3.5);
   addBlast(b.c, b.r, 'center', 0, 0, b.ice, b.pierce, b.owner);
 
   const biome = getActiveBiome();
+  const blastPoints = [{ x: b.x, y: b.y }];
 
   for (const d of dirs) {
     let endC = b.c;
@@ -4293,6 +4734,7 @@ function detonateBombObject(b) {
 
       endC = c;
       endR = r;
+      blastPoints.push({ x: c * TILE + TILE / 2, y: r * TILE + TILE / 2 });
 
       if (map[r][c] === 2 || map[r][c] === 3) {
         if (map[r][c] === 3 && !b.pierce) {
@@ -4350,6 +4792,97 @@ function detonateBombObject(b) {
     }
   }
 
+  // Cluster Spore Bomb: 4 diagonal Bio-Spore bursts forming a full 3x3 core demolition!
+  if (b.cluster) {
+    for (const [dc, dr] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
+      const sc = b.c + dc;
+      const sr = b.r + dr;
+      if (!map[sr] || map[sr][sc] === 1) continue;
+      if (map[sr][sc] === 2 || map[sr][sc] === 3) {
+        if (map[sr][sc] === 3 && !b.pierce) {
+          map[sr][sc] = 2;
+          crateDamaged[sr][sc] = true;
+          spawnCrateDebris(sc, sr, '#636f8a');
+        } else {
+          const wasReinf = map[sr][sc] === 3 || crateDamaged[sr][sc];
+          map[sr][sc] = 0;
+          crateDamaged[sr][sc] = false;
+          spawnCrateDebris(sc, sr, biome.crateTop);
+          if (isPlayerBomb) addScore(25 * comboCount);
+          const exitSp = specials.find(s => s.type === 'exit' && s.r === sr && s.c === sc);
+          if (exitSp) {
+            exitSp.revealed = true;
+            addFloatText(sc * TILE + 24, sr * TILE + 12, 'PORTAL REVEALED!', '#05ffa1', 1.2);
+          } else if ((wasReinf || Math.random() < 0.42) && !powerups.some(p => p.c === sc && p.r === sr)) {
+            powerups.push({ c: sc, r: sr, type: rollPowerupType() });
+          }
+        }
+      }
+      addBlast(sc, sr, 'end', dc, dr, b.ice, b.pierce, b.owner);
+      for (const other of bombs) {
+        if (other.c === sc && other.r === sr && other.t > 0) {
+          other.t = 0;
+          other.chainDepth = chainDepth + 1;
+          if (isPlayerBomb) other.owner = 'player';
+        }
+      }
+    }
+  }
+
+  // Tesla Coil Bomb: Chain-Lightning arcs to nearby hostiles outside the direct blast!
+  if (b.plasma) {
+    const diff = getDiffConfig();
+    let zapped = 0;
+    for (let ei = enemies.length - 1; ei >= 0 && zapped < 3; ei--) {
+      const en = enemies[ei];
+      if (en.invuln > 0) continue;
+      let bestSrc = null;
+      let bestD = 92;
+      for (const bp of blastPoints) {
+        const d0 = Math.hypot(en.x - bp.x, en.y - bp.y);
+        if (d0 < bestD) { bestD = d0; bestSrc = bp; }
+      }
+      if (bestSrc) {
+        zapped++;
+        lightningArcs.push({ x1: bestSrc.x, y1: bestSrc.y, x2: en.x, y2: en.y, t: 0.36, maxT: 0.36, color: '#facc15' });
+        if (en.kind === 'knight' && en.shielded !== false) {
+          en.shielded = false;
+          en.stunned = 2.0;
+          en.invuln = 0.5;
+          addFloatText(en.x, en.y - 14, 'TESLA OVERLOAD!', '#facc15', 1.05);
+        } else if (en.hp && en.hp > 1) {
+          en.hp--;
+          en.stunned = 1.8;
+          en.invuln = 0.6;
+          addFloatText(en.x, en.y - 14, `TESLA SHOCK! (${en.hp} HP)`, '#facc15', 1.05);
+        } else {
+          stageKills++;
+          totalKills++;
+          const pts = Math.round(150 * comboCount * diff.scoreMult);
+          addScore(pts);
+          addOverdriveCharge(16);
+          addFloatText(en.x, en.y - 14, `TESLA ZAP! +${pts}`, '#facc15', 1.15);
+          burst(en.x, en.y, '#facc15', 24);
+          const deadEnemy = enemies.splice(ei, 1)[0];
+          if (deadEnemy.kind === 'slime' && !deadEnemy.isMini) spawnHydraMiniSlimes(deadEnemy);
+          syncRoyaleUI();
+        }
+      }
+    }
+    if (boss && boss.invuln <= 0) {
+      const bSrc = blastPoints.find(bp => Math.hypot(boss.x - bp.x, boss.y - bp.y) < 105);
+      if (bSrc) {
+        zapped++;
+        lightningArcs.push({ x1: bSrc.x, y1: bSrc.y, x2: boss.x, y2: boss.y, t: 0.38, maxT: 0.38, color: '#facc15' });
+        boss.hp = Math.max(1, boss.hp - 1);
+        boss.invuln = 0.65;
+        addFloatText(boss.x, boss.y - 28, 'TESLA ARC! -1 HP', '#facc15', 1.2);
+        syncBossUI();
+      }
+    }
+    if (zapped > 0 && state === 'PLAYING') sfx.playZap();
+  }
+
   if (isPlayerBomb) addScore(10 * comboCount);
   if (state === 'PLAYING') {
     shake = Math.min(0.52, 0.2 + chainDepth * 0.08);
@@ -4398,6 +4931,8 @@ function updateExplosions(dt) {
   for (const e of explosions) e.t -= dt;
   for (const bs of beamStrips) bs.t -= dt;
   beamStrips = beamStrips.filter(bs => bs.t > 0);
+  for (const la of lightningArcs) la.t -= dt;
+  lightningArcs = lightningArcs.filter(la => la.t > 0);
 
   for (const s of singularities) {
     s.t -= dt;
@@ -4479,7 +5014,7 @@ function updateExplosions(dt) {
           totalKills++;
           killStreak++;
           killStreakTimer = 2.6;
-          const basePts = e.kind === 'rival' ? 320 : e.kind === 'sniper' || e.kind === 'knight' ? 180 : 130;
+          const basePts = e.kind === 'rival' ? 320 : (e.kind === 'cryogolem' || e.kind === 'valkyrie' || e.kind === 'gravitor') ? 210 : (e.kind === 'sniper' || e.kind === 'knight' || e.kind === 'pyromancer') ? 180 : 140;
           const pts = Math.round(basePts * comboCount * diff.scoreMult);
           addScore(pts);
           addOverdriveCharge(20);
@@ -4502,6 +5037,9 @@ function updateExplosions(dt) {
       burst(e.x, e.y, e.rivalColor || '#ff2a6d', 34);
       addShockwave(e.x, e.y, 78, e.rivalColor || '#ff2a6d', 3);
       enemies.splice(i, 1);
+      if (e.kind === 'slime' && !e.isMini) {
+        spawnHydraMiniSlimes(e);
+      }
       syncRoyaleUI();
       if (state === 'PLAYING') syncUI();
     }
@@ -4834,7 +5372,7 @@ function chooseDir(e) {
   const pool = safeDirs.length > 0 ? safeDirs : valid;
   const diff = getDiffConfig();
 
-  if (e.kind === 'rival' || e.kind === 'sapper') {
+  if (e.kind === 'rival' || e.kind === 'sapper' || e.kind === 'pyromancer') {
     let targetX = player.x + 15;
     let targetY = player.y + 15;
 
@@ -4853,10 +5391,10 @@ function chooseDir(e) {
     }
 
     if (e.kind === 'rival' && powerups.length > 0) {
-      const nearPow = powerups.find(p => p.type !== 'skull' && Math.hypot(p.c * TILE - e.x, p.r * TILE - e.y) < TILE * 5);
+      const nearPow = powerups.find(p => p.type !== 'skull' && Math.hypot((p.x ?? p.c * TILE) - e.x, (p.y ?? p.r * TILE) - e.y) < TILE * 5);
       if (nearPow) {
-        targetX = nearPow.c * TILE + 24;
-        targetY = nearPow.r * TILE + 24;
+        targetX = nearPow.x ?? (nearPow.c * TILE + 24);
+        targetY = nearPow.y ?? (nearPow.r * TILE + 24);
       }
     }
     pool.sort((a, b) => {
@@ -4870,7 +5408,17 @@ function chooseDir(e) {
     return;
   }
 
-  if ((e.kind === 'hunter' || e.kind === 'phantom' || (e.kind === 'knight' && e.enraged)) && Math.random() < diff.aggroChance) {
+  if (
+    (e.kind === 'hunter' ||
+      e.kind === 'mantis' ||
+      e.kind === 'valkyrie' ||
+      e.kind === 'zephyr' ||
+      e.kind === 'cryogolem' ||
+      e.kind === 'gravitor' ||
+      e.kind === 'phantom' ||
+      (e.kind === 'knight' && e.enraged)) &&
+    Math.random() < diff.aggroChance
+  ) {
     pool.sort((a, b) => {
       const da = Math.hypot((e.x + a.x * TILE) - (player.x + 15), (e.y + a.y * TILE) - (player.y + 15));
       const db = Math.hypot((e.x + b.x * TILE) - (player.x + 15), (e.y + b.y * TILE) - (player.y + 15));
@@ -4892,7 +5440,7 @@ function updateEnemiesAndBoss(dt) {
   const pc = Math.floor((player.x + 15) / TILE);
   const pr = Math.floor((player.y + 15) / TILE);
 
-  // Update Enemy Plasma Rail Bolts
+  // Update Enemy Plasma Rail, Frost, Magma, Tesla & Void Bolts
   for (let bi = enemyBolts.length - 1; bi >= 0; bi--) {
     const bolt = enemyBolts[bi];
     bolt.x += bolt.vx * effDt * 60;
@@ -4935,12 +5483,11 @@ function updateEnemiesAndBoss(dt) {
 
     e.walkPhase = (e.walkPhase || 0) + effDt * 12;
 
-    // Rail-Spider Sniper Aiming & Laser Shot
+    // 1. Rail-Spider Sniper Aiming & Laser Shot (Neon Citadel)
     if (e.kind === 'sniper') {
       e.shotCd = Math.max(0, (e.shotCd || 0) - effDt);
       if (e.aimTimer > 0) {
         if (isTileThreatenedByBomb(e.c, e.r)) {
-          // Cancel aim to escape an incoming bomb!
           e.aimTimer = 0;
         } else {
           e.aimTimer -= effDt;
@@ -4972,38 +5519,110 @@ function updateEnemiesAndBoss(dt) {
       }
     }
 
-    // Seeker Hound Line-of-Sight Turbo Charge
-    if (e.kind === 'hunter') {
+    // 2. Cryo-Golem 4-Way Frost Shard Slam (Cryo Foundry)
+    if (e.kind === 'cryogolem') {
+      e.frostCd = (e.frostCd ?? 3.2) - effDt;
+      if (e.frostCd <= 0 && Math.hypot(e.x - (player.x + 15), e.y - (player.y + 15)) < TILE * 4.6 && !isTileThreatenedByBomb(e.c, e.r)) {
+        e.frostCd = 3.8 + Math.random() * 0.8;
+        addShockwave(e.x, e.y, 76, '#70e2ff', 3);
+        burst(e.x, e.y, '#70e2ff', 14);
+        addFloatText(e.x, e.y - 18, 'CRYO SLAM!', '#70e2ff', 0.98);
+        for (const d of dirs) {
+          enemyBolts.push({
+            x: e.x + d.x * 14,
+            y: e.y + d.y * 14,
+            vx: d.x * 4.2,
+            vy: d.y * 4.2,
+            color: '#70e2ff',
+            life: 0.95
+          });
+        }
+      }
+    }
+
+    // 3. Seeker Hound, Bio-Mantis & Zephyr Interceptor Line-of-Sight Aggro Lunges
+    if (e.kind === 'hunter' || e.kind === 'mantis' || e.kind === 'zephyr') {
       const los = (e.c === pc || e.r === pr) &&
                   (Math.abs(e.c - pc) + Math.abs(e.r - pr) <= 6) &&
                   checkClearCorridor(e.c, e.r, pc, pr);
       if (los && !isTileThreatenedByBomb(e.c, e.r) && !isTileThreatenedByBomb(e.c + Math.sign(pc - e.c), e.r + Math.sign(pr - e.r))) {
         if (!e.aggro) {
           e.aggro = true;
-          addFloatText(e.x, e.y - 16, 'TURBO AGGRO!', '#ff7b1c', 0.95);
+          const callout = e.kind === 'mantis' ? 'SCYTHE LUNGE!' : e.kind === 'zephyr' ? 'SONIC SWOOP!' : 'TURBO AGGRO!';
+          const col = e.kind === 'mantis' ? '#84cc16' : e.kind === 'zephyr' ? '#38bdf8' : '#ff7b1c';
+          addFloatText(e.x, e.y - 16, callout, col, 0.95);
         }
         e.dx = Math.sign(pc - e.c);
         e.dy = Math.sign(pr - e.r);
         e.turn = 0.35;
+
+        if (e.kind === 'zephyr') {
+          e.shotCd = Math.max(0, (e.shotCd ?? 1.8) - effDt);
+          if (e.shotCd <= 0 && (Math.abs(e.c - pc) + Math.abs(e.r - pr) >= 2)) {
+            e.shotCd = 3.2;
+            enemyBolts.push({
+              x: e.x + e.dx * 14,
+              y: e.y + e.dy * 14,
+              vx: e.dx * 5.2,
+              vy: e.dy * 5.2,
+              color: '#38bdf8',
+              life: 1.35
+            });
+          }
+        }
       } else {
         e.aggro = false;
       }
     }
 
-    // Phase Wraith Shadow Blink
-    if (e.kind === 'phantom') {
-      e.blinkCd = (e.blinkCd || 3.5) - effDt;
+    // 4. Pyromancer, Storm Valkyrie & Void Gravitor Corridor Projectiles
+    if (e.kind === 'pyromancer' || e.kind === 'valkyrie' || e.kind === 'gravitor') {
+      e.shotCd = Math.max(0, (e.shotCd ?? 2.2) - effDt);
+      if (e.shotCd <= 0 && (e.c === pc || e.r === pr) && !isTileThreatenedByBomb(e.c, e.r)) {
+        const distTiles = Math.abs(e.c - pc) + Math.abs(e.r - pr);
+        const maxDist = e.kind === 'valkyrie' ? 7 : 6;
+        if (distTiles >= 2 && distTiles <= maxDist && checkClearCorridor(e.c, e.r, pc, pr)) {
+          const sdx = Math.sign(pc - e.c);
+          const sdy = Math.sign(pr - e.r);
+          e.dx = sdx || e.dx;
+          e.dy = sdy || e.dy;
+          const bSpeed = e.kind === 'valkyrie' ? 5.7 : e.kind === 'pyromancer' ? 4.8 : 4.4;
+          const bCol = e.kind === 'valkyrie' ? '#facc15' : e.kind === 'pyromancer' ? '#ff5e00' : '#c084fc';
+          const bText = e.kind === 'valkyrie' ? 'TESLA LANCE!' : e.kind === 'pyromancer' ? 'MAGMA FLARE!' : 'VOID ORB!';
+          enemyBolts.push({
+            x: e.x + sdx * 15,
+            y: e.y + sdy * 15,
+            vx: sdx * bSpeed,
+            vy: sdy * bSpeed,
+            color: bCol,
+            life: 1.55
+          });
+          burst(e.x + sdx * 16, e.y + sdy * 16, bCol, 10);
+          if (state === 'PLAYING') {
+            if (e.kind === 'valkyrie') sfx.playZap();
+            else sfx.playRailShot();
+          }
+          addFloatText(e.x, e.y - 16, bText, bCol, 0.94);
+          e.shotCd = e.kind === 'valkyrie' ? 2.6 : e.kind === 'pyromancer' ? 2.9 : 2.75;
+        }
+      }
+    }
+
+    // 5. Phase Wraith & Void Gravitor Dimensional Shadow Blink (Quantum Abyss)
+    if (e.kind === 'phantom' || e.kind === 'gravitor') {
+      e.blinkCd = (e.blinkCd || 3.8) - effDt;
       if (e.blinkCd <= 0 && (e.dx !== 0 || e.dy !== 0)) {
-        e.blinkCd = 4.0 + Math.random() * 2.0;
+        e.blinkCd = (e.kind === 'gravitor' ? 4.6 : 4.0) + Math.random() * 2.0;
         const bc = e.c + e.dx * 2;
         const br = e.r + e.dy * 2;
         if (bc >= 1 && bc <= COLS - 2 && br >= 1 && br <= ROWS - 2 && cellOpen(br, bc) && !isTileThreatenedByBomb(bc, br)) {
-          burst(e.x, e.y, '#a855f7', 12);
+          const blinkCol = e.kind === 'gravitor' ? '#05ffa1' : '#a855f7';
+          burst(e.x, e.y, blinkCol, 12);
           e.c = bc;
           e.r = br;
           e.x = bc * TILE + TILE / 2;
           e.y = br * TILE + TILE / 2;
-          burst(e.x, e.y, '#a855f7', 14);
+          burst(e.x, e.y, blinkCol, 14);
         }
       }
     }
@@ -5016,20 +5635,22 @@ function updateEnemiesAndBoss(dt) {
     e.turn -= effDt;
     if (e.turn <= 0) chooseDir(e);
 
-    // Rival Bombers & Demo-Sappers: collect upgrades & plant BFS-verified tactical bombs
-    if (e.kind === 'rival' || e.kind === 'sapper') {
-      for (let pi = powerups.length - 1; pi >= 0; pi--) {
-        const pw = powerups[pi];
-        if (pw.c === e.c && pw.r === e.r && pw.type !== 'skull') {
-          if (pw.type === 'bomb') e.maxBombs = Math.min(4, (e.maxBombs || 1) + 1);
-          else if (pw.type === 'flame' || pw.type === 'fullfire') e.range = Math.min(5, (e.range || 2) + 1);
-          else if (pw.type === 'kick') e.canKick = true;
-          else if (pw.type === 'pierce') e.pierce = true;
-          else if (pw.type === 'ice') e.ice = true;
-          else if (pw.type === 'shield') e.hp = Math.min((e.maxHp || 2) + 1, (e.hp || 1) + 1);
-          else e.speed = Math.min(3.0, e.speed + 0.14);
-          powerups.splice(pi, 1);
-          burst(e.x, e.y, e.rivalColor || '#ffcc33', 10);
+    // Rival Bombers, Demo-Sappers & Pyromancers: plant BFS-verified tactical bombs
+    if (e.kind === 'rival' || e.kind === 'sapper' || e.kind === 'pyromancer') {
+      if (e.kind !== 'pyromancer') {
+        for (let pi = powerups.length - 1; pi >= 0; pi--) {
+          const pw = powerups[pi];
+          if (pw.c === e.c && pw.r === e.r && pw.type !== 'skull') {
+            if (pw.type === 'bomb') e.maxBombs = Math.min(4, (e.maxBombs || 1) + 1);
+            else if (pw.type === 'flame' || pw.type === 'fullfire') e.range = Math.min(5, (e.range || 2) + 1);
+            else if (pw.type === 'kick') e.canKick = true;
+            else if (pw.type === 'pierce') e.pierce = true;
+            else if (pw.type === 'ice') e.ice = true;
+            else if (pw.type === 'shield') e.hp = Math.min((e.maxHp || 2) + 1, (e.hp || 1) + 1);
+            else e.speed = Math.min(3.0, e.speed + 0.14);
+            powerups.splice(pi, 1);
+            burst(e.x, e.y, e.rivalColor || '#ffcc33', 10);
+          }
         }
       }
 
@@ -5039,14 +5660,15 @@ function updateEnemiesAndBoss(dt) {
       const nearPlayer = Math.hypot(e.x - (player.x + 15), e.y - (player.y + 15)) < TILE * 3.0;
       const nearOtherRival = gameMode === 'BATTLE_ROYALE' && enemies.some(o => o !== e && Math.hypot(o.x - e.x, o.y - e.y) < TILE * 3.0);
       const bRange = e.range || 2;
+      const fuseT = e.kind === 'pyromancer' ? 1.85 : 2.15;
 
       if (e.bombCd <= 0 && myActiveBombs < (e.maxBombs || 1) && (nearCrate || nearPlayer || nearOtherRival) && !isTileThreatenedByBomb(e.c, e.r)) {
-        e.bombCd = (e.kind === 'rival' ? 2.2 : 3.2) + Math.random() * 1.4;
+        e.bombCd = (e.kind === 'rival' ? 2.2 : e.kind === 'pyromancer' ? 3.5 : 3.2) + Math.random() * 1.4;
         if (!bombs.some(b => b.c === e.c && b.r === e.r) && hasSafeEscapeAfterBomb(e.c, e.r, bRange, !!e.pierce)) {
           bombs.push({
             c: e.c, r: e.r,
             x: e.c * TILE + TILE / 2, y: e.r * TILE + TILE / 2,
-            vx: 0, vy: 0, t: 2.15, maxT: 2.15, range: bRange,
+            vx: 0, vy: 0, t: fuseT, maxT: fuseT, range: bRange,
             solid: false, remote: false, pierce: !!e.pierce, ice: !!e.ice, owner: e.uid, chainDepth: 1
           });
           chooseDir(e);
@@ -5070,7 +5692,8 @@ function updateEnemiesAndBoss(dt) {
     }
 
     const canPhase = e.kind === 'phantom';
-    const spdBoost = e.aggro ? 1.38 : e.escaping ? 1.18 : 1.0;
+    const aggroMult = e.kind === 'mantis' ? 1.68 : e.kind === 'zephyr' ? 1.55 : 1.38;
+    const spdBoost = e.aggro ? aggroMult : e.escaping ? 1.18 : 1.0;
     const nx = e.x + e.dx * e.speed * spdBoost * effDt * 60;
     const ny = e.y + e.dy * e.speed * spdBoost * effDt * 60;
     const colCheck = rectHitsWall(nx - e.rad, ny - e.rad, e.rad * 2, e.rad * 2, {
@@ -5172,8 +5795,8 @@ function updateEnemiesAndBoss(dt) {
       spawnCrateDebris(bc, br, biome.crateTop);
     }
 
-    // Quantum Nexus (Variant 3) Phase-2+ Safe Dimensional Blink!
-    if (boss.variant === 3 && boss.phase >= 2) {
+    // Quantum Nexus (Variant 5) Phase-2+ Safe Dimensional Blink!
+    if (boss.variant === 5 && boss.phase >= 2) {
       boss.blinkTimer = (boss.blinkTimer ?? 4.8) - effDt;
       if (boss.blinkTimer <= 0) {
         boss.blinkTimer = boss.phase === 3 ? 3.8 : 5.2;
@@ -5196,15 +5819,23 @@ function updateEnemiesAndBoss(dt) {
       }
     }
 
-    // Signature Boss Projectile Patterns (0: Tank Salvo, 1: Cryo 8-Way Nova, 2: Solar Spiral, 3: Quantum Hex-Rift!)
-    if (boss.variant === 3 || boss.variant === 2 || boss.variant === 1 || boss.phase >= 2) {
+    // Signature Boss Projectile Patterns across all 6 Worlds (0..5)!
+    if (boss.variant >= 1 || boss.phase >= 2) {
       boss.boltTimer = (boss.boltTimer || 3.0) - effDt;
       if (boss.boltTimer <= 0) {
         boss.recoil = 1.0;
-        if (state === 'PLAYING') sfx.playRailShot();
-        const boltCol = boss.variant === 1 ? '#70e2ff' : boss.variant === 2 ? '#ffcc33' : boss.variant === 3 ? '#05ffa1' : '#ff2a6d';
+        if (state === 'PLAYING') {
+          if (boss.variant === 4) sfx.playZap();
+          else sfx.playRailShot();
+        }
+        const boltCol =
+          boss.variant === 1 ? '#70e2ff' :
+          boss.variant === 2 ? '#ffcc33' :
+          boss.variant === 3 ? '#84cc16' :
+          boss.variant === 4 ? '#facc15' :
+          boss.variant === 5 ? '#05ffa1' : '#ff2a6d';
 
-        if (boss.variant === 3) {
+        if (boss.variant === 5) {
           // Quantum Nexus: Rotating 6-Way Dual-Hue Quantum Rift Star
           boss.boltTimer = boss.phase === 3 ? 1.45 : boss.phase === 2 ? 1.95 : 2.5;
           boss.spiralAngle = (boss.spiralAngle || 0) + 0.52;
@@ -5218,6 +5849,40 @@ function updateEnemiesAndBoss(dt) {
               vx: dx * 4.5,
               vy: dy * 4.5,
               color: k % 2 === 0 ? '#05ffa1' : '#c77dff',
+              life: 1.7
+            });
+          }
+        } else if (boss.variant === 4) {
+          // Tempest Sky-Titan: High-Velocity 8-Way Golden-Cyan Tesla Storm Salvo
+          boss.boltTimer = boss.phase === 3 ? 1.65 : boss.phase === 2 ? 2.15 : 2.75;
+          boss.spiralAngle = (boss.spiralAngle || 0) + 0.39;
+          for (let k = 0; k < 8; k++) {
+            const ang = boss.spiralAngle + (k * Math.PI) / 4;
+            const dx = Math.cos(ang);
+            const dy = Math.sin(ang);
+            enemyBolts.push({
+              x: boss.x + dx * 30,
+              y: boss.y + dy * 30,
+              vx: dx * 5.0,
+              vy: dy * 5.0,
+              color: k % 2 === 0 ? '#facc15' : '#38bdf8',
+              life: 1.65
+            });
+          }
+        } else if (boss.variant === 3) {
+          // Venom Brood-Queen: Rotating 6-Way Bio-Acid Spore Volley
+          boss.boltTimer = boss.phase === 3 ? 1.55 : boss.phase === 2 ? 2.05 : 2.65;
+          boss.spiralAngle = (boss.spiralAngle || 0) - 0.48;
+          for (let k = 0; k < 6; k++) {
+            const ang = boss.spiralAngle + (k * Math.PI) / 3;
+            const dx = Math.cos(ang);
+            const dy = Math.sin(ang);
+            enemyBolts.push({
+              x: boss.x + dx * 28,
+              y: boss.y + dy * 28,
+              vx: dx * 4.3,
+              vy: dy * 4.3,
+              color: k % 2 === 0 ? '#84cc16' : '#d946ef',
               life: 1.7
             });
           }
@@ -5259,25 +5924,29 @@ function updateEnemiesAndBoss(dt) {
       }
     }
 
-    // Phase 3 Theme-Matched Minion Deployment
-    if (boss.phase === 3 && enemies.length < 4) {
-      boss.summonTimer = (boss.summonTimer || 8.0) - effDt;
+    // Theme-Matched Minion Deployment (Venom Brood-Queen spawns broodlings starting in Phase II!)
+    const canSummon = (boss.phase === 3 || (boss.variant === 3 && boss.phase >= 2)) &&
+                      enemies.length < (boss.variant === 3 ? 5 : 4);
+    if (canSummon) {
+      boss.summonTimer = (boss.summonTimer || 7.5) - effDt;
       if (boss.summonTimer <= 0) {
-        boss.summonTimer = 9.5;
+        boss.summonTimer = boss.variant === 3 ? 7.8 : 9.5;
         if (cellOpen(br, bc)) {
           const mKind = biome.bossMinion || 'hunter';
+          const isGolem = mKind === 'cryogolem';
           enemies.push({
             uid: `e_${nextEnemyId++}`,
-            x: boss.x, y: boss.y, r: br, c: bc, rad: 14,
-            kind: mKind, rivalColor: biome.wallEdge, hp: 1, maxHp: 1, maxBombs: 1,
+            x: boss.x, y: boss.y, r: br, c: bc, rad: isGolem ? 15 : 14,
+            kind: mKind, isMini: false, rivalColor: biome.wallEdge,
+            hp: isGolem ? 2 : 1, maxHp: isGolem ? 2 : 1, maxBombs: 1,
             canKick: mKind === 'sapper' || mKind === 'rival',
             shielded: mKind === 'knight',
             warpLock: 0, enraged: false, aggro: false,
             range: 2, speed: 1.55, dx: 1, dy: 0, turn: 0.2,
-            hue: 15, frozen: 0, stunned: 0, invuln: 0.8, bombCd: 2.0,
+            hue: 15, frozen: 0, stunned: 0, invuln: 0.8, bombCd: 2.0, frostCd: 2.8,
             aimTimer: 0, aimDx: 1, aimDy: 0, shotCd: 2.0, blinkCd: 3.5, walkPhase: 0
           });
-          addFloatText(boss.x, boss.y - 38, 'FACTION UNIT DEPLOYED!', biome.wallEdge, 1.1);
+          addFloatText(boss.x, boss.y - 38, boss.variant === 3 ? 'BROOD SPAWNED!' : 'FACTION UNIT DEPLOYED!', biome.wallEdge, 1.1);
           if (state === 'PLAYING') syncUI();
         }
       }
@@ -5290,7 +5959,13 @@ function updateEnemiesAndBoss(dt) {
       const pushRet = (tc, tr, delay = 1.25) => {
         if (tc >= 1 && tc <= COLS - 2 && tr >= 1 && tr <= ROWS - 2 && map[tr][tc] !== 1 &&
             !boss.reticles.some(r0 => r0.c === tc && r0.r === tr)) {
-          boss.reticles.push({ c: tc, r: tr, t: delay, maxT: delay, ice: boss.variant === 1, quantum: boss.variant === 3 });
+          boss.reticles.push({
+            c: tc, r: tr, t: delay, maxT: delay,
+            ice: boss.variant === 1,
+            bio: boss.variant === 3,
+            storm: boss.variant === 4,
+            quantum: boss.variant === 5
+          });
         }
       };
 
@@ -5309,13 +5984,25 @@ function updateEnemiesAndBoss(dt) {
         pushRet(pc + 1, pr + 1, 1.3); pushRet(pc - 1, pr + 1, 1.3);
         pushRet(pc + 1, pr - 1, 1.3); pushRet(pc - 1, pr - 1, 1.3);
       } else if (boss.variant === 3) {
+        // Venom Brood-Queen: Corner Bio-Spore Cluster Ring around player
+        pushRet(pc + 1, pr + 1, 1.3); pushRet(pc - 1, pr + 1, 1.3);
+        pushRet(pc + 1, pr - 1, 1.3); pushRet(pc - 1, pr - 1, 1.3);
+        if (boss.phase >= 2) pushRet(pc, pr, 1.35);
+      } else if (boss.variant === 4) {
+        // Tempest Sky-Titan: Cross-Runway Lightning Line Sweep
+        const span = boss.phase >= 2 ? 2 : 1;
+        for (let k = -span; k <= span; k++) {
+          pushRet(pc + k, pr, 1.28);
+          pushRet(pc, pr + k, 1.28);
+        }
+      } else if (boss.variant === 5) {
         // Quantum Nexus: Dimensional Diamond Rift around player
         pushRet(pc + 2, pr, 1.3); pushRet(pc - 2, pr, 1.3);
         pushRet(pc, pr + 2, 1.3); pushRet(pc, pr - 2, 1.3);
         if (boss.phase >= 2) pushRet(pc, pr, 1.35);
       }
 
-      const count = boss.phase === 3 ? 4 : boss.phase === 2 ? 3 : 3;
+      const count = boss.phase === 3 ? 4 : 3;
       for (let k = 0; k < count; k++) {
         const tc = 2 + Math.floor(Math.random() * (COLS - 4));
         const tr = 2 + Math.floor(Math.random() * (ROWS - 4));
@@ -5756,14 +6443,40 @@ function drawSpecialTiles() {
       ctx.arc(0, 0, 4, 0, Math.PI * 2);
       ctx.fill();
       ctx.restore();
+    } else if (sp.type === 'boost') {
+      // Storm Sky-Fortress Turbo Runway Boost Pad
+      drawGlow(x, y, 28, '#facc15', 0.25);
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.fillStyle = 'rgba(12, 24, 48, 0.82)';
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 1.8;
+      roundRectPath(-18, -18, 36, 36, 7);
+      ctx.fill();
+      ctx.stroke();
+
+      // Animated scrolling golden-cyan turbo chevrons
+      const phase = (elapsed * 4.5) % 1;
+      for (let k = -1; k <= 1; k++) {
+        const cyOff = k * 8 - phase * 6 + 3;
+        const alpha = 0.5 + 0.5 * Math.cos((k - phase) * 1.4);
+        ctx.strokeStyle = k === 0 ? `rgba(250, 204, 21, ${alpha})` : `rgba(56, 189, 248, ${alpha})`;
+        ctx.lineWidth = 2.4;
+        ctx.beginPath();
+        ctx.moveTo(-9, cyOff + 4);
+        ctx.lineTo(0, cyOff - 3);
+        ctx.lineTo(9, cyOff + 4);
+        ctx.stroke();
+      }
+      ctx.restore();
     }
   }
 }
 
 function drawPowerups() {
   for (const p of powerups) {
-    const x = p.c * TILE + TILE / 2;
-    const y = p.r * TILE + TILE / 2;
+    const x = p.x ?? (p.c * TILE + TILE / 2);
+    const y = p.y ?? (p.r * TILE + TILE / 2);
     const meta = POWERUP_CATALOG.find(item => item.id === p.type) || { color: '#ffd166' };
     const bob = Math.sin(elapsed * 5.5 + p.c) * 3.2;
 
@@ -5803,7 +6516,21 @@ function renderBombSphere(x, y, b, scaleMult = 1, drawFloorRing = true) {
   const isEnemyBomb = b.owner !== 'player';
   const coreColor = isEnemyBomb
     ? '#ff5500'
-    : b.ice ? '#70e2ff' : b.pierce ? '#ff2a6d' : b.remote ? '#c77dff' : '#00f0ff';
+    : b.ice
+      ? '#70e2ff'
+      : b.pierce
+        ? '#ff2a6d'
+        : b.plasma
+          ? '#facc15'
+          : b.gravity
+            ? '#c084fc'
+            : b.cluster
+              ? '#84cc16'
+              : b.bouncy
+                ? '#f472b6'
+                : b.remote
+                  ? '#c77dff'
+                  : '#00f0ff';
 
   if (drawFloorRing) {
     const pct = Math.max(0, Math.min(1, b.t / (b.maxT || 2.15)));
@@ -5814,6 +6541,18 @@ function renderBombSphere(x, y, b, scaleMult = 1, drawFloorRing = true) {
     ctx.beginPath();
     ctx.arc(x, y + 2, 19, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * pct);
     ctx.stroke();
+
+    // Gravity Well Bomb: Swirling Singularity Pull Ring
+    if (b.gravity) {
+      ctx.strokeStyle = '#c084fc';
+      ctx.globalAlpha = 0.5;
+      ctx.lineWidth = 1.6;
+      ctx.setLineDash([5, 5]);
+      ctx.beginPath();
+      ctx.arc(x, y + 2, 25 + Math.sin(elapsed * 8) * 2, elapsed * 5, elapsed * 5 + Math.PI * 2);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
     ctx.restore();
   }
 
@@ -5827,7 +6566,7 @@ function renderBombSphere(x, y, b, scaleMult = 1, drawFloorRing = true) {
   ctx.translate(x, y);
   ctx.scale(sx, sy);
 
-  // Pierce Bomb outer spikes or Cryo prongs
+  // Pierce Bomb outer spikes
   if (b.pierce) {
     ctx.fillStyle = '#ff2a6d';
     for (let i = 0; i < 4; i++) {
@@ -5841,6 +6580,27 @@ function renderBombSphere(x, y, b, scaleMult = 1, drawFloorRing = true) {
     }
   }
 
+  // Tesla Plasma Prongs
+  if (b.plasma) {
+    ctx.strokeStyle = '#facc15';
+    ctx.lineWidth = 2;
+    for (let i = 0; i < 4; i++) {
+      const a = elapsed * 6 + (i * Math.PI) / 2;
+      ctx.beginPath();
+      ctx.arc(0, 0, 18.2, a, a + 0.65);
+      ctx.stroke();
+    }
+  }
+
+  // Bouncy Kinetic Bumper Ring
+  if (b.bouncy) {
+    ctx.strokeStyle = '#f472b6';
+    ctx.lineWidth = 2.6;
+    ctx.beginPath();
+    ctx.ellipse(0, 1, 17.8, 12.5, 0, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+
   // 3D shaded metallic bomb sphere
   const sphereGrad = ctx.createRadialGradient(-5, -6, 2, 0, 0, 16);
   sphereGrad.addColorStop(0, '#334868');
@@ -5850,6 +6610,16 @@ function renderBombSphere(x, y, b, scaleMult = 1, drawFloorRing = true) {
   ctx.beginPath();
   ctx.arc(0, 0, 15.5, 0, Math.PI * 2);
   ctx.fill();
+
+  // Cluster Spore Bio-Nodes on Casing
+  if (b.cluster) {
+    ctx.fillStyle = '#84cc16';
+    for (const [cx0, cy0] of [[-8.5, -3], [8.5, -3], [-6.5, 8], [6.5, 8]]) {
+      ctx.beginPath();
+      ctx.arc(cx0, cy0, 2.7, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
 
   // Equatorial glowing plasma seam
   ctx.strokeStyle = b.t < 0.55 && Math.floor(elapsed * 20) % 2 === 0 ? '#ffffff' : coreColor;
@@ -5934,6 +6704,15 @@ function drawBombsAndTelegraphs() {
         if (!map[tr] || map[tr][tc] === 1) break;
         ctx.fillRect(tc * TILE + 17, tr * TILE + 17, TILE - 34, TILE - 34);
         if ((map[tr][tc] === 2 || map[tr][tc] === 3) && !b.pierce) break;
+      }
+    }
+    if (b.cluster) {
+      for (const [dc, dr] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
+        const sc = b.c + dc;
+        const sr = b.r + dr;
+        if (map[sr] && map[sr][sc] !== 1) {
+          ctx.fillRect(sc * TILE + 18, sr * TILE + 18, TILE - 36, TILE - 36);
+        }
       }
     }
     ctx.restore();
@@ -6054,6 +6833,54 @@ function drawExplosionsAndSingularities() {
     ctx.strokeStyle = '#e0aaff';
     ctx.lineWidth = 1.6;
     ctx.stroke();
+    ctx.restore();
+  }
+
+  // Tesla Coil Bomb Chain-Lightning Arcs!
+  for (const la of lightningArcs) {
+    const ratio = Math.max(0, la.t / (la.maxT || 0.36));
+    const dx = la.x2 - la.x1;
+    const dy = la.y2 - la.y1;
+    const len = Math.hypot(dx, dy) || 1;
+    const nx = -dy / len;
+    const ny = dx / len;
+    const segs = 6;
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.globalAlpha = Math.min(1, ratio * 1.8);
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+
+    const traceBolt = () => {
+      ctx.beginPath();
+      ctx.moveTo(la.x1, la.y1);
+      for (let s = 1; s < segs; s++) {
+        const f = s / segs;
+        const jit = Math.sin(elapsed * 72 + s * 4.3 + la.x1) * 9.5;
+        ctx.lineTo(la.x1 + dx * f + nx * jit, la.y1 + dy * f + ny * jit);
+      }
+      ctx.lineTo(la.x2, la.y2);
+    };
+
+    ctx.strokeStyle = '#38bdf8';
+    ctx.lineWidth = 9 * ratio;
+    traceBolt();
+    ctx.stroke();
+
+    ctx.strokeStyle = la.color || '#facc15';
+    ctx.lineWidth = 4.5 * ratio;
+    traceBolt();
+    ctx.stroke();
+
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 1.9 * ratio;
+    traceBolt();
+    ctx.stroke();
+
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.arc(la.x2, la.y2, 5.5 * ratio, 0, Math.PI * 2);
+    ctx.fill();
     ctx.restore();
   }
 }
@@ -6233,210 +7060,968 @@ function renderCyberBomber(g, opts) {
   }
 }
 
-// Reusable 2.5D Cyber-Enemy & Boss Model Renderer (shared by Live Arena & Bestiary!)
+// Reusable AAA 3/4 2.5D Articulated Character, Mech & Creature Renderer (Live Arena & Bestiary!)
 function renderEnemyModel(g, e, tNow = 0) {
   const kind = e.kind;
   const walk = e.walkPhase || 0;
+  const stride = Math.sin(walk) * 3.8;
   const dx = e.dx || 0;
   const dy = e.dy === undefined ? 1 : e.dy;
 
   if (kind === 'drone') {
-    const col = `hsl(${335 + (e.hue || 0)}, 92%, 60%)`;
-    // 4 Angled Thruster Pods
-    g.fillStyle = '#334155';
-    for (const a of [0.78, 2.35, 3.92, 5.5]) {
-      const px = Math.cos(a + tNow * 2.5) * 14;
-      const py = Math.sin(a + tNow * 2.5) * 14;
-      g.beginPath(); g.arc(px, py, 3.5, 0, Math.PI * 2); g.fill();
+    // 1. NEON INTERCEPTOR — Twin-Rotor Cyber-Wasp Assault Mech (Neon Citadel)
+    const accent = '#ff2a6d';
+    const tilt = dx * 2.2;
+
+    // Twin Shrouded Tilt-Rotor Nacelles + Spinning Plasma Blades
+    for (const side of [-1, 1]) {
+      const nx = side * 15;
+      const ny = -5 + side * tilt * 0.25;
+      g.fillStyle = '#0f172a';
+      g.strokeStyle = '#38bdf8';
+      g.lineWidth = 1.4;
+      g.beginPath(); g.ellipse(nx, ny, 6.2, 4.2, 0, 0, Math.PI * 2); g.fill(); g.stroke();
+
+      // Spinning rotor blur
+      g.save();
+      g.translate(nx, ny);
+      g.scale(1, 0.65);
+      g.rotate(tNow * 18 * side);
+      g.strokeStyle = 'rgba(0, 240, 255, 0.85)';
+      g.lineWidth = 1.8;
+      g.beginPath(); g.moveTo(-5.2, 0); g.lineTo(5.2, 0); g.moveTo(0, -5.2); g.lineTo(0, 5.2); g.stroke();
+      g.restore();
+
+      // Underslung thruster flame
+      g.fillStyle = accent;
+      g.beginPath(); g.moveTo(nx - 2.2, ny + 4); g.lineTo(nx, ny + 8.5 + Math.sin(tNow * 24) * 1.5); g.lineTo(nx + 2.2, ny + 4); g.closePath(); g.fill();
     }
-    // Rotating plasma stabilizer ring
+
+    // Twin Underslung Pulse Blasters
+    g.fillStyle = '#334155';
+    g.beginPath(); g.roundRect(-9.5, 7, 4, 8.5, 1.5); g.roundRect(5.5, 7, 4, 8.5, 1.5); g.fill();
+    g.fillStyle = '#00f0ff';
+    g.beginPath(); g.arc(-7.5, 15, 1.8, 0, Math.PI * 2); g.arc(7.5, 15, 1.8, 0, Math.PI * 2); g.fill();
+
+    // Armored Wasp-Mech Torso & Belly Thruster Core
+    const bodyG = g.createLinearGradient(0, -4, 0, 13);
+    bodyG.addColorStop(0, '#be123c');
+    bodyG.addColorStop(1, '#1e1b4b');
+    g.fillStyle = bodyG;
+    g.beginPath();
+    g.moveTo(-9, -2); g.lineTo(9, -2); g.lineTo(6.5, 11.5); g.lineTo(0, 14); g.lineTo(-6.5, 11.5); g.closePath();
+    g.fill();
+    g.strokeStyle = accent; g.lineWidth = 1.3; g.stroke();
+
+    g.fillStyle = '#00f0ff';
+    g.beginPath(); g.arc(0, 6.5, 2.7, 0, Math.PI * 2); g.fill();
+
+    // Sculpted 3D Interceptor Wasp-Helmet + Swept Winglet Ears
+    g.fillStyle = accent;
+    g.beginPath();
+    g.moveTo(-10, -10); g.lineTo(-16, -17); g.lineTo(-7, -14); g.closePath();
+    g.moveTo(10, -10); g.lineTo(16, -17); g.lineTo(7, -14); g.closePath();
+    g.fill();
+
+    const helmG = g.createRadialGradient(-3.5, -12, 1.5, 0, -8, 13);
+    helmG.addColorStop(0, '#f8fafc');
+    helmG.addColorStop(0.45, '#475569');
+    helmG.addColorStop(1, '#0f172a');
+    g.fillStyle = helmG;
+    g.beginPath(); g.roundRect(-10.5, -16.5, 21, 15, 7.5); g.fill();
+    g.strokeStyle = accent; g.lineWidth = 1.4; g.stroke();
+
+    // Angled V-Visor & Fierce Dual Cyber-Optics
+    g.fillStyle = '#050814';
+    g.beginPath();
+    g.moveTo(-8.5, -11.5); g.lineTo(0, -9.2); g.lineTo(8.5, -11.5);
+    g.lineTo(7.5, -5); g.lineTo(0, -3.5); g.lineTo(-7.5, -5); g.closePath();
+    g.fill();
+
+    g.fillStyle = '#00f0ff';
+    g.beginPath();
+    g.moveTo(-6.8 + dx * 1.2, -9.5); g.lineTo(-1.8 + dx * 1.2, -7.8); g.lineTo(-2.2 + dx * 1.2, -5.8); g.lineTo(-6.8 + dx * 1.2, -7.2); g.closePath();
+    g.moveTo(6.8 + dx * 1.2, -9.5); g.lineTo(1.8 + dx * 1.2, -7.8); g.lineTo(2.2 + dx * 1.2, -5.8); g.lineTo(6.8 + dx * 1.2, -7.2); g.closePath();
+    g.fill();
+
+  } else if (kind === 'sapper') {
+    // 2. DEMO SAPPER — Heavy Bulldozer Siege-Mech with Claw Arm & Dozer Plow (Neon Citadel)
+    // Twin Heavy Caterpillar Treads
+    for (const tx of [-16.5, 11.5]) {
+      g.fillStyle = '#0f172a';
+      g.strokeStyle = '#64748b';
+      g.lineWidth = 1.3;
+      g.beginPath(); g.roundRect(tx, -8, 5, 21, 2); g.fill(); g.stroke();
+      g.fillStyle = '#475569';
+      const off = ((walk * 0.6) % 1) * 4;
+      for (let ty = -6 + off; ty <= 9; ty += 4.5) {
+        g.fillRect(tx + 0.8, ty, 3.4, 2);
+      }
+    }
+
+    // Articulated Right Hydraulic Demolition Claw + Left Grenade Pod
+    g.strokeStyle = '#94a3b8';
+    g.lineWidth = 2.6;
+    g.beginPath(); g.moveTo(11, -1); g.lineTo(17, 3 + stride * 0.35); g.stroke();
+    g.strokeStyle = '#fbbf24';
+    g.lineWidth = 1.8;
+    g.beginPath();
+    g.arc(17.5, 5 + stride * 0.35, 3.5, 0.3, Math.PI - 0.3, true);
+    g.stroke();
+
+    // 3D Armored Industrial Mech Torso + Roll-Cage Pauldrons
+    const hullG = g.createLinearGradient(0, -13, 0, 10);
+    hullG.addColorStop(0, '#fde047');
+    hullG.addColorStop(0.5, '#f59e0b');
+    hullG.addColorStop(1, '#78350f');
+    g.fillStyle = hullG;
+    g.beginPath(); g.roundRect(-12, -11, 24, 19, 5.5); g.fill();
+    g.strokeStyle = '#fef08a'; g.lineWidth = 1.3; g.stroke();
+
+    // Armored Blast-Helmet Dome & Dual Cyan Optics
+    const domeG = g.createRadialGradient(-3, -12, 1, 0, -9, 10);
+    domeG.addColorStop(0, '#64748b');
+    domeG.addColorStop(1, '#0f172a');
+    g.fillStyle = domeG;
+    g.beginPath(); g.roundRect(-9.5, -16, 19, 11.5, 5); g.fill();
+    g.strokeStyle = '#fbbf24'; g.lineWidth = 1.2; g.stroke();
+
+    g.fillStyle = '#050b14';
+    g.beginPath(); g.roundRect(-7.5, -12.5, 15, 5.8, 2); g.fill();
+    g.fillStyle = '#00f0ff';
+    g.beginPath(); g.arc(-3.8 + dx, -9.6, 2.1, 0, Math.PI * 2); g.arc(3.8 + dx, -9.6, 2.1, 0, Math.PI * 2); g.fill();
+
+    // Rotating Strobe Warning Beacon
+    const flashOn = Math.floor(tNow * 10) % 2 === 0;
+    g.fillStyle = flashOn ? '#ff2a6d' : '#f59e0b';
+    g.beginPath(); g.roundRect(-3.2, -20.5, 6.4, 4.5, 2); g.fill();
+    g.fillStyle = '#ffffff';
+    g.beginPath(); g.arc(-1, -18.8, 1.1, 0, Math.PI * 2); g.fill();
+
+    // Front V-Shaped Beveled Steel Bulldozer Plow + Hazard Chevrons!
+    const plowG = g.createLinearGradient(0, 6, 0, 16);
+    plowG.addColorStop(0, '#cbd5e1');
+    plowG.addColorStop(1, '#334155');
+    g.fillStyle = plowG;
+    g.beginPath();
+    g.moveTo(-14.5, 6.5); g.lineTo(0, 9.5); g.lineTo(14.5, 6.5);
+    g.lineTo(13, 14.5); g.lineTo(0, 17); g.lineTo(-13, 14.5); g.closePath();
+    g.fill();
+    g.strokeStyle = '#fbbf24'; g.lineWidth = 1.4; g.stroke();
+
+    g.fillStyle = '#111827';
+    for (const hx of [-9, -3, 3, 9]) {
+      g.fillRect(hx - 1.3, 9.5, 2.6, 4);
+    }
+
+  } else if (kind === 'sniper') {
+    // 3. RAIL SPIDER — 4-Legged Articulated Tachikoma Rail-Tank (Neon Citadel)
+    const magenta = '#f72585';
+
+    // Rear Bulbous Armored Plasma-Abdomen Pod
+    const abdG = g.createRadialGradient(-2, -13, 1, 0, -11, 9);
+    abdG.addColorStop(0, '#f472b6');
+    abdG.addColorStop(0.6, '#9d174d');
+    abdG.addColorStop(1, '#3b0764');
+    g.fillStyle = abdG;
+    g.beginPath(); g.ellipse(0, -11.5, 9.5, 6.5, 0, 0, Math.PI * 2); g.fill();
+    g.strokeStyle = '#fbcfe8'; g.lineWidth = 1.1; g.stroke();
+
+    // 4 Multi-Jointed 3D Armored Arachnid-Mech Legs
+    for (const side of [-1, 1]) {
+      for (const row of [-1, 1]) {
+        const lOff = (side * row > 0 ? stride : -stride) * 0.75;
+        const hipX = side * 8.5, hipY = row * 3.5;
+        const kneeX = side * 16.5, kneeY = row * 5.5 - 3.5 + lOff * 0.5;
+        const footX = side * 18.5, footY = row * 9.5 + 3 + lOff;
+
+        g.strokeStyle = '#334155';
+        g.lineWidth = 3.6;
+        g.lineCap = 'round';
+        g.beginPath(); g.moveTo(hipX, hipY); g.lineTo(kneeX, kneeY); g.lineTo(footX, footY); g.stroke();
+
+        g.strokeStyle = magenta;
+        g.lineWidth = 1.5;
+        g.beginPath(); g.moveTo(hipX, hipY); g.lineTo(kneeX, kneeY); g.stroke();
+
+        // Glowing Knee Actuator & Claw Tip
+        g.fillStyle = '#00f0ff';
+        g.beginPath(); g.arc(kneeX, kneeY, 2.1, 0, Math.PI * 2); g.fill();
+        g.fillStyle = '#e2e8f0';
+        g.beginPath(); g.arc(footX, footY, 1.8, 0, Math.PI * 2); g.fill();
+      }
+    }
+
+    // Sculpted 3D Cephalothorax Armored Turret Hull
+    const hullG = g.createRadialGradient(-3, -2, 2, 0, 1, 12.5);
+    hullG.addColorStop(0, '#64748b');
+    hullG.addColorStop(0.55, '#1e1b4b');
+    hullG.addColorStop(1, '#090514');
+    g.fillStyle = hullG;
+    g.beginPath(); g.roundRect(-11, -7, 22, 16, 7.5); g.fill();
+    g.strokeStyle = magenta; g.lineWidth = 1.7; g.stroke();
+
+    // Triple Tachikoma Spider-Optic Lenses
+    g.fillStyle = '#050814';
+    g.beginPath(); g.roundRect(-8.5, 0.5, 17, 6, 3); g.fill();
+    g.fillStyle = e.aimTimer > 0 ? '#ff2a6d' : '#00f0ff';
+    g.beginPath();
+    g.arc(-4.8, 3.5, 1.9, 0, Math.PI * 2);
+    g.arc(0, 3.3, 2.4, 0, Math.PI * 2);
+    g.arc(4.8, 3.5, 1.9, 0, Math.PI * 2);
+    g.fill();
+
+    // Dorsal Rotating Twin-Rail Long-Barrel Sniper Cannon!
+    const aimAng = Math.atan2(e.aimTimer > 0 ? e.aimDy : (dy || 1), e.aimTimer > 0 ? e.aimDx : dx);
     g.save();
-    g.rotate(tNow * 3.2);
-    g.strokeStyle = col;
-    g.lineWidth = 2;
-    g.setLineDash([7, 5]);
-    g.beginPath(); g.arc(0, 0, 16, 0, Math.PI * 2); g.stroke();
-    g.setLineDash([]);
+    g.translate(0, -3);
+    g.rotate(aimAng);
+    g.fillStyle = '#1e293b';
+    g.strokeStyle = '#cbd5e1';
+    g.lineWidth = 1.2;
+    g.beginPath(); g.roundRect(-4.5, -4.5, 9, 9, 3); g.fill(); g.stroke();
+    g.fillStyle = '#e2e8f0';
+    g.fillRect(4, -3.4, 13, 2.2);
+    g.fillRect(4, 1.2, 13, 2.2);
+    g.fillStyle = e.aimTimer > 0 ? '#ffffff' : magenta;
+    g.fillRect(5, -1, 10, 2);
     g.restore();
 
-    // Metallic Drone Core
-    const dg = g.createRadialGradient(-4, -5, 2, 0, 0, 13);
-    dg.addColorStop(0, '#475569');
-    dg.addColorStop(1, '#0f172a');
-    g.fillStyle = dg;
-    g.beginPath(); g.arc(0, 0, 12.5, 0, Math.PI * 2); g.fill();
-    g.strokeStyle = col; g.lineWidth = 2; g.stroke();
-
-    // Scanning Cyclops Visor
-    g.fillStyle = '#050b14';
-    g.beginPath(); g.roundRect(-9, -4, 18, 7.5, 3.5); g.fill();
-    g.fillStyle = '#00f0ff';
-    g.beginPath(); g.arc(dx * 3.5, -0.2 + dy * 1.5, 3.2, 0, Math.PI * 2); g.fill();
-    g.fillStyle = '#ffffff';
-    g.beginPath(); g.arc(dx * 3.5 - 1, -1.2 + dy * 1.5, 1.1, 0, Math.PI * 2); g.fill();
-  } else if (kind === 'hunter') {
-    const col = e.aggro ? '#ff2a6d' : '#ff7b1c';
-    const leg = Math.sin(walk) * 3.5;
-    // Mechanical Quadruped Claws
-    g.fillStyle = '#1e293b';
-    for (const [lx, ly] of [[-12, -6 + leg], [12, -6 - leg], [-12, 8 - leg], [12, 8 + leg]]) {
-      g.beginPath(); g.roundRect(lx - 3, ly - 3, 6, 6, 2); g.fill();
-    }
-    if (e.aggro) {
-      g.strokeStyle = 'rgba(255, 42, 109, 0.75)';
-      g.lineWidth = 2.2;
-      g.beginPath(); g.arc(0, 0, 19 + Math.sin(tNow * 22) * 2, 0, Math.PI * 2); g.stroke();
-    }
-    // Predator Chassis + Swept Radar Ears
-    g.fillStyle = col;
-    g.beginPath();
-    g.moveTo(-13, -5); g.lineTo(-10, -18); g.lineTo(-3, -11);
-    g.lineTo(3, -11); g.lineTo(10, -18); g.lineTo(13, -5);
-    g.lineTo(14, 8); g.lineTo(0, 15); g.lineTo(-14, 8);
-    g.closePath();
-    g.fill();
-    g.strokeStyle = '#fff3b0'; g.lineWidth = 1.2; g.stroke();
-
-    // Dark Snout Plate + Separate Glowing Eyes (no arc bridge!)
-    g.fillStyle = '#0f172a';
-    g.beginPath(); g.roundRect(-10, -6, 20, 8, 3); g.fill();
-    g.fillStyle = '#ffe066';
-    g.beginPath(); g.arc(-5, -2, 2.8, 0, Math.PI * 2); g.fill();
-    g.beginPath(); g.arc(5, -2, 2.8, 0, Math.PI * 2); g.fill();
-    // Plasma Fangs
-    g.fillStyle = '#ffffff';
-    g.beginPath(); g.moveTo(-6, 5); g.lineTo(-4, 10); g.lineTo(-2, 5); g.fill();
-    g.beginPath(); g.moveTo(2, 5); g.lineTo(4, 10); g.lineTo(6, 5); g.fill();
-  } else if (kind === 'phantom') {
-    // Orbiting Soul Shards
-    g.fillStyle = '#05ffa1';
-    for (let k = 0; k < 2; k++) {
-      const a = tNow * 4 + k * Math.PI;
-      g.beginPath(); g.arc(Math.cos(a) * 16, Math.sin(a) * 9, 2.3, 0, Math.PI * 2); g.fill();
-    }
-    // Tattered Spectral Cloak
-    const pg = g.createLinearGradient(0, -16, 0, 14);
-    pg.addColorStop(0, '#9333ea');
-    pg.addColorStop(1, '#3b0764');
-    g.fillStyle = pg;
-    g.beginPath();
-    g.arc(0, -3, 13.5, Math.PI, 0);
-    g.lineTo(14, 12); g.lineTo(8, 7); g.lineTo(3, 13.5);
-    g.lineTo(-3, 8); g.lineTo(-8, 13.5); g.lineTo(-14, 11);
-    g.closePath();
-    g.fill();
-    g.strokeStyle = '#e9d5ff'; g.lineWidth = 1.4; g.stroke();
-
-    // Glowing Void Face & Twin Eyes
-    g.fillStyle = '#090414';
-    g.beginPath(); g.roundRect(-8.5, -8, 17, 8, 4); g.fill();
-    g.fillStyle = '#05ffa1';
-    g.beginPath(); g.arc(-4.5, -4, 2.6, 0, Math.PI * 2); g.fill();
-    g.beginPath(); g.arc(4.5, -4, 2.6, 0, Math.PI * 2); g.fill();
   } else if (kind === 'knight') {
-    const col = e.enraged ? '#ff2a6d' : '#38bdf8';
-    // Heavy Pauldrons & Paladin Chassis
-    g.fillStyle = col;
-    g.beginPath(); g.roundRect(-17, -9, 5, 14, 2); g.fill();
-    g.beginPath(); g.roundRect(12, -9, 5, 14, 2); g.fill();
+    // 4. AEGIS KNIGHT — Horned Cryo-Crusader Paladin with Plasma Broadsword & Shield (Cryo Foundry)
+    const trim = e.enraged ? '#ff2a6d' : '#38bdf8';
+    const glow = e.enraged ? '#ffcc33' : '#00f0ff';
 
+    // Armored Sabaton Boots
+    g.fillStyle = '#64748b';
+    g.beginPath();
+    g.ellipse(-5.5, 14 + stride * 0.45, 4.5, 3.2, 0, 0, Math.PI * 2);
+    g.ellipse(5.5, 14 - stride * 0.45, 4.5, 3.2, 0, 0, Math.PI * 2);
+    g.fill();
+
+    // Right Hand Glowing Cryo-Plasma Broadsword!
+    g.save();
+    g.translate(13.5, 3 - stride * 0.35);
+    g.rotate(-0.42);
+    g.fillStyle = glow;
+    g.beginPath(); g.moveTo(-2.2, 0); g.lineTo(0, -19); g.lineTo(2.2, 0); g.closePath(); g.fill();
+    g.fillStyle = '#ffffff';
+    g.beginPath(); g.moveTo(-0.9, 0); g.lineTo(0, -16); g.lineTo(0.9, 0); g.closePath(); g.fill();
+    g.fillStyle = '#fbbf24';
+    g.fillRect(-4.5, -1, 9, 2.4);
+    g.restore();
+
+    // 3D Glacier-Plate Cuirass & Winged Pauldrons
+    const plateG = g.createLinearGradient(0, -3, 0, 13);
+    plateG.addColorStop(0, '#94a3b8');
+    plateG.addColorStop(1, '#0f172a');
+    g.fillStyle = plateG;
+    g.beginPath(); g.roundRect(-10, -2, 20, 14, 5); g.fill();
+    g.strokeStyle = trim; g.lineWidth = 1.5; g.stroke();
+
+    // Layered Shoulder Pauldrons
     g.fillStyle = '#1e293b';
-    g.beginPath(); g.roundRect(-13, -13, 26, 26, 6); g.fill();
-    g.strokeStyle = col; g.lineWidth = 2.4; g.stroke();
+    g.strokeStyle = trim;
+    g.beginPath();
+    g.moveTo(-9, -3); g.lineTo(-16.5, -6); g.lineTo(-14.5, 3); g.lineTo(-9, 2); g.closePath();
+    g.moveTo(9, -3); g.lineTo(16.5, -6); g.lineTo(14.5, 3); g.lineTo(9, 2); g.closePath();
+    g.fill(); g.stroke();
 
-    // Cyber Plume Crest
-    g.fillStyle = e.enraged ? '#ffcc33' : '#00f0ff';
-    g.beginPath(); g.roundRect(-3, -18, 6, 6, 2); g.fill();
+    // Chest Diamond Reactor
+    g.fillStyle = glow;
+    g.beginPath(); g.moveTo(0, 1.5); g.lineTo(3.2, 5.5); g.lineTo(0, 9.5); g.lineTo(-3.2, 5.5); g.closePath(); g.fill();
 
-    // Mandalorian / Paladin T-Visor
-    g.fillStyle = '#060c18';
-    g.fillRect(-9, -6, 18, 5);
-    g.fillRect(-2.5, -6, 5, 13);
-    g.fillStyle = e.enraged ? '#ff2a6d' : '#00f0ff';
-    g.fillRect(-7.5, -4.8, 15, 2.6);
-    g.fillRect(-1.2, -4.8, 2.4, 10);
+    // Horned Crusader Great-Helm
+    g.fillStyle = trim;
+    g.beginPath();
+    g.moveTo(-9, -12); g.quadraticCurveTo(-16, -18, -12, -22.5); g.lineTo(-6.5, -15); g.closePath();
+    g.moveTo(9, -12); g.quadraticCurveTo(16, -18, 12, -22.5); g.lineTo(6.5, -15); g.closePath();
+    g.fill();
 
-    // Directional Frontal Energy Riot Shield!
+    const helmG = g.createRadialGradient(-3, -13, 1.5, 0, -9, 12);
+    helmG.addColorStop(0, '#f8fafc');
+    helmG.addColorStop(0.6, '#cbd5e1');
+    helmG.addColorStop(1, '#334155');
+    g.fillStyle = helmG;
+    g.beginPath(); g.roundRect(-10.5, -17.5, 21, 15.5, 6.5); g.fill();
+    g.strokeStyle = trim; g.lineWidth = 1.4; g.stroke();
+
+    // Crusader Glowing V-Visor
+    g.fillStyle = '#050b16';
+    g.beginPath();
+    g.moveTo(-8, -12); g.lineTo(0, -9.8); g.lineTo(8, -12);
+    g.lineTo(6.5, -7.5); g.lineTo(1.6, -7.2); g.lineTo(1.6, -3.2); g.lineTo(-1.6, -3.2); g.lineTo(-1.6, -7.2); g.lineTo(-6.5, -7.5);
+    g.closePath(); g.fill();
+    g.fillStyle = glow;
+    g.fillRect(-6.5, -10.6, 5, 2);
+    g.fillRect(1.5, -10.6, 5, 2);
+
+    // Physical Left-Arm Beveled Tower Shield
+    const shG = g.createLinearGradient(-17, -2, -8, 12);
+    shG.addColorStop(0, '#e0f2fe');
+    shG.addColorStop(1, '#0284c7');
+    g.fillStyle = shG;
+    g.strokeStyle = '#ffffff';
+    g.lineWidth = 1.3;
+    g.beginPath();
+    g.moveTo(-16.5, -2); g.lineTo(-8.5, -2); g.lineTo(-8.5, 7.5); g.lineTo(-12.5, 12.5); g.lineTo(-16.5, 7.5); g.closePath();
+    g.fill(); g.stroke();
+
+    // Directional Frontal Energy Riot Shield Arc!
     if (e.shielded !== false) {
       const ang = Math.atan2(dy || 1, dx || 0);
       g.save();
       g.rotate(ang);
       g.strokeStyle = '#00f0ff';
-      g.lineWidth = 3.2;
-      g.beginPath();
-      g.arc(0, 0, 18.5, -0.95, 0.95);
-      g.stroke();
+      g.lineWidth = 2.8;
+      g.beginPath(); g.arc(0, 0, 19.5, -0.92, 0.92); g.stroke();
       g.strokeStyle = 'rgba(255,255,255,0.75)';
-      g.lineWidth = 1.4;
-      g.beginPath();
-      g.arc(0, 0, 16, -0.7, 0.7);
-      g.stroke();
+      g.lineWidth = 1.2;
+      g.beginPath(); g.arc(0, 0, 17.2, -0.68, 0.68); g.stroke();
       g.restore();
     }
-  } else if (kind === 'sapper') {
-    // Tracked Demolition Rover
-    g.fillStyle = '#0f172a';
-    g.fillRect(-15, -12, 4, 24);
-    g.fillRect(11, -12, 4, 24);
 
-    // Front Bulldozer Bomb-Kicking Claws
-    g.fillStyle = '#94a3b8';
-    g.fillRect(-10, 10, 4, 5);
-    g.fillRect(6, 10, 4, 5);
+  } else if (kind === 'cryogolem') {
+    // 5. CRYO-GOLEM — Hulking 2-HP Sub-Zero Glacier Colossus (Cryo Foundry)
+    // Heavy Glacier-Stone Legs
+    g.fillStyle = '#0c4a6e';
+    g.beginPath();
+    g.roundRect(-10.5, 9 + stride * 0.4, 7.5, 7.5, 2.5);
+    g.roundRect(3, 9 - stride * 0.4, 7.5, 7.5, 2.5);
+    g.fill();
 
-    g.fillStyle = '#f59e0b';
-    g.beginPath(); g.roundRect(-12, -11, 24, 22, 5); g.fill();
-    g.strokeStyle = '#fde68a'; g.lineWidth = 1.4; g.stroke();
+    // Jagged Translucent Dorsal Shoulder Ice Spires!
+    const iceG = g.createLinearGradient(0, -23, 0, -4);
+    iceG.addColorStop(0, '#ffffff');
+    iceG.addColorStop(0.45, '#7dd3fc');
+    iceG.addColorStop(1, '#0284c7');
+    g.fillStyle = iceG;
+    g.beginPath();
+    g.moveTo(-13, -6); g.lineTo(-19, -20); g.lineTo(-8, -14); g.closePath();
+    g.moveTo(13, -6); g.lineTo(19, -20); g.lineTo(8, -14); g.closePath();
+    g.moveTo(-4.5, -15); g.lineTo(0, -23.5); g.lineTo(4.5, -15); g.closePath();
+    g.fill();
 
-    // Black/Amber Hazard Stripes
-    g.fillStyle = '#111827';
-    g.fillRect(-10, 3, 20, 5);
-    g.fillStyle = '#ffcc33';
-    for (let sx = -8; sx <= 6; sx += 6) {
-      g.fillRect(sx, 3, 3, 5);
+    // Broad V-Tapered Crystalline Frost-Granite Torso
+    const bodyG = g.createRadialGradient(-4, -6, 2, 0, 0, 17);
+    bodyG.addColorStop(0, '#e0f2fe');
+    bodyG.addColorStop(0.5, '#0284c7');
+    bodyG.addColorStop(1, '#082f49');
+    g.fillStyle = bodyG;
+    g.beginPath();
+    g.moveTo(-14.5, -11); g.lineTo(14.5, -11); g.lineTo(11, 11); g.lineTo(-11, 11); g.closePath();
+    g.fill();
+    g.strokeStyle = '#bae6fd'; g.lineWidth = 1.5; g.stroke();
+
+    // Glowing Sub-Zero Cryo-Furnace Chest Core
+    g.fillStyle = '#051324';
+    g.beginPath(); g.arc(0, 3.5, 5, 0, Math.PI * 2); g.fill();
+    g.fillStyle = '#70e2ff';
+    g.beginPath(); g.arc(0, 3.5, 3.4, 0, Math.PI * 2); g.fill();
+    g.fillStyle = '#ffffff';
+    g.beginPath(); g.arc(0, 3.5, 1.5, 0, Math.PI * 2); g.fill();
+
+    // Craggy Armored Brow & 3 Blazing Cyan Eyes
+    g.fillStyle = '#081b2e';
+    g.beginPath(); g.roundRect(-9.5, -14, 19, 9.5, 3.5); g.fill();
+    g.fillStyle = '#70e2ff';
+    g.beginPath();
+    g.arc(-5, -9, 2.1, 0, Math.PI * 2);
+    g.arc(0, -10.5, 2.3, 0, Math.PI * 2);
+    g.arc(5, -9, 2.1, 0, Math.PI * 2);
+    g.fill();
+
+    // Massive Articulated Ice-Crusher Gauntlet Fists!
+    g.fillStyle = '#38bdf8';
+    g.strokeStyle = '#e0f2fe';
+    g.lineWidth = 1.3;
+    g.beginPath();
+    g.roundRect(-19.5, -1 - stride * 0.5, 7, 10.5, 3);
+    g.roundRect(12.5, -1 + stride * 0.5, 7, 10.5, 3);
+    g.fill(); g.stroke();
+
+    if ((e.maxHp || 1) > 1) {
+      for (let h = 0; h < e.maxHp; h++) {
+        g.fillStyle = h < (e.hp ?? e.maxHp) ? '#70e2ff' : 'rgba(255,255,255,0.22)';
+        g.fillRect(-7 + h * 8, -27, 6, 2.8);
+      }
     }
 
-    // Dual Optics
-    g.fillStyle = '#09111e';
-    g.beginPath(); g.roundRect(-9, -6, 18, 6.5, 2.5); g.fill();
-    g.fillStyle = '#00f0ff';
-    g.beginPath(); g.arc(-4.5, -2.8, 2.2, 0, Math.PI * 2); g.fill();
-    g.beginPath(); g.arc(4.5, -2.8, 2.2, 0, Math.PI * 2); g.fill();
+  } else if (kind === 'hunter') {
+    // 6. SEEKER HOUND — Biomechanical Cerberus Magma-Wolf (Magma Core)
+    const fireCol = e.aggro ? '#ff2a6d' : '#ff7b1c';
 
-    // Flashing Top Bomb Beacon
-    g.fillStyle = Math.floor(tNow * 10) % 2 === 0 ? '#ff2a6d' : '#ffe066';
-    g.beginPath(); g.arc(0, -14, 4, 0, Math.PI * 2); g.fill();
-  } else if (kind === 'sniper') {
-    // 6-Legged Articulated Rail-Spider Strider
-    const swing = Math.sin(walk) * 3;
-    g.strokeStyle = '#f72585';
-    g.lineWidth = 2.2;
+    // Segmented Whipping Molten Tail
+    const wag = Math.sin(tNow * 14) * 3.5;
+    g.strokeStyle = '#7f1d1d';
+    g.lineWidth = 3;
+    g.beginPath(); g.moveTo(0, -8); g.quadraticCurveTo(wag, -16, wag * 1.4, -21); g.stroke();
+    g.fillStyle = '#ffcc33';
+    g.beginPath(); g.arc(wag * 1.4, -21.5, 3.2, 0, Math.PI * 2); g.fill();
+
+    // 4 Articulated Lupine Cyber-Legs + Talons
+    for (const [lx, ly, ph] of [[-12.5, -3, stride], [12.5, -3, -stride], [-11.5, 9, -stride], [11.5, 9, stride]]) {
+      g.fillStyle = '#1f2937';
+      g.strokeStyle = fireCol;
+      g.lineWidth = 1.2;
+      g.beginPath(); g.roundRect(lx - 3.2, ly + ph * 0.55 - 3, 6.4, 7.5, 2.2); g.fill(); g.stroke();
+      g.fillStyle = '#fde047';
+      g.fillRect(lx - 2, ly + ph * 0.55 + 3.5, 1.5, 2.2);
+      g.fillRect(lx + 0.6, ly + ph * 0.55 + 3.5, 1.5, 2.2);
+    }
+
+    // Muscular Obsidian-Crimson Armored Wolf Torso + Molten Dorsal Spines
+    const torsoG = g.createLinearGradient(0, -10, 0, 12);
+    torsoG.addColorStop(0, '#991b1b');
+    torsoG.addColorStop(1, '#18181b');
+    g.fillStyle = torsoG;
+    g.beginPath(); g.ellipse(0, 1, 11.5, 11, 0, 0, Math.PI * 2); g.fill();
+    g.strokeStyle = fireCol; g.lineWidth = 1.5; g.stroke();
+
+    // Swept Metallic Cyber-Wolf Ears
+    g.fillStyle = '#ea580c';
+    g.beginPath();
+    g.moveTo(-9.5, -7); g.lineTo(-14.5, -19.5); g.lineTo(-3.5, -12.5); g.closePath();
+    g.moveTo(9.5, -7); g.lineTo(14.5, -19.5); g.lineTo(3.5, -12.5); g.closePath();
+    g.fill();
+    g.strokeStyle = '#fde047'; g.lineWidth = 1.1; g.stroke();
+
+    // Sculpted 3D Snarling Wolf Head + Muzzle + Gleaming Fangs
+    const headG = g.createRadialGradient(-2.5, -6, 1.5, 0, -2, 12);
+    headG.addColorStop(0, '#fb923c');
+    headG.addColorStop(0.55, '#dc2626');
+    headG.addColorStop(1, '#450a0a');
+    g.fillStyle = headG;
+    g.beginPath();
+    g.moveTo(-10.5, -10); g.lineTo(10.5, -10); g.lineTo(12, 1); g.lineTo(6.5, 10.5); g.lineTo(-6.5, 10.5); g.lineTo(-12, 1); g.closePath();
+    g.fill();
+
+    // Dark Armored Brow & Snout Bridge + Blazing Predator Eyes
+    g.fillStyle = '#090d16';
+    g.beginPath(); g.roundRect(-8.5, -6.5, 17, 6.5, 2.5); g.fill();
+    g.fillStyle = '#ffe066';
+    g.beginPath();
+    g.moveTo(-7, -5); g.lineTo(-2, -3.2); g.lineTo(-2.5, -1.5); g.lineTo(-7, -2.5); g.closePath();
+    g.moveTo(7, -5); g.lineTo(2, -3.2); g.lineTo(2.5, -1.5); g.lineTo(7, -2.5); g.closePath();
+    g.fill();
+
+    // Snarling Jaw & 4 White Fangs
+    g.fillStyle = '#111827';
+    g.beginPath(); g.roundRect(-6, 3.5, 12, 5.5, 2); g.fill();
+    g.fillStyle = '#ffffff';
+    for (const fx of [-4.5, -1.8, 1.8, 4.5]) {
+      g.beginPath(); g.moveTo(fx - 1.1, 4); g.lineTo(fx, 8.2); g.lineTo(fx + 1.1, 4); g.closePath(); g.fill();
+    }
+
+  } else if (kind === 'pyromancer') {
+    // 7. PYROMANCER — Horned Volcanic Cyber-Warlock with Twin Fire-Orbs (Magma Core)
+    // Floating Solar Flame Halo Behind Shoulders
+    g.save();
+    g.rotate(tNow * 2.4);
+    g.strokeStyle = '#ff9e2c';
+    g.lineWidth = 1.8;
+    g.setLineDash([5, 4]);
+    g.beginPath(); g.arc(0, -4, 17, 0, Math.PI * 2); g.stroke();
+    g.setLineDash([]);
+    g.restore();
+
+    // Armored Volcanic Mantle & Battle Robes
+    const robeG = g.createLinearGradient(0, -3, 0, 15);
+    robeG.addColorStop(0, '#ea580c');
+    robeG.addColorStop(0.55, '#991b1b');
+    robeG.addColorStop(1, '#1f0707');
+    g.fillStyle = robeG;
+    g.beginPath();
+    g.moveTo(-10, -2); g.lineTo(10, -2); g.lineTo(13, 14); g.lineTo(4, 11.5); g.lineTo(0, 15); g.lineTo(-4, 11.5); g.lineTo(-13, 14); g.closePath();
+    g.fill();
+    g.strokeStyle = '#fbbf24'; g.lineWidth = 1.3; g.stroke();
+
+    // Molten Gold Sash & Core
+    g.fillStyle = '#ffcc33';
+    g.beginPath(); g.moveTo(0, 0.5); g.lineTo(3.5, 6); g.lineTo(0, 11.5); g.lineTo(-3.5, 6); g.closePath(); g.fill();
+
+    // Spiked Obsidian Pauldrons
+    g.fillStyle = '#18181b';
+    g.strokeStyle = '#ff5e00';
+    g.beginPath();
+    g.moveTo(-8, -3); g.lineTo(-16, -7); g.lineTo(-13.5, 2.5); g.closePath();
+    g.moveTo(8, -3); g.lineTo(16, -7); g.lineTo(13.5, 2.5); g.closePath();
+    g.fill(); g.stroke();
+
+    // Curved Molten Demon Horns + Crowned Obsidian Warlock Helm
+    const hornG = g.createLinearGradient(0, -23, 0, -11);
+    hornG.addColorStop(0, '#fef08a');
+    hornG.addColorStop(0.5, '#f97316');
+    hornG.addColorStop(1, '#7f1d1d');
+    g.fillStyle = hornG;
+    g.beginPath();
+    g.moveTo(-8, -11); g.quadraticCurveTo(-17, -16, -12.5, -23); g.quadraticCurveTo(-9, -18, -5, -14); g.closePath();
+    g.moveTo(8, -11); g.quadraticCurveTo(17, -16, 12.5, -23); g.quadraticCurveTo(9, -18, 5, -14); g.closePath();
+    g.fill();
+
+    g.fillStyle = '#18181b';
+    g.strokeStyle = '#fbbf24';
+    g.lineWidth = 1.4;
+    g.beginPath(); g.roundRect(-9.5, -16, 19, 13.5, 6); g.fill(); g.stroke();
+
+    // Blazing Warlock Slit Eyes
+    g.fillStyle = '#ffcc33';
+    g.beginPath();
+    g.moveTo(-6.5, -10.5); g.lineTo(-1.8, -8.8); g.lineTo(-2.2, -7); g.lineTo(-6.5, -8.5); g.closePath();
+    g.moveTo(6.5, -10.5); g.lineTo(1.8, -8.8); g.lineTo(2.2, -7); g.lineTo(6.5, -8.5); g.closePath();
+    g.fill();
+
+    // Twin Levitating Solar Fire-Orbs in Gauntlets!
     for (const side of [-1, 1]) {
-      for (let li = -1; li <= 1; li++) {
-        const off = li === 0 ? -swing : swing;
+      const ox = side * 14.5;
+      const oy = 3 + Math.sin(tNow * 8 + side) * 2;
+      g.fillStyle = '#ff5e00';
+      g.beginPath(); g.arc(ox, oy, 4.4, 0, Math.PI * 2); g.fill();
+      g.fillStyle = '#fef08a';
+      g.beginPath(); g.arc(ox, oy, 2.2, 0, Math.PI * 2); g.fill();
+    }
+
+  } else if (kind === 'mantis') {
+    // 8. BIO-MANTIS — Chitinous Insectoid Assassin with Twin Raptorial Plasma-Scythes (Verdant Bio-Dome)
+    // Translucent Iridescent Folded Bio-Wings
+    g.fillStyle = 'rgba(163, 230, 53, 0.28)';
+    g.strokeStyle = '#84cc16';
+    g.lineWidth = 1.1;
+    g.beginPath();
+    g.ellipse(-6.5, 2, 5, 11, -0.28, 0, Math.PI * 2);
+    g.ellipse(6.5, 2, 5, 11, 0.28, 0, Math.PI * 2);
+    g.fill(); g.stroke();
+
+    // 4 Articulated Chitin Stalker Legs
+    g.strokeStyle = '#15803d';
+    g.lineWidth = 2.4;
+    for (const side of [-1, 1]) {
+      for (const ry of [2, 8]) {
+        const off = (side * ry > 0 ? stride : -stride) * 0.55;
         g.beginPath();
-        g.moveTo(side * 8, li * 5);
-        g.lineTo(side * 14, li * 7 + side * off * 0.5);
-        g.lineTo(side * 18, li * 10 + side * off);
+        g.moveTo(side * 6, ry);
+        g.lineTo(side * 13, ry + 2 + off * 0.5);
+        g.lineTo(side * 15, ry + 6.5 + off);
         g.stroke();
       }
     }
-    g.fillStyle = '#1e1035';
-    g.beginPath(); g.arc(0, 0, 11.5, 0, Math.PI * 2); g.fill();
-    g.strokeStyle = '#f72585'; g.lineWidth = 2.2; g.stroke();
 
-    // Rotating Railgun Turret Barrel
-    const aimAng = Math.atan2(e.aimTimer > 0 ? e.aimDy : dy, e.aimTimer > 0 ? e.aimDx : dx);
+    // Segmented Emerald-Jade 3D Thorax
+    const thxG = g.createLinearGradient(0, -6, 0, 14);
+    thxG.addColorStop(0, '#84cc16');
+    thxG.addColorStop(0.55, '#15803d');
+    thxG.addColorStop(1, '#052e16');
+    g.fillStyle = thxG;
+    g.beginPath(); g.ellipse(0, 4, 7.8, 10.5, 0, 0, Math.PI * 2); g.fill();
+    g.strokeStyle = '#bef264'; g.lineWidth = 1.2; g.stroke();
+
+    // Twin Swept Raptorial Plasma-Scythe Blades!
+    const slash = e.aggro ? Math.sin(tNow * 24) * 0.32 : Math.sin(walk) * 0.16;
+    for (const side of [-1, 1]) {
+      g.save();
+      g.translate(side * 8.5, -2);
+      g.rotate(side * (0.28 + slash));
+      g.fillStyle = '#14532d';
+      g.fillRect(-1.8, -2, 3.6, 8);
+      // Curved glowing neon-lime scythe edge
+      g.fillStyle = '#bef264';
+      g.strokeStyle = '#ffffff';
+      g.lineWidth = 0.9;
+      g.beginPath();
+      g.moveTo(0, 3);
+      g.quadraticCurveTo(side * 10.5, 6, side * 6.5, 16.5);
+      g.quadraticCurveTo(side * 3.5, 9.5, -side * 1.5, 5);
+      g.closePath();
+      g.fill(); g.stroke();
+      g.restore();
+    }
+
+    // Triangular Alien Mantis Head + Antennae + Magenta Compound Eyes
+    g.strokeStyle = '#a3e635';
+    g.lineWidth = 1.5;
+    g.beginPath();
+    g.moveTo(-3.5, -15); g.quadraticCurveTo(-9, -22, -13, -21);
+    g.moveTo(3.5, -15); g.quadraticCurveTo(9, -22, 13, -21);
+    g.stroke();
+
+    g.fillStyle = '#166534';
+    g.strokeStyle = '#bef264';
+    g.lineWidth = 1.3;
+    g.beginPath();
+    g.moveTo(-10.5, -14.5); g.lineTo(10.5, -14.5); g.lineTo(3.5, -3.5); g.lineTo(-3.5, -3.5); g.closePath();
+    g.fill(); g.stroke();
+
+    // Multifaceted Glowing Magenta-Crimson Compound Eyes
+    g.fillStyle = '#f72585';
+    g.beginPath();
+    g.ellipse(-7.2, -11.5, 4.2, 2.8, 0.45, 0, Math.PI * 2);
+    g.ellipse(7.2, -11.5, 4.2, 2.8, -0.45, 0, Math.PI * 2);
+    g.fill();
+    g.fillStyle = '#ffffff';
+    g.beginPath(); g.arc(-8, -12.3, 1, 0, Math.PI * 2); g.arc(6.4, -12.3, 1, 0, Math.PI * 2); g.fill();
+
+  } else if (kind === 'slime') {
+    // 9. HYDRA-OOZE — Translucent 3D Bioluminescent Xenomorph Symbiote (Verdant Bio-Dome)
+    const squish = Math.sin(tNow * 7 + walk * 0.4) * 0.08;
     g.save();
-    g.rotate(aimAng);
-    g.fillStyle = '#cbd5e1';
-    g.fillRect(4, -3, 12, 2);
-    g.fillRect(4, 1, 12, 2);
-    g.fillStyle = e.aimTimer > 0 ? '#ffffff' : '#00f0ff';
-    g.beginPath(); g.arc(2, 0, 4.2, 0, Math.PI * 2); g.fill();
+    g.scale(1 + squish, 1 - squish);
+
+    // Writhing Base Bio-Pseudopods
+    g.fillStyle = 'rgba(21, 128, 61, 0.9)';
+    for (let k = -2; k <= 2; k++) {
+      const px = k * 5.2;
+      const py = 11.5 + Math.sin(tNow * 9 + k * 1.4) * 2.2;
+      g.beginPath(); g.ellipse(px, py, 4.2, 3.2, 0, 0, Math.PI * 2); g.fill();
+    }
+
+    // Outer Translucent 3D Gelatinous Xenomorph Carapace
+    const oozeG = g.createRadialGradient(-4.5, -6, 2, 0, 0, 16);
+    oozeG.addColorStop(0, 'rgba(217, 249, 157, 0.95)');
+    oozeG.addColorStop(0.5, 'rgba(101, 163, 13, 0.88)');
+    oozeG.addColorStop(1, 'rgba(20, 83, 45, 0.94)');
+    g.fillStyle = oozeG;
+    g.beginPath();
+    g.moveTo(-14, 9);
+    g.bezierCurveTo(-16, -5, -10, -15.5, 0, -15.5);
+    g.bezierCurveTo(10, -15.5, 16, -5, 14, 9);
+    g.quadraticCurveTo(0, 14.5, -14, 9);
+    g.closePath();
+    g.fill();
+    g.strokeStyle = '#bef264'; g.lineWidth = 1.5; g.stroke();
+
+    // Suspended Internal Glowing Magenta-Violet DNA Nucleus!
+    const nucY = -1.5 + Math.sin(tNow * 6) * 1.5;
+    g.fillStyle = 'rgba(217, 70, 239, 0.45)';
+    g.beginPath(); g.arc(0, nucY, 7.2, 0, Math.PI * 2); g.fill();
+    g.fillStyle = '#f0abfc';
+    g.beginPath(); g.arc(0, nucY, 4.1, 0, Math.PI * 2); g.fill();
+
+    // Floating Internal Bio-Bubbles
+    g.fillStyle = 'rgba(236, 252, 203, 0.75)';
+    g.beginPath();
+    g.arc(-7.5, -5, 2, 0, Math.PI * 2);
+    g.arc(7.8, 2.5, 1.7, 0, Math.PI * 2);
+    g.arc(5.2, -7.5, 1.3, 0, Math.PI * 2);
+    g.fill();
+
+    // Fierce Triple Alien Eyes & Jagged Bio-Maw
+    g.fillStyle = '#052e16';
+    g.beginPath(); g.roundRect(-7.5, 3, 15, 4.5, 2); g.fill();
+    g.fillStyle = '#fef08a';
+    g.beginPath();
+    g.arc(-5.5, -2.5, 2.1, 0, Math.PI * 2);
+    g.arc(0, -5.5, 2.3, 0, Math.PI * 2);
+    g.arc(5.5, -2.5, 2.1, 0, Math.PI * 2);
+    g.fill();
+
+    // Wet-Glass Specular Crescent Highlight
+    g.strokeStyle = 'rgba(255, 255, 255, 0.75)';
+    g.lineWidth = 2;
+    g.lineCap = 'round';
+    g.beginPath(); g.arc(-3, -6, 7.5, Math.PI * 1.08, Math.PI * 1.48); g.stroke();
     g.restore();
+
+  } else if (kind === 'valkyrie') {
+    // 10. STORM VALKYRIE — Winged Golden-Cobalt Cyber-Seraph with Forked Tesla Lance (Storm Sky-Fortress)
+    const flap = Math.sin(tNow * 9 + walk * 0.3) * 3.8;
+
+    // Grand Articulated 3-Pinion Golden-Cyan Energy Wings!
+    for (const side of [-1, 1]) {
+      g.save();
+      g.scale(side, 1);
+      const wingG = g.createLinearGradient(4, -8, 21, -14);
+      wingG.addColorStop(0, '#38bdf8');
+      wingG.addColorStop(0.55, '#facc15');
+      wingG.addColorStop(1, '#fef08a');
+      g.fillStyle = wingG;
+      g.strokeStyle = '#ffffff';
+      g.lineWidth = 0.9;
+      // Upper, middle & lower wing pinions
+      g.beginPath(); g.moveTo(6, -5); g.lineTo(21.5, -16 + flap); g.lineTo(17, -7 + flap * 0.7); g.lineTo(6, -1); g.closePath(); g.fill(); g.stroke();
+      g.beginPath(); g.moveTo(6, -1); g.lineTo(19.5, -6 + flap * 0.6); g.lineTo(15, 1 + flap * 0.4); g.lineTo(6, 3); g.closePath(); g.fill();
+      g.beginPath(); g.moveTo(5, 2); g.lineTo(15.5, 4 + flap * 0.3); g.lineTo(11, 9); g.lineTo(5, 6); g.closePath(); g.fill();
+      g.restore();
+    }
+
+    // Armored Golden Greaves
+    g.fillStyle = '#eab308';
+    g.beginPath();
+    g.ellipse(-4.5, 14 + stride * 0.35, 3.8, 3, 0, 0, Math.PI * 2);
+    g.ellipse(4.5, 14 - stride * 0.35, 3.8, 3, 0, 0, Math.PI * 2);
+    g.fill();
+
+    // Royal-Cobalt & Gold Valkyrie Cuirass
+    const armorG = g.createLinearGradient(0, -3, 0, 13);
+    armorG.addColorStop(0, '#facc15');
+    armorG.addColorStop(0.45, '#1d4ed8');
+    armorG.addColorStop(1, '#0f172a');
+    g.fillStyle = armorG;
+    g.beginPath(); g.roundRect(-8.5, -2, 17, 13.5, 5); g.fill();
+    g.strokeStyle = '#fde047'; g.lineWidth = 1.3; g.stroke();
+
+    // Winged Golden Valkyrie Battle-Helm + Glowing Sky-Cyan Visor
+    g.fillStyle = '#fef08a';
+    g.beginPath();
+    g.moveTo(-9, -11); g.lineTo(-15.5, -19); g.lineTo(-7.5, -15); g.closePath();
+    g.moveTo(9, -11); g.lineTo(15.5, -19); g.lineTo(7.5, -15); g.closePath();
+    g.fill();
+
+    const helmG = g.createRadialGradient(-3, -13, 1.5, 0, -9, 11.5);
+    helmG.addColorStop(0, '#ffffff');
+    helmG.addColorStop(0.55, '#facc15');
+    helmG.addColorStop(1, '#a16207');
+    g.fillStyle = helmG;
+    g.beginPath(); g.roundRect(-9.8, -17, 19.6, 14.5, 7); g.fill();
+    g.strokeStyle = '#fef9c3'; g.lineWidth = 1.2; g.stroke();
+
+    g.fillStyle = '#061024';
+    g.beginPath(); g.roundRect(-7.5, -12, 15, 6.5, 3); g.fill();
+    g.fillStyle = '#38bdf8';
+    g.beginPath(); g.roundRect(-5.2, -10.5, 3.2, 4, 1.2); g.roundRect(2, -10.5, 3.2, 4, 1.2); g.fill();
+
+    // Left Arm Storm Buckler + Right Hand Forked Tesla Lance!
+    g.fillStyle = '#38bdf8';
+    g.strokeStyle = '#fde047';
+    g.lineWidth = 1.5;
+    g.beginPath(); g.arc(-11.5, 4, 5.2, 0, Math.PI * 2); g.fill(); g.stroke();
+
+    g.save();
+    g.translate(12.5, 3);
+    g.rotate(0.22);
+    g.strokeStyle = '#fef08a';
+    g.lineWidth = 2.2;
+    g.beginPath(); g.moveTo(0, 11); g.lineTo(0, -16); g.stroke();
+    // Forked Tesla Prongs
+    g.strokeStyle = '#38bdf8';
+    g.lineWidth = 1.8;
+    g.beginPath();
+    g.moveTo(-3.8, -19.5); g.lineTo(-2.2, -13); g.lineTo(2.2, -13); g.lineTo(3.8, -19.5);
+    g.moveTo(0, -13); g.lineTo(0, -21.5);
+    g.stroke();
+    g.restore();
+
+  } else if (kind === 'zephyr') {
+    // 11. ZEPHYR RAPTOR — Biomechanical Thunder-Falcon Interceptor (Storm Sky-Fortress)
+    const flap = Math.sin(tNow * 13 + walk * 0.4) * 4.5;
+
+    // V-Tail Stabilizer Plumes
+    g.fillStyle = '#0284c7';
+    g.beginPath();
+    g.moveTo(-3, -10); g.lineTo(-9, -19.5); g.lineTo(0, -14.5); g.lineTo(9, -19.5); g.lineTo(3, -10); g.closePath();
+    g.fill();
+
+    // Swept Articulated Titanium-Cyan Jet-Pinion Wings!
+    for (const side of [-1, 1]) {
+      g.save();
+      g.scale(side, 1);
+      const wg = g.createLinearGradient(4, -4, 21, -8);
+      wg.addColorStop(0, '#0284c7');
+      wg.addColorStop(0.6, '#38bdf8');
+      wg.addColorStop(1, '#f8fafc');
+      g.fillStyle = wg;
+      g.strokeStyle = '#facc15';
+      g.lineWidth = 1.1;
+      g.beginPath();
+      g.moveTo(6, -6);
+      g.lineTo(21.5, -12 + flap);
+      g.lineTo(18.5, -2 + flap * 0.6);
+      g.lineTo(13, 4 + flap * 0.3);
+      g.lineTo(6, 3);
+      g.closePath();
+      g.fill(); g.stroke();
+      g.restore();
+    }
+
+    // Tucked Golden Metallic Raptor Talons
+    g.strokeStyle = '#facc15';
+    g.lineWidth = 2.2;
+    for (const tx of [-5, 5]) {
+      g.beginPath();
+      g.moveTo(tx, 9.5); g.lineTo(tx - 2, 14.5);
+      g.moveTo(tx, 9.5); g.lineTo(tx + 2, 14.5);
+      g.stroke();
+    }
+
+    // Streamlined Silver-Azure Raptor Fuselage & Chest Turbine
+    const bodyG = g.createRadialGradient(-3, -3, 1.5, 0, 1, 12);
+    bodyG.addColorStop(0, '#f0f9ff');
+    bodyG.addColorStop(0.55, '#0284c7');
+    bodyG.addColorStop(1, '#0f172a');
+    g.fillStyle = bodyG;
+    g.beginPath(); g.ellipse(0, 1.5, 8.8, 10.5, 0, 0, Math.PI * 2); g.fill();
+    g.strokeStyle = '#7dd3fc'; g.lineWidth = 1.3; g.stroke();
+
+    // Sculpted Armored Falcon Head + Swept Crest + Hooked Golden Cyber-Beak!
+    g.fillStyle = '#0f172a';
+    g.strokeStyle = '#38bdf8';
+    g.lineWidth = 1.4;
+    g.beginPath(); g.roundRect(-8.5, -13.5, 17, 12, 6); g.fill(); g.stroke();
+
+    // Fierce Electric-Gold Predator Eyes
+    g.fillStyle = '#facc15';
+    g.beginPath();
+    g.moveTo(-6.8, -9.5); g.lineTo(-2, -7.8); g.lineTo(-2.5, -5.8); g.lineTo(-6.8, -7.2); g.closePath();
+    g.moveTo(6.8, -9.5); g.lineTo(2, -7.8); g.lineTo(2.5, -5.8); g.lineTo(6.8, -7.2); g.closePath();
+    g.fill();
+
+    // Hooked Golden Raptor Beak
+    const beakG = g.createLinearGradient(0, -6, 0, 3);
+    beakG.addColorStop(0, '#fef08a');
+    beakG.addColorStop(1, '#d97706');
+    g.fillStyle = beakG;
+    g.beginPath();
+    g.moveTo(-3.8, -5.5); g.lineTo(3.8, -5.5); g.lineTo(0, 2.8); g.closePath();
+    g.fill();
+
+  } else if (kind === 'phantom') {
+    // 12. VOID REAPER — Hooded Dimensional Grim-Wraith with Quantum Energy-Scythe (Quantum Abyss)
+    // Swirling Abyssal Vortex Tail
+    const sway = Math.sin(tNow * 6) * 2.5;
+    const cloakG = g.createLinearGradient(0, -14, 0, 16);
+    cloakG.addColorStop(0, '#9333ea');
+    cloakG.addColorStop(0.6, '#4c1d95');
+    cloakG.addColorStop(1, '#140326');
+    g.fillStyle = cloakG;
+    g.beginPath();
+    g.moveTo(-9.5, -3); g.lineTo(9.5, -3);
+    g.lineTo(12, 9); g.lineTo(5 + sway, 15.5); g.lineTo(0, 10.5); g.lineTo(-5 + sway, 15.5); g.lineTo(-12, 9);
+    g.closePath();
+    g.fill();
+    g.strokeStyle = '#d8b4fe'; g.lineWidth = 1.2; g.stroke();
+
+    // Spiked Obsidian Spectral Pauldrons
+    g.fillStyle = '#1e1035';
+    g.strokeStyle = '#05ffa1';
+    g.lineWidth = 1.2;
+    g.beginPath();
+    g.moveTo(-8, -3); g.lineTo(-16.5, -7.5); g.lineTo(-13, 1.5); g.closePath();
+    g.moveTo(8, -3); g.lineTo(16.5, -7.5); g.lineTo(13, 1.5); g.closePath();
+    g.fill(); g.stroke();
+
+    // Deep Sculpted 3D Cowled Reaper Hood + Cyber-Skull Mask!
+    const hoodG = g.createRadialGradient(-3, -13, 2, 0, -9, 13);
+    hoodG.addColorStop(0, '#a855f7');
+    hoodG.addColorStop(0.65, '#4c1d95');
+    hoodG.addColorStop(1, '#0f051d');
+    g.fillStyle = hoodG;
+    g.beginPath();
+    g.moveTo(0, -20.5);
+    g.bezierCurveTo(11, -18, 12.5, -6, 9.5, -1.5);
+    g.lineTo(-9.5, -1.5);
+    g.bezierCurveTo(-12.5, -6, -11, -18, 0, -20.5);
+    g.closePath();
+    g.fill();
+    g.strokeStyle = '#e9d5ff'; g.lineWidth = 1.3; g.stroke();
+
+    // Recessed Abyssal Hood Shadow & Metallic Skull Faceplate
+    g.fillStyle = '#07020f';
+    g.beginPath(); g.ellipse(0, -8.5, 7.2, 6.8, 0, 0, Math.PI * 2); g.fill();
+    g.fillStyle = '#cbd5e1';
+    g.beginPath();
+    g.moveTo(-5.2, -11.5); g.lineTo(5.2, -11.5); g.lineTo(4.2, -4.5); g.lineTo(2, -3); g.lineTo(-2, -3); g.lineTo(-4.2, -4.5); g.closePath();
+    g.fill();
+    g.fillStyle = '#05ffa1';
+    g.beginPath(); g.arc(-2.5, -8.2, 1.9, 0, Math.PI * 2); g.arc(2.5, -8.2, 1.9, 0, Math.PI * 2); g.fill();
+
+    // Sweeping Crescent Quantum Energy-Scythe!
+    g.save();
+    g.rotate(-0.35 + Math.sin(tNow * 5) * 0.08);
+    g.strokeStyle = '#cbd5e1';
+    g.lineWidth = 2.2;
+    g.beginPath(); g.moveTo(-12, 11); g.lineTo(10, -14); g.stroke();
+
+    const bladeG = g.createLinearGradient(4, -18, 20, -4);
+    bladeG.addColorStop(0, '#05ffa1');
+    bladeG.addColorStop(1, '#e879f9');
+    g.fillStyle = bladeG;
+    g.beginPath();
+    g.moveTo(8, -14.5);
+    g.quadraticCurveTo(22, -13, 19.5, 1.5);
+    g.quadraticCurveTo(14.5, -8, 6.5, -11);
+    g.closePath();
+    g.fill();
+    g.restore();
+
+  } else if (kind === 'gravitor') {
+    // 13. VOID GRAVITOR — Levitating Celestial Singularity Archon (Quantum Abyss)
+    // Rotating Golden-Violet Astrolabe Halo Behind Head
+    g.save();
+    g.translate(0, -10);
+    g.rotate(tNow * 2.2);
+    g.strokeStyle = '#c084fc';
+    g.lineWidth = 1.6;
+    g.beginPath(); g.arc(0, 0, 14.5, 0, Math.PI * 2); g.stroke();
+    g.fillStyle = '#05ffa1';
+    for (let k = 0; k < 4; k++) {
+      const a = (k * Math.PI) / 2;
+      g.beginPath(); g.arc(Math.cos(a) * 14.5, Math.sin(a) * 14.5, 2, 0, Math.PI * 2); g.fill();
+    }
+    g.restore();
+
+    // Ornate 3D Astral Mantle & High-Collar Robes
+    const archG = g.createLinearGradient(0, -4, 0, 15);
+    archG.addColorStop(0, '#a855f7');
+    archG.addColorStop(0.55, '#3b0764');
+    archG.addColorStop(1, '#090314');
+    g.fillStyle = archG;
+    g.beginPath();
+    g.moveTo(-12.5, -4); g.lineTo(12.5, -4); g.lineTo(9.5, 14.5); g.lineTo(0, 16.5); g.lineTo(-9.5, 14.5); g.closePath();
+    g.fill();
+    g.strokeStyle = '#e9d5ff'; g.lineWidth = 1.4; g.stroke();
+
+    // Embedded Swirling Black Hole Singularity Core in Chest!
+    g.fillStyle = '#030008';
+    g.beginPath(); g.arc(0, 5.5, 5.2, 0, Math.PI * 2); g.fill();
+    g.strokeStyle = '#05ffa1';
+    g.lineWidth = 1.5;
+    g.beginPath(); g.arc(0, 5.5, 5.2, tNow * 6, tNow * 6 + Math.PI * 1.4); g.stroke();
+
+    // Faceted Crowned Gold-Obsidian Archon Mask + Triple Psionic Eyes
+    g.fillStyle = '#fbbf24';
+    g.beginPath();
+    g.moveTo(-7, -15); g.lineTo(-5, -21.5); g.lineTo(0, -17.5); g.lineTo(5, -21.5); g.lineTo(7, -15); g.closePath();
+    g.fill();
+
+    const maskG = g.createRadialGradient(-2, -12, 1, 0, -10, 9.5);
+    maskG.addColorStop(0, '#f8fafc');
+    maskG.addColorStop(0.5, '#c084fc');
+    maskG.addColorStop(1, '#2e1065');
+    g.fillStyle = maskG;
+    g.beginPath();
+    g.moveTo(-8, -15.5); g.lineTo(8, -15.5); g.lineTo(6.5, -4.5); g.lineTo(0, -2.5); g.lineTo(-6.5, -4.5); g.closePath();
+    g.fill();
+
+    g.fillStyle = '#05ffa1';
+    g.beginPath();
+    g.arc(-3.5, -9.5, 1.7, 0, Math.PI * 2);
+    g.arc(0, -12, 1.9, 0, Math.PI * 2);
+    g.arc(3.5, -9.5, 1.7, 0, Math.PI * 2);
+    g.fill();
+
+    // Orbiting Crystalline Void Pylons in Telekinetic Hands
+    for (const side of [-1, 1]) {
+      const px = side * 15.5;
+      const py = 2.5 + Math.cos(tNow * 7 + side) * 2.5;
+      g.fillStyle = '#c084fc';
+      g.strokeStyle = '#ffffff';
+      g.lineWidth = 1;
+      g.beginPath();
+      g.moveTo(px, py - 5); g.lineTo(px + 3.2, py); g.lineTo(px, py + 5); g.lineTo(px - 3.2, py); g.closePath();
+      g.fill(); g.stroke();
+    }
+
   } else if (kind === 'rival') {
+    // 14. RIVAL BOMBER — Elite Horned Dark-Spec Cyber-Bomber (Quantum Abyss & Royale)
     const rCol = e.rivalColor || '#ef4444';
+    // Spiked Dark-Spec Shoulder Pauldrons
+    g.fillStyle = '#0f172a';
+    g.strokeStyle = rCol;
+    g.lineWidth = 1.4;
+    g.beginPath();
+    g.moveTo(-8, -2); g.lineTo(-16.5, -5.5); g.lineTo(-13.5, 2.5); g.closePath();
+    g.moveTo(8, -2); g.lineTo(16.5, -5.5); g.lineTo(13.5, 2.5); g.closePath();
+    g.fill(); g.stroke();
+
     renderCyberBomber(g, {
       suitCol: rCol,
       helmetCol: '#1e293b',
@@ -6448,56 +8033,78 @@ function renderEnemyModel(g, e, tNow = 0) {
       dirY: dy,
       walk
     });
+
+    // Elite Demon-Brow Visor Crest Horns!
+    if (dy >= 0) {
+      g.fillStyle = '#ffcc33';
+      g.beginPath();
+      g.moveTo(-8, -15); g.lineTo(-14.5, -20.5); g.lineTo(-4.5, -16.5); g.closePath();
+      g.moveTo(8, -15); g.lineTo(14.5, -20.5); g.lineTo(4.5, -16.5); g.closePath();
+      g.fill();
+    }
+
     if ((e.maxHp || 1) > 1) {
       for (let h = 0; h < e.maxHp; h++) {
         g.fillStyle = h < e.hp ? '#05ffa1' : 'rgba(255,255,255,0.22)';
         g.fillRect(-8 + h * 6, -30, 5, 3);
       }
     }
+
   } else if (kind === 'boss') {
-    // Detailed 2.5D Omega Tank-Core Portrait for Bestiary
+    // 15. 6 WORLD BOSSES — Crowned Colossal Titan Dreadnought Bestiary Portrait
     g.fillStyle = '#090f1d';
-    g.strokeStyle = '#334155';
+    g.strokeStyle = '#475569';
     g.lineWidth = 1.4;
-    g.beginPath(); g.roundRect(-22, -14, 7, 29, 2.5); g.fill(); g.stroke();
-    g.beginPath(); g.roundRect(15, -14, 7, 29, 2.5); g.fill(); g.stroke();
-    g.fillStyle = '#475569';
-    for (let ty = -11; ty <= 10; ty += 5) {
-      g.fillRect(-21, ty, 5, 2);
-      g.fillRect(16, ty, 5, 2);
-    }
-    // Dual shoulder missile pods
+    g.beginPath(); g.roundRect(-22, -13, 6.5, 28, 2.5); g.roundRect(15.5, -13, 6.5, 28, 2.5); g.fill(); g.stroke();
+
+    // Swept Golden Titan Horns + Shoulder Missile Pods
+    g.fillStyle = '#ffcc33';
+    g.beginPath();
+    g.moveTo(-12, -14); g.lineTo(-21, -23); g.lineTo(-6, -17); g.closePath();
+    g.moveTo(12, -14); g.lineTo(21, -23); g.lineTo(6, -17); g.closePath();
+    g.fill();
+
     g.fillStyle = '#1e293b';
     g.strokeStyle = '#00f0ff';
-    g.lineWidth = 1.4;
-    g.beginPath(); g.roundRect(-16, -20, 10, 7, 2); g.fill(); g.stroke();
-    g.beginPath(); g.roundRect(6, -20, 10, 7, 2); g.fill(); g.stroke();
-    g.fillStyle = '#ff2a6d';
-    g.beginPath(); g.arc(-13, -16.5, 1.7, 0, Math.PI * 2); g.arc(-9, -16.5, 1.7, 0, Math.PI * 2); g.fill();
-    g.beginPath(); g.arc(9, -16.5, 1.7, 0, Math.PI * 2); g.arc(13, -16.5, 1.7, 0, Math.PI * 2); g.fill();
-    // Main armored hull
-    g.fillStyle = '#0f172a';
+    g.lineWidth = 1.3;
+    g.beginPath(); g.roundRect(-15.5, -19.5, 9.5, 6.5, 2); g.roundRect(6, -19.5, 9.5, 6.5, 2); g.fill(); g.stroke();
+
+    const hullG = g.createLinearGradient(0, -15, 0, 15);
+    hullG.addColorStop(0, '#312e81');
+    hullG.addColorStop(1, '#090d16');
+    g.fillStyle = hullG;
     g.strokeStyle = '#ff2a6d';
     g.lineWidth = 2.2;
     g.beginPath(); g.roundRect(-16, -14, 32, 28, 7); g.fill(); g.stroke();
-    // Angry visor slit & glowing eyes
+
     g.fillStyle = '#050811';
     g.beginPath(); g.roundRect(-12, -10, 24, 7, 2); g.fill();
     g.fillStyle = '#ffcc33';
-    g.beginPath(); g.moveTo(-10, -8); g.lineTo(-2, -6); g.lineTo(-2, -4.5); g.lineTo(-10, -5.5); g.closePath(); g.fill();
-    g.beginPath(); g.moveTo(10, -8); g.lineTo(2, -6); g.lineTo(2, -4.5); g.lineTo(10, -5.5); g.closePath(); g.fill();
-    // Central plasma reactor core
-    g.fillStyle = 'rgba(0, 240, 255, 0.28)';
-    g.beginPath(); g.arc(0, 5, 8.5, 0, Math.PI * 2); g.fill();
+    g.beginPath();
+    g.moveTo(-10, -8); g.lineTo(-2, -6); g.lineTo(-2, -4.5); g.lineTo(-10, -5.5); g.closePath();
+    g.moveTo(10, -8); g.lineTo(2, -6); g.lineTo(2, -4.5); g.lineTo(10, -5.5); g.closePath();
+    g.fill();
+
+    g.fillStyle = 'rgba(0, 240, 255, 0.3)';
+    g.beginPath(); g.arc(0, 5, 8.2, 0, Math.PI * 2); g.fill();
     g.fillStyle = '#00f0ff';
-    g.beginPath(); g.arc(0, 5, 5.5, 0, Math.PI * 2); g.fill();
+    g.beginPath(); g.arc(0, 5, 5.2, 0, Math.PI * 2); g.fill();
     g.fillStyle = '#ffffff';
-    g.beginPath(); g.arc(0, 5, 2.8, 0, Math.PI * 2); g.fill();
+    g.beginPath(); g.arc(0, 5, 2.5, 0, Math.PI * 2); g.fill();
   }
 }
 
 function drawSingleEnemy(e) {
-  const bob = Math.sin((e.walkPhase || 0) + e.c) * 1.6;
+  const isAerial =
+    e.kind === 'drone' ||
+    e.kind === 'pyromancer' ||
+    e.kind === 'valkyrie' ||
+    e.kind === 'zephyr' ||
+    e.kind === 'phantom' ||
+    e.kind === 'gravitor';
+  const bob = isAerial
+    ? Math.sin(elapsed * 6.2 + e.c) * 2.6 - 2.2
+    : Math.sin((e.walkPhase || 0) + e.c) * 1.5;
 
   // Raycasted Sniper Laser Sight (stops cleanly on walls, crates & bombs!)
   if (e.kind === 'sniper' && e.aimTimer > 0) {
@@ -6523,13 +8130,15 @@ function drawSingleEnemy(e) {
   ctx.translate(e.x, e.y + bob);
 
   // Ground shadow
+  const shScale = e.isMini ? 0.72 : 1.0;
   ctx.fillStyle = 'rgba(0, 0, 0, 0.42)';
   ctx.beginPath();
-  ctx.ellipse(0, 14 - bob, 13, 5, 0, 0, Math.PI * 2);
+  ctx.ellipse(0, 14.5 - bob, 13 * shScale, 5 * shScale, 0, 0, Math.PI * 2);
   ctx.fill();
 
+  if (e.isMini) ctx.scale(0.72, 0.72);
   if (e.invuln > 0 && Math.floor(elapsed * 16) % 2 === 0) ctx.globalAlpha = 0.45;
-  else if (e.kind === 'phantom') ctx.globalAlpha = 0.84;
+  else if (e.kind === 'phantom') ctx.globalAlpha = 0.88;
 
   renderEnemyModel(ctx, e, elapsed);
 
@@ -6564,7 +8173,15 @@ function drawBossEntity() {
     const rx = ret.c * TILE + TILE / 2;
     const ry = ret.r * TILE + TILE / 2;
     const ratio = Math.max(0, ret.t / ret.maxT);
-    const rCol = ret.ice ? '#70e2ff' : ret.quantum ? '#05ffa1' : '#ff2a6d';
+    const rCol = ret.ice
+      ? '#70e2ff'
+      : ret.bio
+        ? '#84cc16'
+        : ret.storm
+          ? '#facc15'
+          : ret.quantum
+            ? '#05ffa1'
+            : '#ff2a6d';
 
     drawGlow(rx, ry, 28, rCol, 0.25 * (1 - ratio));
     ctx.save();
@@ -6580,7 +8197,6 @@ function drawBossEntity() {
     ctx.stroke();
 
     if (ratio < 0.35) {
-      // Incoming orbital strike laser!
       ctx.strokeStyle = '#ffffff';
       ctx.lineWidth = (0.35 - ratio) * 16;
       ctx.beginPath();
@@ -6591,15 +8207,16 @@ function drawBossEntity() {
     ctx.restore();
   }
 
-  const coreCol = boss.variant === 1
-    ? (boss.phase === 3 ? '#ff2a6d' : '#70e2ff')
-    : boss.variant === 2
-      ? (boss.phase === 3 ? '#ff2a6d' : '#ffcc33')
-      : boss.variant === 3
-        ? (boss.phase === 3 ? '#c77dff' : '#05ffa1')
-        : (boss.phase === 3 ? '#ff2a6d' : boss.phase === 2 ? '#ff7b1c' : '#00f0ff');
+  const v = boss.variant || 0;
+  const coreCol =
+    v === 1 ? (boss.phase === 3 ? '#ff2a6d' : '#70e2ff') :
+    v === 2 ? (boss.phase === 3 ? '#ff2a6d' : '#ffcc33') :
+    v === 3 ? (boss.phase === 3 ? '#d946ef' : '#84cc16') :
+    v === 4 ? (boss.phase === 3 ? '#38bdf8' : '#facc15') :
+    v === 5 ? (boss.phase === 3 ? '#c77dff' : '#05ffa1') :
+    (boss.phase === 3 ? '#ff2a6d' : boss.phase === 2 ? '#ff7b1c' : '#00f0ff');
 
-  drawGlow(boss.x, boss.y, 64, coreCol, 0.38);
+  drawGlow(boss.x, boss.y, 68, coreCol, 0.4);
 
   ctx.save();
   ctx.translate(boss.x, boss.y);
@@ -6608,52 +8225,168 @@ function drawBossEntity() {
   // Ground shadow
   ctx.fillStyle = 'rgba(0, 0, 0, 0.55)';
   ctx.beginPath();
-  ctx.ellipse(0, 32, 42, 14, 0, 0, Math.PI * 2);
+  ctx.ellipse(0, 34, 44, 14, 0, 0, Math.PI * 2);
   ctx.fill();
 
-  // Animated Heavy Tank Treads
-  for (const tx of [-41, 29]) {
-    ctx.fillStyle = '#0f172a';
-    ctx.strokeStyle = '#64748b';
-    ctx.lineWidth = 2;
-    roundRectPath(tx, -32, 12, 64, 4);
-    ctx.fill(); ctx.stroke();
-
-    ctx.fillStyle = '#334155';
-    const treadOff = ((boss.treadScroll || 0) % 1) * 10;
-    for (let ty = -28 + treadOff; ty <= 24; ty += 10) {
-      ctx.fillRect(tx + 2, ty, 8, 4);
-    }
-  }
-
-  // Recoiling Shoulder Missile Pods
   const recY = (boss.recoil || 0) * 5;
-  for (const sx of [-36, 16]) {
-    ctx.fillStyle = '#334155';
-    ctx.strokeStyle = coreCol;
-    ctx.lineWidth = 1.5;
-    roundRectPath(sx, -39 + recY, 20, 13, 4);
-    ctx.fill(); ctx.stroke();
-    ctx.fillStyle = boss.variant === 3 ? '#c77dff' : '#ff2a6d';
-    for (const mx of [sx + 5, sx + 10, sx + 15]) {
-      ctx.beginPath(); ctx.arc(mx, -32.5 + recY, 2, 0, Math.PI * 2); gFill(ctx);
-    }
-  }
 
-  // Side Rotary Cannon Arms
-  ctx.fillStyle = '#1e293b';
-  roundRectPath(-47, -10, 12, 24, 4); ctx.fill();
-  roundRectPath(35, -10, 12, 24, 4); ctx.fill();
+  // BESPOKE 6-WORLD BOSS EXTERIOR ANATOMY (0..5)!
+  if (v === 3) {
+    // Variant 3: VENOM BROOD-QUEEN — 6 Articulated Chitinous Arachnid Legs + Pulsing Brood Abdomen + Mandibles!
+    const pulse = Math.sin(elapsed * 7) * 2.5;
+    ctx.fillStyle = '#365314';
+    ctx.strokeStyle = '#84cc16';
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.ellipse(0, -34, 24 + pulse * 0.5, 14, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#d946ef';
+    for (const bx of [-11, 0, 11]) {
+      ctx.beginPath(); ctx.arc(bx, -35, 3.5, 0, Math.PI * 2); ctx.fill();
+    }
+    for (const side of [-1, 1]) {
+      for (let li = -1; li <= 1; li++) {
+        const legSwing = Math.sin(elapsed * 9 + li * 1.4 + side) * 4;
+        ctx.strokeStyle = '#15803d';
+        ctx.lineWidth = 5;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(side * 28, li * 13);
+        ctx.lineTo(side * 46, li * 17 - 6 + legSwing * 0.6);
+        ctx.lineTo(side * 54, li * 23 + 8 + legSwing);
+        ctx.stroke();
+        ctx.fillStyle = '#bef264';
+        ctx.beginPath(); ctx.arc(side * 46, li * 17 - 6 + legSwing * 0.6, 3, 0, Math.PI * 2); ctx.fill();
+      }
+      // Serrated Venom Mandibles
+      ctx.fillStyle = '#bef264';
+      ctx.beginPath();
+      ctx.moveTo(side * 12, 27);
+      ctx.quadraticCurveTo(side * 22, 38, side * 6, 43);
+      ctx.quadraticCurveTo(side * 10, 34, side * 5, 28);
+      ctx.closePath();
+      ctx.fill();
+    }
+  } else if (v === 4) {
+    // Variant 4: TEMPEST SKY-TITAN — Swept Golden-Titanium Jet-Wings + Dual Crackling Tesla Pylons!
+    const flap = Math.sin(elapsed * 7) * 4;
+    for (const side of [-1, 1]) {
+      ctx.save();
+      ctx.scale(side, 1);
+      const wg = ctx.createLinearGradient(28, -10, 62, -24);
+      wg.addColorStop(0, '#0284c7');
+      wg.addColorStop(0.55, '#facc15');
+      wg.addColorStop(1, '#fef9c3');
+      ctx.fillStyle = wg;
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 1.6;
+      ctx.beginPath();
+      ctx.moveTo(28, -18);
+      ctx.lineTo(62, -32 + flap);
+      ctx.lineTo(54, -8 + flap * 0.6);
+      ctx.lineTo(44, 14 + flap * 0.3);
+      ctx.lineTo(28, 12);
+      ctx.closePath();
+      ctx.fill(); ctx.stroke();
+      ctx.restore();
+    }
+    // Dual Shoulder Tesla Coil Pylons
+    for (const sx of [-24, 24]) {
+      ctx.fillStyle = '#1e293b';
+      ctx.strokeStyle = '#facc15';
+      ctx.lineWidth = 2;
+      roundRectPath(sx - 6, -46 + recY, 12, 18, 4); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = '#38bdf8';
+      ctx.beginPath(); ctx.arc(sx, -49 + recY, 5, 0, Math.PI * 2); ctx.fill();
+    }
+  } else if (v === 5) {
+    // Variant 5: QUANTUM NEXUS — Counter-Rotating Dimensional Astrolabe Rings + 4 Void Obelisks!
+    ctx.save();
+    ctx.rotate(elapsed * 2.2);
+    ctx.strokeStyle = '#c084fc';
+    ctx.lineWidth = 2.4;
+    ctx.setLineDash([12, 8]);
+    ctx.beginPath(); ctx.arc(0, 0, 48, 0, Math.PI * 2); ctx.stroke();
+    ctx.setLineDash([]);
+    for (let k = 0; k < 4; k++) {
+      const a = (k * Math.PI) / 2;
+      const ox = Math.cos(a) * 48, oy = Math.sin(a) * 48;
+      ctx.fillStyle = '#05ffa1';
+      ctx.beginPath(); ctx.arc(ox, oy, 4.5, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.restore();
+  } else {
+    // Variants 0, 1, 2: Heavy Tracked Siege Dreadnoughts + Theme Crowns/Horns!
+    for (const tx of [-41, 29]) {
+      ctx.fillStyle = '#0f172a';
+      ctx.strokeStyle = '#64748b';
+      ctx.lineWidth = 2;
+      roundRectPath(tx, -32, 12, 64, 4);
+      ctx.fill(); ctx.stroke();
+
+      ctx.fillStyle = '#334155';
+      const treadOff = ((boss.treadScroll || 0) % 1) * 10;
+      for (let ty = -28 + treadOff; ty <= 24; ty += 10) {
+        ctx.fillRect(tx + 2, ty, 8, 4);
+      }
+    }
+
+    if (v === 1) {
+      // Cryo Overlord: 5-Spire Crystalline Glacier Crown!
+      ctx.fillStyle = '#bae6fd';
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 1.6;
+      for (const [cx0, h0] of [[-22, -46], [-11, -50], [0, -55], [11, -50], [22, -46]]) {
+        ctx.beginPath();
+        ctx.moveTo(cx0 - 6, -28 + recY);
+        ctx.lineTo(cx0, h0 + recY);
+        ctx.lineTo(cx0 + 6, -28 + recY);
+        ctx.closePath();
+        ctx.fill(); ctx.stroke();
+      }
+    } else if (v === 2) {
+      // Solar Emperor: Swept Molten Demon-Bull Horns!
+      const hg = ctx.createLinearGradient(0, -54, 0, -26);
+      hg.addColorStop(0, '#fef08a');
+      hg.addColorStop(0.5, '#f97316');
+      hg.addColorStop(1, '#7f1d1d');
+      ctx.fillStyle = hg;
+      ctx.beginPath();
+      ctx.moveTo(-20, -28 + recY); ctx.quadraticCurveTo(-48, -38 + recY, -38, -54 + recY); ctx.quadraticCurveTo(-26, -42 + recY, -10, -30 + recY); ctx.closePath();
+      ctx.moveTo(20, -28 + recY); ctx.quadraticCurveTo(48, -38 + recY, 38, -54 + recY); ctx.quadraticCurveTo(26, -42 + recY, 10, -30 + recY); ctx.closePath();
+      ctx.fill();
+    } else {
+      // Variant 0 (Omega Tank-Core): Recoiling Shoulder Missile Pods
+      for (const sx of [-36, 16]) {
+        ctx.fillStyle = '#334155';
+        ctx.strokeStyle = coreCol;
+        ctx.lineWidth = 1.5;
+        roundRectPath(sx, -39 + recY, 20, 13, 4);
+        ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#ff2a6d';
+        for (const mx of [sx + 5, sx + 10, sx + 15]) {
+          ctx.beginPath(); ctx.arc(mx, -32.5 + recY, 2, 0, Math.PI * 2); ctx.fill();
+        }
+      }
+    }
+
+    // Side Rotary Cannon Arms
+    ctx.fillStyle = '#1e293b';
+    roundRectPath(-47, -10, 12, 24, 4); ctx.fill();
+    roundRectPath(35, -10, 12, 24, 4); ctx.fill();
+  }
 
   // Main Armored War-Core Chassis
   const bodyGrad = ctx.createLinearGradient(0, -30, 0, 30);
   bodyGrad.addColorStop(
     0,
-    boss.variant === 3 ? '#064e3b' : boss.variant === 2 ? '#451a03' : boss.variant === 1 ? '#0c4a6e' : '#1e1b4b'
+    v === 5 ? '#2e1065' :
+    v === 4 ? '#1e3a8a' :
+    v === 3 ? '#14532d' :
+    v === 2 ? '#7c2d12' :
+    v === 1 ? '#0c4a6e' : '#1e1b4b'
   );
   bodyGrad.addColorStop(1, '#090d16');
   ctx.fillStyle = bodyGrad;
-  roundRectPath(-32, -30, 64, 60, 14);
+  roundRectPath(-32, -30, 64, 60, v === 3 ? 22 : 14);
   ctx.fill();
   ctx.strokeStyle = coreCol;
   ctx.lineWidth = 3.2;
@@ -6683,7 +8416,7 @@ function drawBossEntity() {
   ctx.fillStyle = '#050811';
   roundRectPath(-23, -20, 46, 13, 4);
   ctx.fill();
-  ctx.fillStyle = boss.phase === 3 ? '#ff2a6d' : boss.variant === 3 ? '#05ffa1' : '#ffcc33';
+  ctx.fillStyle = boss.phase === 3 ? '#ff2a6d' : v === 5 ? '#05ffa1' : v === 3 ? '#d946ef' : v === 4 ? '#38bdf8' : '#ffcc33';
   ctx.beginPath();
   ctx.moveTo(-19, -17); ctx.lineTo(-5, -14); ctx.lineTo(-5, -10); ctx.lineTo(-19, -11); ctx.closePath();
   ctx.fill();
@@ -7160,7 +8893,7 @@ function initVectorIconsAndBestiary() {
     node.appendChild(c);
   });
 
-  // 2. 4 World Theme Cards (with Exclusive Enemy Factions & Exclusive Signature Power-Ups!)
+  // 2. 6 World Theme Cards (with Exclusive Enemy Factions & Exclusive Signature Power-Ups!)
   const themeCodexContainer = document.getElementById('theme-codex-list');
   if (themeCodexContainer) {
     themeCodexContainer.innerHTML = '';
@@ -7186,8 +8919,9 @@ function initVectorIconsAndBestiary() {
         ec.title = em.name;
         const eg = ec.getContext('2d');
         eg.translate(28, 31);
-        eg.scale(0.95, 0.95);
-        renderEnemyModel(eg, { kind: eId, rivalColor: em.color, shielded: true, dx: 0, dy: 1, maxHp: 1, hp: 1 }, 0.8);
+        eg.scale(0.92, 0.92);
+        const hpVal = eId === 'cryogolem' ? 2 : 1;
+        renderEnemyModel(eg, { kind: eId, rivalColor: em.color, shielded: true, dx: 0, dy: 1, maxHp: hpVal, hp: hpVal }, 0.8);
         foeIcons.appendChild(ec);
       });
 
@@ -7215,7 +8949,7 @@ function initVectorIconsAndBestiary() {
     });
   }
 
-  // 3. 16 Power-Up Armory Cards (tagged with Home Theme or Universal CORE)
+  // 3. 22 Power-Up Armory Cards (tagged with Home Theme or Universal CORE)
   const codexContainer = document.getElementById('codex-list');
   codexContainer.innerHTML = '';
   POWERUP_CATALOG.forEach(item => {
@@ -7246,7 +8980,7 @@ function initVectorIconsAndBestiary() {
     codexContainer.appendChild(el);
   });
 
-  // 4. 8 Hostile Cyber-Units & Boss Live Portrait Cards (tagged with Active Sectors)
+  // 4. 15 Hostile Units & Boss Live 2.5D Portrait Cards (tagged with Active World)
   const enemyCodexContainer = document.getElementById('enemy-codex-list');
   enemyCodexContainer.innerHTML = '';
   ENEMY_CATALOG.forEach(item => {
@@ -7258,8 +8992,9 @@ function initVectorIconsAndBestiary() {
     c.height = 88;
     const g = c.getContext('2d');
     g.translate(44, 48);
-    g.scale(1.45, 1.45);
-    renderEnemyModel(g, { kind: item.id, rivalColor: item.color, shielded: true, dx: 0, dy: 1, maxHp: 1, hp: 1 }, 0.8);
+    g.scale(1.38, 1.38);
+    const hpVal = item.id === 'cryogolem' ? 2 : 1;
+    renderEnemyModel(g, { kind: item.id, rivalColor: item.color, shielded: true, dx: 0, dy: 1, maxHp: hpVal, hp: hpVal }, 0.8);
     const title = document.createElement('b');
     title.textContent = item.name;
     const sub = document.createElement('small');
@@ -7268,8 +9003,9 @@ function initVectorIconsAndBestiary() {
     const badge = document.createElement('span');
     badge.className = 'theme-origin-pill';
     badge.style.color = homeBiomes.length === 1 ? homeBiomes[0].wallEdge : '#f8fafc';
+    badge.style.borderColor = homeBiomes.length === 1 ? homeBiomes[0].wallEdge : 'rgba(255,255,255,0.25)';
     badge.textContent = item.id === 'boss'
-      ? 'ALL BOSS SECTORS'
+      ? '6 WORLD BOSSES'
       : homeBiomes.map(b => b.shortName).join(' • ');
     el.append(c, title, sub, badge);
     enemyCodexContainer.appendChild(el);
